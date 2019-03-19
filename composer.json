@@ -19,12 +19,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Macsidigital\\Xero\\": "src"
+            "Macsidigital\\Zoom\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Macsidigital\\Xero\\Tests\\": "tests"
+            "Macsidigital\\Zoom\\Tests\\": "tests"
         }
     },
     "scripts": {
