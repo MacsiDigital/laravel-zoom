@@ -1,0 +1,49 @@
+{
+    "name": "macsidigital/zoom-laravel",
+    "description": "Zoom API Wrapper for Laravel",
+    "homepage": "https://github.com/MacsiDigital/zoom-laravel",
+    "keywords": ["zoom", "laravel", "api", "client"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Colin Hall",
+            "email": "colin@macsi.co.uk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.0", 
+        "guzzlehttp/guzzle": "~6.0|~5.0|~4.0",
+        "firebase/php-jwt": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Macsidigital\\Xero\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Macsidigital\\Xero\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Macsidigital\\Zoom\\ZoomServiceProvider"
+            ],
+            "aliases": {
+                "Zoom": "Macsidigital\\Zoom\\ZoomFacade"
+            }
+        }
+    },
+    "minimum-stability" : "dev"
+}
