@@ -1,18 +1,18 @@
 # Laravel package for Zoom video conferencing
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/macsidigital/zoom-laravel.svg?style=flat-square)](https://packagist.org/packages/macsidigital/zoom-laravel)
-[![Build Status](https://img.shields.io/travis/macsidigital/zoom-laravel/master.svg?style=flat-square)](https://travis-ci.org/macsidigital/zoom-laravel)
-[![Quality Score](https://img.shields.io/scrutinizer/g/macsidigital/zoom-laravel.svg?style=flat-square)](https://scrutinizer-ci.com/g/macsidigital/zoom-laravel)
-[![Total Downloads](https://img.shields.io/packagist/dt/macsidigital/zoom-laravel.svg?style=flat-square)](https://packagist.org/packages/macsidigital/zoom-laravel)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/macsidigital/laravel-zoom.svg?style=flat-square)](https://packagist.org/packages/macsidigital/laravel-zoom)
+[![Build Status](https://img.shields.io/travis/macsidigital/laravel-zoom/master.svg?style=flat-square)](https://travis-ci.org/MacsiDigital/laravel-zoom)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MacsiDigital/laravel-zoom/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MacsiDigital/laravel-zoom/?branch=master)
+[![Total Downloads](https://img.shields.io/packagist/dt/macsidigital/laravel-zoom.svg?style=flat-square)](https://packagist.org/packages/macsidigital/laravel-zoom)
 
-Package to manage the zoom API in Laravel
+Package to manage the Zoom API in Laravel
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require macsidigital/zoom-laravel
+composer require macsidigital/laravel-zoom
 ```
 
 ## Configuration file
@@ -20,7 +20,7 @@ composer require macsidigital/zoom-laravel
 Publish the configuration file
 
 ```bash
-php artisan vendor:publish --provider="MacsiDigital\Zoom\ZoomServiceProvider"
+php artisan vendor:publish --provider="MacsiDigital\Zoom\Providers\ZoomServiceProvider"
 ```
 
 This will create a zoom/config.php within your config directory, where you add value for api_key and api_secret.
@@ -28,7 +28,7 @@ This will create a zoom/config.php within your config directory, where you add v
 ## Usage
 
 ``` php
-$zoom = new MacsiDigital\Zoom\Zoom();
+$zoom = new Macsidigital\Zoom\Zoom();
 
 $zoom->users->list();
 ```

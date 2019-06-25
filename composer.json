@@ -1,8 +1,8 @@
 {
-    "name": "macsidigital/zoom-laravel",
-    "description": "Zoom Laravel package",
-    "homepage": "https://github.com/MacsiDigital/zoom-laravel",
-    "keywords": ["macsidigital", "zoom-laravel", "zoom", "laravel", "api", "client"],
+    "name": "macsidigital/laravel-zoom",
+    "description": "Laravel Zoom package",
+    "homepage": "https://github.com/MacsiDigital/laravel-zoom",
+    "keywords": ["macsidigital", "laravel-zoom", "zoom", "laravel", "api", "client"],
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -38,10 +38,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "MacsiDigital\\Zoom\\ZoomServiceProvider"
+                "MacsiDigital\\Zoom\\Providers\\ZoomServiceProvider"
             ],
             "aliases": {
-                "Zoom": "MacsiDigital\\Zoom\\ZoomFacade"
+                "Zoom": "MacsiDigital\\Zoom\\Facades\\Zoom"
             }
         }
     },

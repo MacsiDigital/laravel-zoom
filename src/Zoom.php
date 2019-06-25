@@ -3,47 +3,36 @@ namespace MacsiDigital\Zoom;
 
 use Exception;
 use Illuminate\Support\Str;
+use MacsiDigital\Zoom\Interfaces\PrivateApplication;
 
-/**
- * @package MacsiDigital\Zoom
- */
 class Zoom
 {
 
-    /**
-     * __call
-     *
-     * @param $method
-     * @param $args
-     * @return mixed
-     */
-    public function __call($method, $args)
+    public $client;
+
+    public function __construct($type='Private')
     {
-        return $this->make($method);
+        $function = 'boot'.ucfirst($type).'Application';
+        if(method_exists($this, $function)){
+            $this->$function();    
+        } else {
+            throw new Exception("Application Interface type not known");
+        }
     }
 
-
-    /**
-     * __get
-     *
-     * @param $name
-     * @return mixed
-     */
-    public function __get($name)
+    public function bootPrivateApplication() 
     {
-        return $this->make($name);
+        $this->client = (new PrivateApplication());
     }
 
-    /**
-     * Make
-     *
-     * @param $resource
-     * @return mixed
-     * @throws Exception
-     */
-    public function make($resource)
+    public function __get($key)
     {
-        $class = 'MacsiDigital\\Zoom\\Requests\\' . Str::studly($resource);
+        return $this->getNode($key);
+    }
+
+    public function getNode($key)
+    {
+        $class = 'MacsiDigital\Zoom\\' . Str::studly($key);
         if (class_exists($class)) {
             return new $class();
         }
