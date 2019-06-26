@@ -1,14 +1,12 @@
-<?php 
+<?php
 
 namespace MacsiDigital\Zoom;
 
 use Exception;
-use MacsiDigital\Zoom\Recurrance;
 use MacsiDigital\Zoom\Support\Model;
 
 class Meeting extends Model
 {
-
     const ENDPOINT = 'meetings';
     const NODE_NAME = 'meeting';
     const KEY_FIELD = 'id';
@@ -19,70 +17,70 @@ class Meeting extends Model
 
     public $response;
 
-	protected $attributes = [
+    protected $attributes = [
         'uuid' => '',
-        "id" => '', // string
-        "host_id" => '', // string
-        "created_at" => '', // string [date-time]
-        "join_url" => '', // string
-        "topic" => '', // string
-        "type" => '', // integer
-        "start_time" => '', // string [date-time]
-        "duration" => '', // integer
-        "timezone" => '', // string
-        "password" => '', // string
-        "agenda" => '', // string
-        "recurrence" => [],
-        "occurrences" => [],
-        "tracking_fields" => [],
-        "settings" => [],
+        'id' => '', // string
+        'host_id' => '', // string
+        'created_at' => '', // string [date-time]
+        'join_url' => '', // string
+        'topic' => '', // string
+        'type' => '', // integer
+        'start_time' => '', // string [date-time]
+        'duration' => '', // integer
+        'timezone' => '', // string
+        'password' => '', // string
+        'agenda' => '', // string
+        'recurrence' => [],
+        'occurrences' => [],
+        'tracking_fields' => [],
+        'settings' => [],
     ];
 
     protected $createAttributes = [
-        'schedule_for', 
-        "topic",
-        "type",
-        "start_time",
-        "duration",
-        "timezone",
-        "password",
-        "agenda",
-        "tracking_fields",
-        "recurrence",
-        "settings",
+        'schedule_for',
+        'topic',
+        'type',
+        'start_time',
+        'duration',
+        'timezone',
+        'password',
+        'agenda',
+        'tracking_fields',
+        'recurrence',
+        'settings',
     ];
 
     protected $updateAttributes = [
         'schedule_for',
-        "topic",
-        "type",
-        "start_time",
-        "duration",
-        "timezone",
-        "password",
-        "agenda",
-        "tracking_fields",
-        "recurrence",
-        "settings",
+        'topic',
+        'type',
+        'start_time',
+        'duration',
+        'timezone',
+        'password',
+        'agenda',
+        'tracking_fields',
+        'recurrence',
+        'settings',
     ];
 
     protected $relationships = [
         'settings' => '\MacsiDigital\Zoom\MeetingSetting',
         'recurrance' => '\MacsiDigital\Zoom\Recurrance',
-        'tracking_fields' => '\MacsiDigital\Zoom\TrackingFields'
+        'tracking_fields' => '\MacsiDigital\Zoom\TrackingFields',
     ];
 
-    public function addTrackingField(TrackingField $tracking_field) 
+    public function addTrackingField(TrackingField $tracking_field)
     {
         $this->attributes['tracking_fields'][] = $tracking_field;
     }
 
-    public function addRecurrance(Recurrance $recurance) 
+    public function addRecurrance(Recurrance $recurance)
     {
         $this->attributes['recurrance'] = $recurance;
     }
 
-    public function addSettings(MeetingSetting $settings) 
+    public function addSettings(MeetingSetting $settings)
     {
         $this->attributes['settings'] = $settings;
     }
@@ -94,26 +92,26 @@ class Meeting extends Model
 
     public function get()
     {
-        if($this->userID != ''){
+        if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
                 $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->query_string);
-                if($this->response->getStatusCode() == '200'){
+                if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getContents());
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');;
+                    throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
             throw new Exception('No User to retireive Meetings');
-        }    
+        }
     }
 
     public function all()
     {
-        if($this->userID != ''){
+        if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
                 $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint());
-                if($this->response->getStatusCode() == '200'){
+                if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getContents());
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
@@ -127,21 +125,22 @@ class Meeting extends Model
     public function save()
     {
         $index = $this->GetKey();
-        if($this->hasID()){
+        if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
-                if($this->response->getStatusCode() == '204'){
+                if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');;
+                    throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->createAttributes());
-                if($this->response->getStatusCode() == '201'){
+                if ($this->response->getStatusCode() == '201') {
                     $saved_item = $this->collect($this->response->getContents())->first();
-                    $this->$index = $saved_item->$index;    
+                    $this->$index = $saved_item->$index;
+
                     return $this->response->getContents();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
@@ -155,38 +154,37 @@ class Meeting extends Model
         $registrant = new \MacsiDigital\Zoom\Registrant;
         $registrant->setType('meetings');
         $registrant->setRelationshipID($this->id);
-        
+
         return $registrant;
     }
 
-    public function deleteRegistrant($registrant) 
+    public function deleteRegistrant($registrant)
     {
         $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
-        if($this->response->getStatusCode() == '200'){
+        if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
     }
 
-    public function denyRegistrant($registrant) 
+    public function denyRegistrant($registrant)
     {
         $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
-        if($this->response->getStatusCode() == '200'){
+        if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
     }
 
-    public function approveRegistrant($registrant) 
+    public function approveRegistrant($registrant)
     {
         $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
-        if($this->response->getStatusCode() == '200'){
+        if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
     }
-
 }

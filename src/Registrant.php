@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MacsiDigital\Zoom;
 
@@ -7,7 +7,6 @@ use MacsiDigital\Zoom\Support\Model;
 
 class Registrant extends Model
 {
-
     public $type;
     public $relationshipID;
 
@@ -18,78 +17,78 @@ class Registrant extends Model
     protected $methods = ['get', 'post', 'patch', 'put', 'delete'];
 
     protected $attributes = [
-        "id" => '', // string
-        "email" => '', // string
-        "first_name" => '', // string
-        "last_name" => '', // string
-        "address" => '', // string
-        "city" => '', // string
-        "country" => '', // string
-        "zip" => '', // string
-        "state" => '', // string
-        "phone" => '', // string
-        "industry" => '', // string
-        "org" => '', // string
-        "job_title" => '', // string
-        "purchasing_time_frame" => '', // string
-        "role_in_purchase_process" => '', // string
-        "no_of_employees" => '', // string
-        "comments" => '', // string
-        "custom_questions" => [],
-        "status" => '', // string
-        "create_time" => '', // string [date-time]
-        "join_url" => '', // string [string]
+        'id' => '', // string
+        'email' => '', // string
+        'first_name' => '', // string
+        'last_name' => '', // string
+        'address' => '', // string
+        'city' => '', // string
+        'country' => '', // string
+        'zip' => '', // string
+        'state' => '', // string
+        'phone' => '', // string
+        'industry' => '', // string
+        'org' => '', // string
+        'job_title' => '', // string
+        'purchasing_time_frame' => '', // string
+        'role_in_purchase_process' => '', // string
+        'no_of_employees' => '', // string
+        'comments' => '', // string
+        'custom_questions' => [],
+        'status' => '', // string
+        'create_time' => '', // string [date-time]
+        'join_url' => '', // string [string]
     ];
 
     protected $createAttributes = [
-        "email",
-        "first_name",
-        "last_name",
-        "address",
-        "city",
-        "country",
-        "zip",
-        "state",
-        "phone",
-        "industry",
-        "org",
-        "job_title",
-        "purchasing_time_frame",
-        "role_in_purchase_process",
-        "no_of_employees",
-        "comments",
-        "custom_questions",       
+        'email',
+        'first_name',
+        'last_name',
+        'address',
+        'city',
+        'country',
+        'zip',
+        'state',
+        'phone',
+        'industry',
+        'org',
+        'job_title',
+        'purchasing_time_frame',
+        'role_in_purchase_process',
+        'no_of_employees',
+        'comments',
+        'custom_questions',
     ];
 
     protected $updateAttributes = [
-        
+
     ];
 
-    public function setType($type) 
+    public function setType($type)
     {
         $this->type = $type;
     }
 
-    public function setRelationshipID($id) 
+    public function setRelationshipID($id)
     {
         $this->relationshipID = $id;
     }
 
-     public function get()
+    public function get()
     {
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->type."/{$this->relationshipID}/registarants".$this->query_string);
-            if($this->response->getStatusCode() == '200'){
+            if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents());
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');;
+                throw new Exception($this->response->getStatusCode().' status code');
             }
         }
     }
 
     public function all()
     {
-        if($this->relationshipID != ''){
+        if ($this->relationshipID != '') {
             return $this->collect($this->get($this->type."/{$this->relationshipID}/registarants"));
         } else {
             throw new Exception('No Relationship set');
@@ -99,21 +98,22 @@ class Registrant extends Model
     public function save()
     {
         $index = $this->GetKey();
-        if($this->hasID()){
+        if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->client->patch("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}", $this->updateAttributes());
-                if($this->response->getStatusCode() == '204'){
+                if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');;
+                    throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}", $this->createAttributes());
-                if($this->response->getStatusCode() == '201'){
+                if ($this->response->getStatusCode() == '201') {
                     $saved_item = $this->collect($this->response->getContents())->first();
-                    $this->$index = $saved_item->$index;    
+                    $this->$index = $saved_item->$index;
+
                     return $this->response->getContents();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
@@ -122,39 +122,38 @@ class Registrant extends Model
         }
     }
 
-    public function delete($id='') 
+    public function delete($id = '')
     {
         return $this->cancel();
     }
 
-    public function cancel() 
+    public function cancel()
     {
         $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $this->email]]]);
-        if($this->response->getStatusCode() == '204'){
+        if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
     }
 
-    public function deny() 
+    public function deny()
     {
         $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $this->email]]]);
-        if($this->response->getStatusCode() == '204'){
+        if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
     }
 
-    public function approve() 
+    public function approve()
     {
         $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $this->email]]]);
-        if($this->response->getStatusCode() == '204'){
+        if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
     }
-
 }

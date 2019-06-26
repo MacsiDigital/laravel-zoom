@@ -6,12 +6,10 @@ use MacsiDigital\Zoom\Support\Request;
 
 class PrivateApplication extends Base
 {
+    protected $request;
 
-	protected $request;
-
- 	public function __construct()
- 	{
+    public function __construct()
+    {
         $this->request = (new Request)->bootPrivateApplication();
     }
-
 }
