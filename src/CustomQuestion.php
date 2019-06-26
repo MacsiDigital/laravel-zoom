@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MacsiDigital\Zoom;
 
@@ -11,18 +11,17 @@ class CustomQuestion extends Model
     protected $methods = [];
 
     protected $attributes = [
-        "title" => '', // string
-        "value" => '', // string
+        'title' => '', // string
+        'value' => '', // string
     ];
 
     protected $createAttributes = [
-        "title",
-        "value"
+        'title',
+        'value',
     ];
 
     protected $updateAttributes = [
-        "title",
-        "value"
+        'title',
+        'value',
     ];
-
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MacsiDigital\Zoom;
 
@@ -10,23 +10,23 @@ class GlobalDialInNumber extends Model
 
     const KEY_FIELD = 'country';
 
-	protected $attributes = [
-        "country" => '', // boolean
-        "country_number" => '', // boolean
-        "city" => '', // boolean
-        "number" => '', // boolean
-        "type" => '' // boolean
+    protected $attributes = [
+        'country' => '', // boolean
+        'country_number' => '', // boolean
+        'city' => '', // boolean
+        'number' => '', // boolean
+        'type' => '', // boolean
     ];
 
     protected $createAttributes = [
-        
+
     ];
 
     protected $updateAttributes = [
-        "country",
-        "country_number",
-        "city",
-        "number",
-        "type"
+        'country',
+        'country_number',
+        'city',
+        'number',
+        'type',
     ];
 }

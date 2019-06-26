@@ -1,4 +1,5 @@
 <?php
+
 namespace MacsiDigital\Zoom\Providers;
 
 use MacsiDigital\Zoom\Zoom;
@@ -34,6 +35,5 @@ class ZoomServiceProvider extends ServiceProvider
         $this->app->singleton('zoom', function () {
             return new Zoom();
         });
-
     }
 }

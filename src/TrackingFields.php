@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MacsiDigital\Zoom;
 
@@ -10,18 +10,18 @@ class TrackingFields extends Model
 
     const KEY_FIELD = 'field';
 
-	protected $attributes = [
-        "field" => '', // boolean
-        "value" => '', // boolean
+    protected $attributes = [
+        'field' => '', // boolean
+        'value' => '', // boolean
     ];
 
     protected $createAttributes = [
-        "field",
-        "value",
+        'field',
+        'value',
     ];
 
     protected $updateAttributes = [
-        "field",
-        "value",
+        'field',
+        'value',
     ];
 }

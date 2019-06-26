@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace MacsiDigital\Zoom\Support;
 
 use Exception;
@@ -6,7 +7,6 @@ use Illuminate\Support\Collection;
 
 abstract class Model
 {
-    
     protected $attributes = [];
     protected $createAttributes = [];
     protected $updateAttributes = [];
@@ -28,7 +28,7 @@ abstract class Model
     }
 
     /**
-     * Get the resource uri of the class (Contacts) etc
+     * Get the resource uri of the class (Contacts) etc.
      *
      * @return string
      */
@@ -38,7 +38,7 @@ abstract class Model
     }
 
     /**
-     * Get the root node name.  Just the unqualified classname
+     * Get the root node name.  Just the unqualified classname.
      *
      * @return string
      */
@@ -48,7 +48,7 @@ abstract class Model
     }
 
     /**
-     * Get the unique key field
+     * Get the unique key field.
      *
      * @return string
      */
@@ -58,22 +58,24 @@ abstract class Model
     }
 
     /**
-     * Get the object unique ID
+     * Get the object unique ID.
      *
      * @return string
      */
     public function getID()
     {
         $index = $this->getKey();
+
         return $this->$index;
     }
 
-    public function hasID() 
+    public function hasID()
     {
         $index = $this->getKey();
-        if($this->$index != ''){
-            return true;    
+        if ($this->$index != '') {
+            return true;
         }
+
         return false;
     }
 
@@ -131,14 +133,14 @@ abstract class Model
      */
     public function setAttribute($key, $value)
     {
-        if($this->attributeExists($key)){
-            if($this->isRelationshipAttribute($key)){
+        if ($this->attributeExists($key)) {
+            if ($this->isRelationshipAttribute($key)) {
                 $class = new $this->relationships[$key];
-                if(is_array($value) && in_array($class->getKey(), $value)){
+                if (is_array($value) && in_array($class->getKey(), $value)) {
                     $class->make($value);
                     $this->attributes[$key] = $class;
                 } else {
-                    foreach($value as $index => $class){
+                    foreach ($value as $index => $class) {
                         $new_class = new $this->relationships[$key];
                         $new_class->make($class);
                         $this->attributes[$key][$index] = $class;
@@ -148,20 +150,21 @@ abstract class Model
                 $this->attributes[$key] = $value;
             }
         }
+
         return $this;
     }
 
-    public function attributeExists($key) 
+    public function attributeExists($key)
     {
         return array_key_exists($key, $this->attributes);
     }
 
-    public function isRelationshipAttribute($key) 
+    public function isRelationshipAttribute($key)
     {
         return array_key_exists($key, $this->relationships);
     }
 
-    public function unsetAttribute($key) 
+    public function unsetAttribute($key)
     {
         $this->setAttribute($key, '');
     }
@@ -211,42 +214,46 @@ abstract class Model
         $this->unsetAttribute($key);
     }
 
-    public function make($attributes) 
+    public function make($attributes)
     {
-        foreach($attributes as $attribute => $value){
+        foreach ($attributes as $attribute => $value) {
             $this->$attribute = $value;
         }
+
         return $this;
     }
 
-    public function create($attributes) 
+    public function create($attributes)
     {
         $this->make($attributes);
         $this->save();
+
         return $this;
     }
 
-    public function fill($attributes) 
+    public function fill($attributes)
     {
-        foreach($attributes as $attribute => $value){
+        foreach ($attributes as $attribute => $value) {
             $this->$attribute = $value;
         }
+
         return $this;
     }
 
-    public function update($attributes) 
+    public function update($attributes)
     {
         $this->fill($attributes)->save();
+
         return $this;
     }
 
     public function save()
     {
         $index = $this->GetKey();
-        if($this->hasID()){
+        if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
-                if($this->response->getStatusCode() == '204'){
+                if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
@@ -255,9 +262,10 @@ abstract class Model
         } else {
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post($this->getEndpoint(), $this->createAttributes());
-                if($this->response->getStatusCode() == '201'){
+                if ($this->response->getStatusCode() == '201') {
                     $saved_item = $this->collect($this->response->getContents())->first();
-                    $this->$index = $saved_item->$index;    
+                    $this->$index = $saved_item->$index;
+
                     return $this->response->getContents();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
@@ -268,10 +276,11 @@ abstract class Model
 
     public function where($key, $operator, $value)
     {
-        if($this->query_string == ''){
-            $this->query_string = "?where=";
+        if ($this->query_string == '') {
+            $this->query_string = '?where=';
         }
         $this->query_string .= urlencode($key.$operator.'"'.$value.'"');
+
         return $this;
     }
 
@@ -284,7 +293,7 @@ abstract class Model
     {
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint().$this->query_string);
-            if($this->response->getStatusCode() == '200'){
+            if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents());
             } else {
                 throw new Exception($this->response->getStatusCode().' status code');
@@ -296,7 +305,7 @@ abstract class Model
     {
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint());
-            if($this->response->getStatusCode() == '200'){
+            if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents());
             } else {
                 throw new Exception($this->response->getStatusCode().' status code');
@@ -308,7 +317,7 @@ abstract class Model
     {
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint().'/'.$id);
-            if($this->response->getStatusCode() == '200'){
+            if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents())->first();
             } else {
                 throw new Exception($this->response->getStatusCode().' status code');
@@ -316,14 +325,14 @@ abstract class Model
         }
     }
 
-    public function delete($id='')
+    public function delete($id = '')
     {
-        if($id == ''){
+        if ($id == '') {
             $id = $this->id;
         }
         if (in_array('delete', $this->methods)) {
             $this->response = $this->collect($this->client->delete($this->getEndpoint().'/'.$this->id));
-            if($this->response->getStatusCode() == '204'){
+            if ($this->response->getStatusCode() == '204') {
                 return $this->response->getContents();
             } else {
                 throw new Exception($this->response->getStatusCode().' status code');
@@ -334,47 +343,50 @@ abstract class Model
     protected function collect($response)
     {
         $items = [];
-        if(isset($response[strtolower($this->getEndpoint())])){
-            foreach($response[strtolower($this->getEndpoint())] as $item){
+        if (isset($response[strtolower($this->getEndpoint())])) {
+            foreach ($response[strtolower($this->getEndpoint())] as $item) {
                 $items[] = static::make($item);
             }
         } else {
             $items[] = static::make($response);
         }
-        return new Collection($items);   
+
+        return new Collection($items);
     }
 
-    public function createAttributes() 
+    public function createAttributes()
     {
         $attributes = [];
-        foreach($this->attributes as $key => $value){
-            if(in_array($key, $this->createAttributes)){
-                if(is_object($value)){
-                    $attributes[$key] = $value->createAttributes();    
+        foreach ($this->attributes as $key => $value) {
+            if (in_array($key, $this->createAttributes)) {
+                if (is_object($value)) {
+                    $attributes[$key] = $value->createAttributes();
                 } else {
-                    if($value != ''){
-                        $attributes[$key] = $value;    
+                    if ($value != '') {
+                        $attributes[$key] = $value;
                     }
                 }
             }
         }
+
         return $attributes;
     }
 
-    public function updateAttributes() 
+    public function updateAttributes()
     {
         $attributes = [];
-        foreach($this->attributes as $key => $value){
-            if(in_array($key, $this->updateAttributes)){
-                if(is_object($value)){
-                    $attributes[$key] = $value->updateAttributes();    
+        foreach ($this->attributes as $key => $value) {
+            if (in_array($key, $this->updateAttributes)) {
+                if (is_object($value)) {
+                    $attributes[$key] = $value->updateAttributes();
                 } else {
-                    if($value != ''){
-                        $attributes[$key] = $value;    
+                    if ($value != '') {
+                        $attributes[$key] = $value;
                     }
                 }
             }
         }
+
         return $attributes;
     }
 }

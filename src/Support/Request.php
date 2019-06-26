@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace MacsiDigital\Zoom\Support;
 
@@ -8,37 +8,39 @@ use GuzzleHttp\Client;
 
 class Request
 {
-	protected $client;
+    protected $client;
 
     public function bootPrivateApplication()
     {
         $options = [
             'base_uri' => 'https://api.zoom.us/v2/',
             'headers' => [
-                'Authorization' => 'Bearer ' . $this->generateJWT(),
+                'Authorization' => 'Bearer '.$this->generateJWT(),
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-            ]
+            ],
         ];
         $this->client = new Client($options);
 
         return $this;
     }
 
-    public function generateJWT(){
+    public function generateJWT()
+    {
         $token = [
-            "iss" => config('zoom.api_key'),
+            'iss' => config('zoom.api_key'),
             // The benefit of JWT is expiry tokens, we'll set this one to expire in 1 minute
-            "exp" => time() + 60
+            'exp' => time() + 60,
         ];
+
         return JWT::encode($token, config('zoom.api_secret'));
     }
 
-	public function get($end_point, $query = '')
+    public function get($end_point, $query = '')
     {
-        try{
-            return $this->client->request('GET', $end_point);   
-        } catch(Exception $e){
+        try {
+            return $this->client->request('GET', $end_point);
+        } catch (Exception $e) {
             return $e->getResponse();
         }
     }
@@ -47,7 +49,7 @@ class Request
     {
         try {
             return $this->client->post($end_point, [
-                'body' => $this->prepareFields($fields)
+                'body' => $this->prepareFields($fields),
             ]);
         } catch (Exception $e) {
             return $e->getResponse();
@@ -58,7 +60,7 @@ class Request
     {
         try {
             return $this->client->patch($end_point, [
-                'body' => $this->prepareFields($fields)
+                'body' => $this->prepareFields($fields),
             ]);
         } catch (Exception $e) {
             return $e->getResponse();
@@ -69,7 +71,7 @@ class Request
     {
         try {
             return $this->client->put($end_point, [
-                'body' => $this->prepareFields($fields)
+                'body' => $this->prepareFields($fields),
             ]);
         } catch (Exception $e) {
             return $e->getResponse();
@@ -78,27 +80,27 @@ class Request
 
     public function delete($end_point)
     {
-    	return $this->client->delete($end_point, [
+        return $this->client->delete($end_point, [
             'headers' => $this->headers,
         ]);
     }
 
-    private function prepareFields($fields) 
+    private function prepareFields($fields)
     {
         $return = [];
-        if(is_array($fields)){
-            foreach($fields as $key => $value){
-                if($value != [] && $value != ''){
-                    if(is_array($value)){
-                        foreach($value as $sub_key => $object){
-                            if(is_object($object)){
-                                if(is_array($fields[$key][$sub_key])){
+        if (is_array($fields)) {
+            foreach ($fields as $key => $value) {
+                if ($value != [] && $value != '') {
+                    if (is_array($value)) {
+                        foreach ($value as $sub_key => $object) {
+                            if (is_object($object)) {
+                                if (is_array($fields[$key][$sub_key])) {
                                     $return[$key][$sub_key][] = $object->getAttributes();
                                 } else {
                                     $return[$key][$sub_key] = $object->getAttributes();
                                 }
                             } else {
-                                if(is_array($fields[$key][$sub_key])){
+                                if (is_array($fields[$key][$sub_key])) {
                                     $return[$key][$sub_key][] = $object;
                                 } else {
                                     $return[$key][$sub_key] = $object;
@@ -106,14 +108,14 @@ class Request
                             }
                         }
                     } else {
-                        if(is_object($value)){
-                            if(is_array($fields[$key])){
+                        if (is_object($value)) {
+                            if (is_array($fields[$key])) {
                                 $return[$key][] = $value->getAttributes();
                             } else {
                                 $return[$key] = $value->getAttributes();
                             }
                         } else {
-                            if(is_array($fields[$key])){
+                            if (is_array($fields[$key])) {
                                 $return[$key][] = $value;
                             } else {
                                 $return[$key] = $value;
@@ -122,6 +124,7 @@ class Request
                     }
                 }
             }
+
             return json_encode($return);
         } else {
             return json_encode($fields);
