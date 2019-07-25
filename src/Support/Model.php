@@ -226,10 +226,10 @@ abstract class Model
 
     public function create($attributes)
     {
-        $this->make($attributes);
-        $this->save();
+        $model = static::make($attributes);
+        $model->save();
 
-        return $this;
+        return $model;
     }
 
     public function fill($attributes)
