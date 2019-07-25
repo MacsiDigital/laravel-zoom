@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.7 - 2019-07-25
+
+Update models to use new query return function
+
 ## 1.0.6 - 2019-07-25
 
 Fix type

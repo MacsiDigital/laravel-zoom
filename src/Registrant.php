@@ -77,7 +77,7 @@ class Registrant extends Model
     public function get()
     {
         if (in_array('get', $this->methods)) {
-            $this->response = $this->client->get($this->type."/{$this->relationshipID}/registarants".$this->query_string);
+            $this->response = $this->client->get($this->type."/{$this->relationshipID}/registarants".$this->getQueryString());
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents());
             } else {

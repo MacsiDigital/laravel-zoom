@@ -93,7 +93,7 @@ class Webinar extends Model
     {
         if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
-                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->query_string);
+                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->getQueryString());
                 if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getContents());
                 } else {
