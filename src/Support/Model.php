@@ -304,7 +304,7 @@ abstract class Model
             }
         }
         
-        return  $query_String;
+        return $query_string;
     }
 
     public function first()

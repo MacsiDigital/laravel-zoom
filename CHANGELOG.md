@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.6 - 2019-07-25
+
+Fix type
+
 ## 1.0.5 - 2019-07-25
 
 Change where clause to act like Laravel.
@@ -12,7 +16,7 @@ where('key', 'value')
 
 or
 
-where('key', '-', 'value')
+where('key', '=', 'value')
 
 ## 1.0.4 - 2019-07-25
 
