@@ -68,10 +68,9 @@ class User extends Model
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes);
+                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes);
                 if ($this->response->getStatusCode() == '200') {
                     return $this->response->getContents();
                 } else {
@@ -84,6 +83,7 @@ class User extends Model
                 $this->response = $this->client->post($this->getEndpoint(), $attributes);
                 if ($this->response->getStatusCode() == '200') {
                     $saved_item = $this->collect($this->response->getContents())->first();
+                    $index = $this->GetKey();
                     $this->$index = $saved_item->$index;
 
                     return $this->response->getContents();
@@ -97,7 +97,7 @@ class User extends Model
     public function meetings()
     {
         $meeting = new \MacsiDigital\Zoom\Meeting;
-        $meeting->setUserID($this->id);
+        $meeting->setUserID($this->getID());
 
         return $meeting;
     }
@@ -105,7 +105,7 @@ class User extends Model
     public function webinars()
     {
         $webinar = new \MacsiDigital\Zoom\Webinar;
-        $webinar->setUserID($this->id);
+        $webinar->setUserID($this->getID());
 
         return $webinar;
     }

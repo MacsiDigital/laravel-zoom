@@ -123,10 +123,10 @@ class Webinar extends Model
 
     public function save()
     {
-        $index = $this->GetKey();
+        
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
+                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
@@ -138,6 +138,7 @@ class Webinar extends Model
                 $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->creaeteAttributes());
                 if ($this->response->getStatusCode() == '201') {
                     $saved_item = $this->collect($this->response->getContents())->first();
+                    $index = $this->GetKey();
                     $this->$index = $saved_item->$index;
 
                     return $this->response->getContents();
@@ -152,7 +153,7 @@ class Webinar extends Model
     {
         $registrant = new \MacsiDigital\Zoom\Registrant;
         $registrant->setType('webinars');
-        $registrant->setRelationshipID($this->id);
+        $registrant->setRelationshipID($this->getID());
 
         return $registrant;
     }
@@ -160,14 +161,14 @@ class Webinar extends Model
     public function panelists()
     {
         $panelist = new \MacsiDigital\Zoom\Panelist;
-        $panelist->setWebinarID($this->id);
+        $panelist->setWebinarID($this->getID());
 
         return $panelist;
     }
 
     public function cancelRegistrant($registrant)
     {
-        $this->response = $this->client->put("/webinars/{$this->id}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
@@ -177,7 +178,7 @@ class Webinar extends Model
 
     public function denyRegistrant($registrant)
     {
-        $this->response = $this->client->put("/webinars/{$this->id}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
@@ -187,7 +188,7 @@ class Webinar extends Model
 
     public function approveRegistrant($registrant)
     {
-        $this->response = $this->client->put("/webinars/{$this->id}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
@@ -197,7 +198,7 @@ class Webinar extends Model
 
     public function deletePanelist($panelist)
     {
-        $this->response = $this->client->delete("/webinars/{$this->id}/panelists/{$panelist->id}");
+        $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists/{$panelist->id}");
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
@@ -207,7 +208,7 @@ class Webinar extends Model
 
     public function deletePanelists()
     {
-        $this->response = $this->client->delete("/webinars/{$this->id}/panelists");
+        $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists");
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {

@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.4 - 2019-07-25
+
+Update all relationship models to use getID function
+
 ## 1.0.3 - 2019-07-25
 
 Update delete method and other functions to use GetID function

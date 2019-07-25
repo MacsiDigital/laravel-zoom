@@ -124,10 +124,9 @@ class Meeting extends Model
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
+                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
@@ -139,6 +138,7 @@ class Meeting extends Model
                 $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
                     $saved_item = $this->collect($this->response->getContents())->first();
+                    $index = $this->GetKey();
                     $this->$index = $saved_item->$index;
 
                     return $this->response->getContents();
@@ -153,14 +153,14 @@ class Meeting extends Model
     {
         $registrant = new \MacsiDigital\Zoom\Registrant;
         $registrant->setType('meetings');
-        $registrant->setRelationshipID($this->id);
+        $registrant->setRelationshipID($this->getID());
 
         return $registrant;
     }
 
     public function deleteRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
@@ -170,7 +170,7 @@ class Meeting extends Model
 
     public function denyRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
@@ -180,7 +180,7 @@ class Meeting extends Model
 
     public function approveRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
