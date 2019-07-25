@@ -250,10 +250,9 @@ abstract class Model
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
+                $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
@@ -265,6 +264,7 @@ abstract class Model
                 $this->response = $this->client->post($this->getEndpoint(), $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
                     $saved_item = $this->collect($this->response->getContents())->first();
+                    $index = $this->GetKey();
                     $this->$index = $saved_item->$index;
 
                     return $this->response->getContents();
@@ -329,10 +329,10 @@ abstract class Model
     public function delete($id = '')
     {
         if ($id == '') {
-            $id = $this->id;
+            $id = $this->getID();
         }
         if (in_array('delete', $this->methods)) {
-            $this->response = $this->client->delete($this->getEndpoint().'/'.$this->id);
+            $this->response = $this->client->delete($this->getEndpoint().'/'.$id);
             if ($this->response->getStatusCode() == '204') {
                 return $this->response->getStatusCode();
             } else {
