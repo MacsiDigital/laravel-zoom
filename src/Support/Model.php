@@ -216,11 +216,12 @@ abstract class Model
 
     public function make($attributes)
     {
+        $model = new static;
         foreach ($attributes as $attribute => $value) {
-            $this->$attribute = $value;
+            $model->$attribute = $value;
         }
 
-        return $this;
+        return $model;
     }
 
     public function create($attributes)
@@ -256,7 +257,7 @@ abstract class Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new Exception('Status Code '.$this->response->getStatusCode());
                 }
             }
         } else {
@@ -268,7 +269,7 @@ abstract class Model
 
                     return $this->response->getContents();
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new Exception('Status Code '.$this->response->getStatusCode());
                 }
             }
         }
@@ -296,7 +297,7 @@ abstract class Model
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents());
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }
@@ -308,7 +309,7 @@ abstract class Model
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents());
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }
@@ -320,7 +321,7 @@ abstract class Model
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents())->first();
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }
@@ -331,11 +332,11 @@ abstract class Model
             $id = $this->id;
         }
         if (in_array('delete', $this->methods)) {
-            $this->response = $this->collect($this->client->delete($this->getEndpoint().'/'.$this->id));
+            $this->response = $this->client->delete($this->getEndpoint().'/'.$this->id);
             if ($this->response->getStatusCode() == '204') {
-                return $this->response->getContents();
+                return $this->response->getStatusCode();
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }
