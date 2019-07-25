@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.2 - 2019-07-25
+
+Update create method to use the static make method
+
 ## 1.0.1 - 2019-07-25
 
 - Bug fixes :-
