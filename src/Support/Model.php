@@ -10,8 +10,9 @@ abstract class Model
     protected $attributes = [];
     protected $createAttributes = [];
     protected $updateAttributes = [];
+    protected $query_attributes = [];
     protected $relationships = [];
-    protected $query_string = '';
+    protected $queries = [];
     protected $methods = [];
 
     public $response;
@@ -275,14 +276,35 @@ abstract class Model
         }
     }
 
-    public function where($key, $operator, $value)
+   public function where($key, $operator, $value="")
     {
-        if ($this->query_string == '') {
-            $this->query_string = '?where=';
+        if(in_array($key, $this->query_attributes)){
+            if($value == ""){
+                $value = $operator;
+                $operator = '=';
+            }
+            $this->queries[$key] = ['key' => $key, 'operator' => $operator, 'value' => $value];
         }
-        $this->query_string .= urlencode($key.$operator.'"'.$value.'"');
 
         return $this;
+    }
+
+    public function getQueryString() 
+    {
+        $query_string = '';
+        if($this->queries != []){
+            $query_string .= '?';
+            $i = 1;
+            foreach($this->queries as $query){
+                if($i>1){
+                    $query_string .= '&';
+                }
+                $query_string  .= $query['key'].$query['operator'].$query['value'];
+                $i++;
+            }
+        }
+        
+        return  $query_String;
     }
 
     public function first()
@@ -293,7 +315,7 @@ abstract class Model
     public function get()
     {
         if (in_array('get', $this->methods)) {
-            $this->response = $this->client->get($this->getEndpoint().$this->query_string);
+            $this->response = $this->client->get($this->getEndpoint().$this->getQueryString());
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getContents());
             } else {
@@ -326,7 +348,7 @@ abstract class Model
         }
     }
 
-    public function delete($id = '')
+    public function delete($id = "")
     {
         if ($id == '') {
             $id = $this->getID();

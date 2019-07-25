@@ -59,7 +59,26 @@ The find all function returns a Laravel Collection so you can use all the Larave
 
 ## Filtered
 
-There are very few ocassions in the API where you can filter the results, but where you can you can use the where function.  Again check the API documentation for where you can add a query to the request
+There are very few ocassions in the API where you can filter the results, but where you can you can use the where function.  Again check the API documentation for where you can add a query to the request.  To action you would do like so
+
+``` php
+    $zoom = new \MacsiDigital\Zoom\Zoom;
+    $thing = $zoom->thing->where('Name', '=', 'Test Name')->get();
+```
+
+You can also just passs the name and value if it is to equal
+
+``` php
+    $zoom = new \MacsiDigital\Zoom\Zoom;
+    $thing = $zoom->thing->where('Name', 'Test Name')->get();
+```
+
+To only get a single item use the 'first' method
+
+``` php
+    $zoom = new \MacsiDigital\Zoom\Zoom;
+    $thing = $zoom->thing->where('Name', 'Test Name')->first();
+```
 
 ## Find by ID
 
