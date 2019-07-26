@@ -72,7 +72,7 @@ class User extends Model
             if (in_array('put', $this->methods)) {
                 $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes);
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->response->getContents();
+                    return $this->response->getBody();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -82,11 +82,9 @@ class User extends Model
                 $attributes = ['action' => 'create', 'user_info' => $this->createAttributes];
                 $this->response = $this->client->post($this->getEndpoint(), $attributes);
                 if ($this->response->getStatusCode() == '200') {
-                    $saved_item = $this->collect($this->response->getContents())->first();
-                    $index = $this->GetKey();
-                    $this->$index = $saved_item->$index;
+                    $this->fill($this->response->getBody());
 
-                    return $this->response->getContents();
+                    return $this->response->getBody();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }

@@ -18,11 +18,6 @@ class Response
         return $this->response;
     }
 
-    public function getContents()
-    {
-        return json_decode($this->response->getBody()->getContents(), true);
-    }
-
     public function getBody()
     {
         return json_decode($this->response->getBody(), true);

@@ -117,7 +117,7 @@ class Webinar extends Model
             if (in_array('get', $this->methods)) {
                 $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->getQueryString());
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getContents());
+                    return $this->collect($this->response->getBody());
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -133,7 +133,7 @@ class Webinar extends Model
             if (in_array('get', $this->methods)) {
                 $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint());
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getContents());
+                    return $this->collect($this->response->getBody());
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -149,7 +149,7 @@ class Webinar extends Model
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getContents();
+                    return $this->response->getBody();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -158,11 +158,9 @@ class Webinar extends Model
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->creaeteAttributes());
                 if ($this->response->getStatusCode() == '201') {
-                    $saved_item = $this->collect($this->response->getContents())->first();
-                    $index = $this->GetKey();
-                    $this->$index = $saved_item->$index;
+                    $this->fill($this->response->getBody());
 
-                    return $this->response->getContents();
+                    return $this->response->getBody();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -191,7 +189,7 @@ class Webinar extends Model
     {
         $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -201,7 +199,7 @@ class Webinar extends Model
     {
         $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -211,7 +209,7 @@ class Webinar extends Model
     {
         $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -221,7 +219,7 @@ class Webinar extends Model
     {
         $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists/{$panelist->id}");
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -231,7 +229,7 @@ class Webinar extends Model
     {
         $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists");
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }

@@ -258,7 +258,7 @@ abstract class Model
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getContents();
+                    return $this->response->getBody();
                 } else {
                     throw new Exception('Status Code '.$this->response->getStatusCode());
                 }
@@ -267,11 +267,9 @@ abstract class Model
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post($this->getEndpoint(), $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
-                    $saved_item = $this->collect($this->response->getContents())->first();
-                    $index = $this->GetKey();
-                    $this->$index = $saved_item->$index;
+                    $this->fill($this->response->getBody());
 
-                    return $this->response->getContents();
+                    return $this->response->getBody();
                 } else {
                     throw new Exception('Status Code '.$this->response->getStatusCode());
                 }
@@ -320,7 +318,7 @@ abstract class Model
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint().$this->getQueryString());
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getContents());
+                return $this->collect($this->response->getBody());
             } else {
                 throw new Exception('Status Code '.$this->response->getStatusCode());
             }
@@ -332,7 +330,7 @@ abstract class Model
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint());
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getContents());
+                return $this->collect($this->response->getBody());
             } else {
                 throw new Exception('Status Code '.$this->response->getStatusCode());
             }
@@ -344,7 +342,7 @@ abstract class Model
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint().'/'.$id);
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getContents())->first();
+                return $this->collect($this->response->getBody())->first();
             } else {
                 throw new Exception('Status Code '.$this->response->getStatusCode());
             }
