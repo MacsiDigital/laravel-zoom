@@ -54,7 +54,7 @@ abstract class Model
      *
      * @return response object
      */
-    public static function getResponse()
+    public function getResponse()
     {
         return $this->response;
     }
