@@ -215,9 +215,7 @@ abstract class Model
      */
     public function __unset($key)
     {
-        $this->unsetAttribute($key);
-
-        return $this;
+        return $this->unsetAttribute($key);
     }
 
     public function make($attributes)
@@ -301,14 +299,14 @@ abstract class Model
             $query_string .= '?';
             $i = 1;
             foreach ($this->queries as $query) {
-                if ($i>1) {
+                if ($i > 1) {
                     $query_string .= '&';
                 }
                 $query_string .= $query['key'].$query['operator'].$query['value'];
                 $i++;
             }
         }
-        
+
         return $query_string;
     }
 

@@ -104,7 +104,7 @@ class Meeting extends Model
         foreach ($attributes as $attribute => $value) {
             $model->$attribute = $value;
         }
-        if(isset($this->userID)){
+        if (isset($this->userID)){
             $model->setUserID($this->userID);
         }
         return $model;

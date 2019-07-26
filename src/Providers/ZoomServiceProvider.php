@@ -2,7 +2,6 @@
 
 namespace MacsiDigital\Zoom\Providers;
 
-use MacsiDigital\Zoom\Zoom;
 use Illuminate\Support\ServiceProvider;
 
 class ZoomServiceProvider extends ServiceProvider

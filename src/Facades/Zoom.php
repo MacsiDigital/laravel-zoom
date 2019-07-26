@@ -8,6 +8,6 @@ class Zoom extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'Zoom';
+        return 'zoom';
     }
 }
