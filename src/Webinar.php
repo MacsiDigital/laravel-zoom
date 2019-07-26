@@ -67,26 +67,48 @@ class Webinar extends Model
     public function addTrackingField(TrackingField $tracking_field)
     {
         $this->attributes['tracking_fields'][] = $tracking_field;
+
+        return $this;
     }
 
     public function addRecurrance(Recurrance $recurance)
     {
         $this->attributes['recurrance'] = $recurance;
+
+        return $this;
     }
 
     public function addSettings(MeetingSetting $settings)
     {
         $this->attributes['settings'] = $settings;
+
+        return $this;
     }
 
     public function addOccurence(Occurance $occurance)
     {
         $this->attributes['occurances'][] = $occurance;
+
+        return $this;
     }
 
     public function setUserID($user_id)
     {
         $this->userID = $user_id;
+
+        return $this;
+    }
+
+    public function make($attributes)
+    {
+        $model = new static;
+        foreach ($attributes as $attribute => $value) {
+            $model->$attribute = $value;
+        }
+        if(isset($this->userID)){
+            $model->setUserID($this->userID);
+        }
+        return $model;
     }
 
     public function get()

@@ -4,6 +4,7 @@ namespace MacsiDigital\Zoom\Support;
 
 use Exception;
 use Illuminate\Support\Collection;
+use MacsiDigital\Zoom\Facades\Zoom;
 
 abstract class Model
 {
@@ -25,7 +26,7 @@ abstract class Model
 
     public function __construct()
     {
-        $this->client = app()->zoom->client;
+        $this->client = Zoom::getClient();
     }
 
     /**
@@ -168,6 +169,8 @@ abstract class Model
     public function unsetAttribute($key)
     {
         $this->setAttribute($key, '');
+
+        return $this;
     }
 
     /**
@@ -213,6 +216,8 @@ abstract class Model
     public function __unset($key)
     {
         $this->unsetAttribute($key);
+
+        return $this;
     }
 
     public function make($attributes)
@@ -278,8 +283,8 @@ abstract class Model
 
     public function where($key, $operator, $value = '')
     {
-        if (in_array($key, $this->query_attributes)){
-            if ($value == ''){
+        if (in_array($key, $this->query_attributes)) {
+            if ($value == '') {
                 $value = $operator;
                 $operator = '=';
             }
@@ -292,11 +297,11 @@ abstract class Model
     public function getQueryString()
     {
         $query_string = '';
-        if ($this->queries != []){
+        if ($this->queries != []) {
             $query_string .= '?';
             $i = 1;
-            foreach ($this->queries as $query){
-                if ($i>1){
+            foreach ($this->queries as $query) {
+                if ($i>1) {
                     $query_string .= '&';
                 }
                 $query_string .= $query['key'].$query['operator'].$query['value'];

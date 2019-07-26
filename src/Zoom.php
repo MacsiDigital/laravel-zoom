@@ -8,7 +8,7 @@ use MacsiDigital\Zoom\Interfaces\PrivateApplication;
 
 class Zoom
 {
-    public $client;
+    protected $client;
 
     public function __construct($type = 'Private')
     {
@@ -23,6 +23,11 @@ class Zoom
     public function bootPrivateApplication()
     {
         $this->client = (new PrivateApplication());
+    }
+
+    public function getClient() 
+    {
+        return $this->client;
     }
 
     public function __get($key)

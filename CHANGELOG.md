@@ -2,6 +2,13 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.8 - 2019-07-26
+
+Added return statements to various methods to allow chaining.
+
+Bug Fix:
+	When creating a new meeting for an existing contact the userID would not pass if it was set before the create method.  We now pass the userID in teh make statement if its set.
+
 ## 1.0.7 - 2019-07-25
 
 Update models to use new query return function
