@@ -50,6 +50,16 @@ abstract class Model
     }
 
     /**
+     * Get the response model
+     *
+     * @return response object
+     */
+    public static function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
      * Get the unique key field.
      *
      * @return string
@@ -139,12 +149,12 @@ abstract class Model
             if ($this->isRelationshipAttribute($key)) {
                 $class = new $this->relationships[$key];
                 if (is_array($value) && in_array($class->getKey(), $value)) {
-                    $class->make($value);
+                    $class->fill($value);
                     $this->attributes[$key] = $class;
                 } else {
                     foreach ($value as $index => $class) {
                         $new_class = new $this->relationships[$key];
-                        $new_class->make($class);
+                        $new_class->fill($class);
                         $this->attributes[$key][$index] = $class;
                     }
                 }
@@ -221,10 +231,8 @@ abstract class Model
     public function make($attributes)
     {
         $model = new static;
-        foreach ($attributes as $attribute => $value) {
-            $model->$attribute = $value;
-        }
-
+        $model->fill($attributes);
+        
         return $model;
     }
 
@@ -239,7 +247,7 @@ abstract class Model
     public function fill($attributes)
     {
         foreach ($attributes as $attribute => $value) {
-            $this->$attribute = $value;
+            $this->$attribute = $value;    
         }
 
         return $this;
@@ -258,7 +266,7 @@ abstract class Model
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception('Status Code '.$this->response->getStatusCode());
                 }
@@ -269,7 +277,7 @@ abstract class Model
                 if ($this->response->getStatusCode() == '201') {
                     $this->fill($this->response->getBody());
 
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception('Status Code '.$this->response->getStatusCode());
                 }

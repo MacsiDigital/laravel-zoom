@@ -102,10 +102,8 @@ class Webinar extends Model
     public function make($attributes)
     {
         $model = new static;
-        foreach ($attributes as $attribute => $value) {
-            $model->$attribute = $value;
-        }
-        if (isset($this->userID)){
+        $model->fill($attributes);
+        if (isset($this->userID)) {
             $model->setUserID($this->userID);
         }
         return $model;
@@ -149,7 +147,7 @@ class Webinar extends Model
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -160,7 +158,7 @@ class Webinar extends Model
                 if ($this->response->getStatusCode() == '201') {
                     $this->fill($this->response->getBody());
 
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }

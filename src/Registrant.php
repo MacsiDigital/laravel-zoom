@@ -97,12 +97,11 @@ class Registrant extends Model
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->client->patch("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -113,7 +112,7 @@ class Registrant extends Model
                 if ($this->response->getStatusCode() == '201') {
                     $this->fill($this->response->getBody());
 
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }

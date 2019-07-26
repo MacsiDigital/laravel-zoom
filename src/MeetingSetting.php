@@ -80,6 +80,10 @@ class MeetingSetting extends Model
         'registrants_confirmation_email',
     ];
 
+    protected $relationships = [
+        'global_dial_in_numbers' => '\MacsiDigital\Zoom\GlobalDialInNumber',
+    ];
+
     public function addGlobalDialInNumbers(GlobalDialInNumber $number)
     {
         $this->global_dial_in_numbers[] = $number;

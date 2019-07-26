@@ -72,7 +72,7 @@ class User extends Model
             if (in_array('put', $this->methods)) {
                 $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes);
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -84,7 +84,7 @@ class User extends Model
                 if ($this->response->getStatusCode() == '200') {
                     $this->fill($this->response->getBody());
 
-                    return $this->response->getBody();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }

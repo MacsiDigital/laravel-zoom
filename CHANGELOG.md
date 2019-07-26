@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.11 - 2019-07-26
+
+Change Model to return itself on save instead of teh resturened array response
+
 ## 1.0.10 - 2019-07-26
 
 replace Guzzle getContents with getBody
