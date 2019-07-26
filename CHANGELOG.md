@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.9 - 2019-07-26
+
+Fix issue with Facade
+
 ## 1.0.8 - 2019-07-26
 
 Added return statements to various methods to allow chaining.
