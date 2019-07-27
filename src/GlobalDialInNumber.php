@@ -29,5 +29,4 @@ class GlobalDialInNumber extends Model
         'number',
         'type',
     ];
-
 }

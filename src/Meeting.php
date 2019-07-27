@@ -107,6 +107,7 @@ class Meeting extends Model
         if (isset($this->userID)) {
             $model->setUserID($this->userID);
         }
+
         return $model;
     }
 

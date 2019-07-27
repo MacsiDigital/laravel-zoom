@@ -50,7 +50,7 @@ abstract class Model
     }
 
     /**
-     * Get the response model
+     * Get the response model.
      *
      * @return response object
      */
@@ -232,7 +232,7 @@ abstract class Model
     {
         $model = new static;
         $model->fill($attributes);
-        
+
         return $model;
     }
 
@@ -247,7 +247,7 @@ abstract class Model
     public function fill($attributes)
     {
         foreach ($attributes as $attribute => $value) {
-            $this->$attribute = $value;    
+            $this->$attribute = $value;
         }
 
         return $this;
