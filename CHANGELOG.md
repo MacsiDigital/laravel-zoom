@@ -4,7 +4,7 @@ All notable changes to `laravel-zoom` will be documented in this file
 
 ## 1.0.13 - 2019-07-26
 
-Change getResponse method to a none static methodBug fix on multiple relationships
+Bug fix on multiple relationships
 
 ## 1.0.12 - 2019-07-26
 
