@@ -154,7 +154,7 @@ class Webinar extends Model
             }
         } else {
             if (in_array('post', $this->methods)) {
-                $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->creaeteAttributes());
+                $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
                     $this->fill($this->response->getBody());
 
