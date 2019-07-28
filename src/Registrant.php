@@ -74,6 +74,21 @@ class Registrant extends Model
         $this->relationshipID = $id;
     }
 
+    public function make($attributes)
+    {
+        $model = new static;
+        $model->fill($attributes);
+        if (isset($this->type)) {
+            $model->setType($this->type);
+        }
+
+        if (isset($this->relationshipID)) {
+            $model->setRelationshipID($this->relationshipID);
+        }
+
+        return $model;
+    }
+
     public function get()
     {
         if (in_array('get', $this->methods)) {

@@ -122,7 +122,7 @@ class Webinar extends Model
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 
@@ -138,7 +138,7 @@ class Webinar extends Model
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 

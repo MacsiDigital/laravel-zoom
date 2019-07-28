@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.14 - 2019-07-28
+
+Bug fix on issue with registrant relationship
+
 ## 1.0.13 - 2019-07-26
 
 Bug fix on multiple relationships

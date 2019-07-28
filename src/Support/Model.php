@@ -151,12 +151,14 @@ abstract class Model
                 if (is_array($value) && in_array($class->getKey(), $value)) {
                     $class->fill($value);
                     $this->attributes[$key] = $class;
-                } else {
+                } else if(is_array($value)){
                     foreach ($value as $index => $class) {
                         $new_class = new $this->relationships[$key];
                         $new_class->fill($class);
                         $this->attributes[$key][$index] = $new_class;
                     }
+                } else {
+                    $this->attributes[$key] = $value;    
                 }
             } else {
                 $this->attributes[$key] = $value;

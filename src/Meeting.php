@@ -123,7 +123,7 @@ class Meeting extends Model
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 
@@ -139,7 +139,7 @@ class Meeting extends Model
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 
