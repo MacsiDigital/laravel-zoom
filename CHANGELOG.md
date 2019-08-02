@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 1.0.15 - 2019-08-02
+
+Update $query_attributes to $queryAttributes to be in line
+
 ## 1.0.14 - 2019-07-28
 
 Bug fix on issue with registrant relationship
