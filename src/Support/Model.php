@@ -310,7 +310,7 @@ abstract class Model
                 if ($i > 1) {
                     $query_string .= '&';
                 }
-                $query_string .= $query['key'].$query['operator'].$query['value'];
+                $query_string .= http_build_query($query['key'].$query['operator'].$query['value']);
                 $i++;
             }
         }
