@@ -129,7 +129,7 @@ class Registrant extends Model
 
     public function cancel()
     {
-        $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $this->email]]]);
+        $this->response = $this->client->put("{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $this->email]]]);
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
@@ -139,7 +139,7 @@ class Registrant extends Model
 
     public function deny()
     {
-        $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $this->email]]]);
+        $this->response = $this->client->put("{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $this->email]]]);
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
@@ -149,7 +149,7 @@ class Registrant extends Model
 
     public function approve()
     {
-        $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $this->email]]]);
+        $this->response = $this->client->put("{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $this->email]]]);
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {

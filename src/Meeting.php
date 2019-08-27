@@ -23,6 +23,7 @@ class Meeting extends Model
         'host_id' => '', // string
         'created_at' => '', // string [date-time]
         'join_url' => '', // string
+        'start_url' => '', //string
         'topic' => '', // string
         'type' => '', // integer
         'start_time' => '', // string [date-time]
@@ -160,7 +161,7 @@ class Meeting extends Model
 
     public function deleteRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("meetings/{$this->id}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
@@ -170,7 +171,7 @@ class Meeting extends Model
 
     public function denyRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("meetings/{$this->id}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getContents();
         } else {
@@ -180,8 +181,18 @@ class Meeting extends Model
 
     public function approveRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
-        if ($this->response->getStatusCode() == '200') {
+        $this->response = $this->client->put("meetings/{$this->id}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
+        if ($this->response->getStatusCode() == '204') {
+            return $this->response->getContents();
+        } else {
+            throw new Exception($this->response->getStatusCode().' status code');
+        }
+    }
+
+    public function updateStatus($action = 'end')
+    {
+        $this->response = $this->client->put("meetings/{$this->id}/status", ['action' => $action]);
+        if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');

@@ -20,11 +20,16 @@ abstract class Model
     const NODE_NAME = '';
     const KEY_FIELD = '';
 
+    /** @var  GuzzleHttp\Client $client */
     protected $client;
 
-    public function __construct()
+    public function __construct($attributes = null)
     {
         $this->client = app()->zoom->client;
+
+        if ($attributes) {
+            $this->fill($attributes);
+        }
     }
 
     /**
@@ -79,9 +84,24 @@ abstract class Model
         return false;
     }
 
-    public function getAttributes()
+    public function getAttributes($withNested = false, $withoutEmpty = false)
     {
-        return $this->attributes;
+        if (!$withNested && !$withoutEmpty) {
+            return $this->attributes;
+        }
+
+        $result = [];
+        foreach ($this->attributes as $attributeName => $attributeValue) {
+            if ($withoutEmpty && $attributeValue === '') {
+                continue;
+            }
+
+            $result[$attributeName] = ($attributeValue instanceof Model && $withNested)
+                ? $attributeValue->getAttributes(true)
+                : $attributeValue;
+        }
+
+        return $result;
     }
 
     /**
@@ -252,7 +272,7 @@ abstract class Model
         $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
+                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
@@ -362,7 +382,7 @@ abstract class Model
                 if (is_object($value)) {
                     $attributes[$key] = $value->createAttributes();
                 } else {
-                    if ($value != '') {
+                    if ($value !== '') {
                         $attributes[$key] = $value;
                     }
                 }
@@ -380,7 +400,7 @@ abstract class Model
                 if (is_object($value)) {
                     $attributes[$key] = $value->updateAttributes();
                 } else {
-                    if ($value != '') {
+                    if ($value !== '') {
                         $attributes[$key] = $value;
                     }
                 }

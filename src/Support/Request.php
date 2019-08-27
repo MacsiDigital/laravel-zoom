@@ -18,6 +18,7 @@ class Request
                 'Authorization' => 'Bearer '.$this->generateJWT(),
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
+                'Origin' => 'https://developer.zoom.us',
             ],
         ];
         $this->client = new Client($options);

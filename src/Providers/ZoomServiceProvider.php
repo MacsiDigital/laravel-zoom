@@ -32,7 +32,7 @@ class ZoomServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'zoom');
 
         // Register the main class to use with the facade
-        $this->app->singleton('zoom', function () {
+        $this->app->bind('zoom', function () {
             return new Zoom();
         });
     }

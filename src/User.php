@@ -3,6 +3,7 @@
 namespace MacsiDigital\Zoom;
 
 use Exception;
+use MacsiDigital\Zoom\Enums\User\CreateUserAction;
 use MacsiDigital\Zoom\Support\Model;
 
 class User extends Model
@@ -66,13 +67,44 @@ class User extends Model
         'cms_user_id',
     ];
 
+    protected $createAction = '';
+
+    protected function setCreateAction($action)
+    {
+        if (!in_array($action, CreateUserAction::getValues())) {
+            throw new Exception('Invalid action');
+        }
+
+        $this->createAction = $action;
+    }
+
+    public function make($attributes, $action = CreateUserAction::ACTION_CREATE)
+    {
+        if (!$this->createAction) {
+            $this->setCreateAction($action);
+        }
+
+        foreach ($attributes as $attribute => $value) {
+            $this->$attribute = $value;
+        }
+
+        return $this;
+    }
+
+    public function create($attributes, $action = CreateUserAction::ACTION_CREATE)
+    {
+        $this->setCreateAction($action);
+
+        return parent::create($attributes);
+    }
+
     public function save()
     {
         $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods)) {
                 $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
-                if ($this->response->getStatusCode() == '200') {
+                if ($this->response->getStatusCode() == '204') {
                     return $this->response->getContents();
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
@@ -80,9 +112,9 @@ class User extends Model
             }
         } else {
             if (in_array('post', $this->methods)) {
-                $attributes = ['action' => 'create', 'user_info' => $this->createAttributes()];
+                $attributes = ['action' => $this->createAction, 'user_info' => $this->createAttributes()];
                 $this->response = $this->client->post($this->getEndpoint(), $attributes);
-                if ($this->response->getStatusCode() == '200') {
+                if ($this->response->getStatusCode() == '201') {
                     $saved_item = $this->collect($this->response->getContents())->first();
                     $this->$index = $saved_item->$index;
 
