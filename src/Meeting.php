@@ -25,11 +25,13 @@ class Meeting extends Model
         'join_url' => '', // string
         'topic' => '', // string
         'type' => '', // integer
+        'status' => '', // string
         'start_time' => '', // string [date-time]
         'duration' => '', // integer
         'timezone' => '', // string
         'password' => '', // string
         'agenda' => '', // string
+        'start_url' => '', // string
         'recurrence' => [],
         'occurrences' => [],
         'tracking_fields' => [],
@@ -73,36 +75,55 @@ class Meeting extends Model
     public function addTrackingField(TrackingField $tracking_field)
     {
         $this->attributes['tracking_fields'][] = $tracking_field;
+
+        return $this;
     }
 
     public function addRecurrance(Recurrance $recurance)
     {
         $this->attributes['recurrance'] = $recurance;
+
+        return $this;
     }
 
     public function addSettings(MeetingSetting $settings)
     {
         $this->attributes['settings'] = $settings;
+
+        return $this;
     }
 
     public function setUserID($user_id)
     {
         $this->userID = $user_id;
+
+        return $this;
+    }
+
+    public function make($attributes)
+    {
+        $model = new static;
+        $model->fill($attributes);
+        if (isset($this->userID)) {
+            $model->setUserID($this->userID);
+        }
+
+        return $model;
     }
 
     public function get()
     {
         if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
-                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->query_string);
+                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->getQueryString());
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getContents());
+                    return $this->collect($this->response->getBody());
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 
@@ -112,24 +133,23 @@ class Meeting extends Model
             if (in_array('get', $this->methods)) {
                 $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint());
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getContents());
+                    return $this->collect($this->response->getBody());
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
+                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getContents();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -138,10 +158,9 @@ class Meeting extends Model
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
-                    $saved_item = $this->collect($this->response->getContents())->first();
-                    $this->$index = $saved_item->$index;
+                    $this->fill($this->response->getBody());
 
-                    return $this->response->getContents();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -153,16 +172,16 @@ class Meeting extends Model
     {
         $registrant = new \MacsiDigital\Zoom\Registrant;
         $registrant->setType('meetings');
-        $registrant->setRelationshipID($this->id);
+        $registrant->setRelationshipID($this->getID());
 
         return $registrant;
     }
 
     public function deleteRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -170,9 +189,9 @@ class Meeting extends Model
 
     public function denyRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -180,9 +199,9 @@ class Meeting extends Model
 
     public function approveRegistrant($registrant)
     {
-        $this->response = $this->client->put("/meetings/{$this->id}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '200') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }

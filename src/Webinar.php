@@ -67,41 +67,62 @@ class Webinar extends Model
     public function addTrackingField(TrackingField $tracking_field)
     {
         $this->attributes['tracking_fields'][] = $tracking_field;
+
+        return $this;
     }
 
     public function addRecurrance(Recurrance $recurance)
     {
         $this->attributes['recurrance'] = $recurance;
+
+        return $this;
     }
 
     public function addSettings(MeetingSetting $settings)
     {
         $this->attributes['settings'] = $settings;
+
+        return $this;
     }
 
     public function addOccurence(Occurance $occurance)
     {
         $this->attributes['occurances'][] = $occurance;
+
+        return $this;
     }
 
     public function setUserID($user_id)
     {
         $this->userID = $user_id;
+
+        return $this;
+    }
+
+    public function make($attributes)
+    {
+        $model = new static;
+        $model->fill($attributes);
+        if (isset($this->userID)) {
+            $model->setUserID($this->userID);
+        }
+
+        return $model;
     }
 
     public function get()
     {
         if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
-                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->query_string);
+                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->getQueryString());
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getContents());
+                    return $this->collect($this->response->getBody());
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 
@@ -111,36 +132,34 @@ class Webinar extends Model
             if (in_array('get', $this->methods)) {
                 $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint());
                 if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getContents());
+                    return $this->collect($this->response->getBody());
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
-            throw new Exception('No User to retireive Meetings');
+            throw new Exception('No User to retreive Meetings');
         }
     }
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
+                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getContents();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
             }
         } else {
             if (in_array('post', $this->methods)) {
-                $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->creaeteAttributes());
+                $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
-                    $saved_item = $this->collect($this->response->getContents())->first();
-                    $this->$index = $saved_item->$index;
+                    $this->fill($this->response->getBody());
 
-                    return $this->response->getContents();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -152,7 +171,7 @@ class Webinar extends Model
     {
         $registrant = new \MacsiDigital\Zoom\Registrant;
         $registrant->setType('webinars');
-        $registrant->setRelationshipID($this->id);
+        $registrant->setRelationshipID($this->getID());
 
         return $registrant;
     }
@@ -160,16 +179,16 @@ class Webinar extends Model
     public function panelists()
     {
         $panelist = new \MacsiDigital\Zoom\Panelist;
-        $panelist->setWebinarID($this->id);
+        $panelist->setWebinarID($this->getID());
 
         return $panelist;
     }
 
     public function cancelRegistrant($registrant)
     {
-        $this->response = $this->client->put("/webinars/{$this->id}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -177,9 +196,9 @@ class Webinar extends Model
 
     public function denyRegistrant($registrant)
     {
-        $this->response = $this->client->put("/webinars/{$this->id}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -187,9 +206,9 @@ class Webinar extends Model
 
     public function approveRegistrant($registrant)
     {
-        $this->response = $this->client->put("/webinars/{$this->id}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
+        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -197,9 +216,9 @@ class Webinar extends Model
 
     public function deletePanelist($panelist)
     {
-        $this->response = $this->client->delete("/webinars/{$this->id}/panelists/{$panelist->id}");
+        $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists/{$panelist->id}");
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -207,9 +226,9 @@ class Webinar extends Model
 
     public function deletePanelists()
     {
-        $this->response = $this->client->delete("/webinars/{$this->id}/panelists");
+        $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists");
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }

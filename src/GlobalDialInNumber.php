@@ -12,7 +12,7 @@ class GlobalDialInNumber extends Model
 
     protected $attributes = [
         'country' => '', // boolean
-        'country_number' => '', // boolean
+        'country_name' => '', // boolean
         'city' => '', // boolean
         'number' => '', // boolean
         'type' => '', // boolean
@@ -24,7 +24,7 @@ class GlobalDialInNumber extends Model
 
     protected $updateAttributes = [
         'country',
-        'country_number',
+        'country_name',
         'city',
         'number',
         'type',

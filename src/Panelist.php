@@ -35,4 +35,15 @@ class Panelist extends Model
     {
         $this->webinarID = $webinar_id;
     }
+
+    public function make($attributes)
+    {
+        $model = new static;
+        $model->fill($attributes);
+        if (isset($this->webinarID)) {
+            $model->setwebinarID($this->webinarID);
+        }
+
+        return $model;
+    }
 }

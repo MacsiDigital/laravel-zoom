@@ -4,14 +4,16 @@ namespace MacsiDigital\Zoom\Support;
 
 use Exception;
 use Illuminate\Support\Collection;
+use MacsiDigital\Zoom\Facades\Zoom;
 
 abstract class Model
 {
     protected $attributes = [];
     protected $createAttributes = [];
     protected $updateAttributes = [];
+    protected $queryAttributes = [];
     protected $relationships = [];
-    protected $query_string = '';
+    protected $queries = [];
     protected $methods = [];
 
     public $response;
@@ -24,7 +26,7 @@ abstract class Model
 
     public function __construct()
     {
-        $this->client = app()->zoom->client;
+        $this->client = Zoom::getClient();
     }
 
     /**
@@ -45,6 +47,16 @@ abstract class Model
     public static function getRootNodeName()
     {
         return static::NODE_NAME;
+    }
+
+    /**
+     * Get the response model.
+     *
+     * @return response object
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 
     /**
@@ -137,14 +149,16 @@ abstract class Model
             if ($this->isRelationshipAttribute($key)) {
                 $class = new $this->relationships[$key];
                 if (is_array($value) && in_array($class->getKey(), $value)) {
-                    $class->make($value);
+                    $class->fill($value);
                     $this->attributes[$key] = $class;
-                } else {
+                } else if(is_array($value)){
                     foreach ($value as $index => $class) {
                         $new_class = new $this->relationships[$key];
-                        $new_class->make($class);
-                        $this->attributes[$key][$index] = $class;
+                        $new_class->fill($class);
+                        $this->attributes[$key][$index] = $new_class;
                     }
+                } else {
+                    $this->attributes[$key] = $value;    
                 }
             } else {
                 $this->attributes[$key] = $value;
@@ -167,6 +181,8 @@ abstract class Model
     public function unsetAttribute($key)
     {
         $this->setAttribute($key, '');
+
+        return $this;
     }
 
     /**
@@ -211,24 +227,23 @@ abstract class Model
      */
     public function __unset($key)
     {
-        $this->unsetAttribute($key);
+        return $this->unsetAttribute($key);
     }
 
     public function make($attributes)
     {
-        foreach ($attributes as $attribute => $value) {
-            $this->$attribute = $value;
-        }
+        $model = new static;
+        $model->fill($attributes);
 
-        return $this;
+        return $model;
     }
 
     public function create($attributes)
     {
-        $this->make($attributes);
-        $this->save();
+        $model = static::make($attributes);
+        $model->save();
 
-        return $this;
+        return $model;
     }
 
     public function fill($attributes)
@@ -249,39 +264,58 @@ abstract class Model
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->id}", $this->updateAttributes());
+                $this->response = $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getContents();
+                    return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new Exception('Status Code '.$this->response->getStatusCode());
                 }
             }
         } else {
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post($this->getEndpoint(), $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
-                    $saved_item = $this->collect($this->response->getContents())->first();
-                    $this->$index = $saved_item->$index;
+                    $this->fill($this->response->getBody());
 
-                    return $this->response->getContents();
+                    return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new Exception('Status Code '.$this->response->getStatusCode());
                 }
             }
         }
     }
 
-    public function where($key, $operator, $value)
+    public function where($key, $operator, $value = '')
     {
-        if ($this->query_string == '') {
-            $this->query_string = '?where=';
+        if (in_array($key, $this->queryAttributes)) {
+            if ($value == '') {
+                $value = $operator;
+                $operator = '=';
+            }
+            $this->queries[$key] = ['key' => $key, 'operator' => $operator, 'value' => $value];
         }
-        $this->query_string .= urlencode($key.$operator.'"'.$value.'"');
 
         return $this;
+    }
+
+    public function getQueryString()
+    {
+        $query_string = '';
+        if ($this->queries != []) {
+            $query_string .= '?';
+            $i = 1;
+            foreach ($this->queries as $query) {
+                if ($i > 1) {
+                    $query_string .= '&';
+                }
+                $query_string .= $query['key'].$query['operator'].urlencode($query['value']);
+                $i++;
+            }
+        }
+
+        return $query_string;
     }
 
     public function first()
@@ -292,11 +326,11 @@ abstract class Model
     public function get()
     {
         if (in_array('get', $this->methods)) {
-            $this->response = $this->client->get($this->getEndpoint().$this->query_string);
+            $this->response = $this->client->get($this->getEndpoint().$this->getQueryString());
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getContents());
+                return $this->collect($this->response->getBody());
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }
@@ -306,9 +340,9 @@ abstract class Model
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint());
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getContents());
+                return $this->collect($this->response->getBody());
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }
@@ -318,9 +352,9 @@ abstract class Model
         if (in_array('get', $this->methods)) {
             $this->response = $this->client->get($this->getEndpoint().'/'.$id);
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getContents())->first();
+                return $this->collect($this->response->getBody())->first();
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }
@@ -328,14 +362,14 @@ abstract class Model
     public function delete($id = '')
     {
         if ($id == '') {
-            $id = $this->id;
+            $id = $this->getID();
         }
         if (in_array('delete', $this->methods)) {
-            $this->response = $this->collect($this->client->delete($this->getEndpoint().'/'.$this->id));
+            $this->response = $this->client->delete($this->getEndpoint().'/'.$id);
             if ($this->response->getStatusCode() == '204') {
-                return $this->response->getContents();
+                return $this->response->getStatusCode();
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new Exception('Status Code '.$this->response->getStatusCode());
             }
         }
     }

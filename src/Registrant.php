@@ -74,12 +74,27 @@ class Registrant extends Model
         $this->relationshipID = $id;
     }
 
+    public function make($attributes)
+    {
+        $model = new static;
+        $model->fill($attributes);
+        if (isset($this->type)) {
+            $model->setType($this->type);
+        }
+
+        if (isset($this->relationshipID)) {
+            $model->setRelationshipID($this->relationshipID);
+        }
+
+        return $model;
+    }
+
     public function get()
     {
         if (in_array('get', $this->methods)) {
-            $this->response = $this->client->get($this->type."/{$this->relationshipID}/registarants".$this->query_string);
+            $this->response = $this->client->get($this->type."/{$this->relationshipID}/registarants".$this->getQueryString());
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getContents());
+                return $this->collect($this->response->getBody());
             } else {
                 throw new Exception($this->response->getStatusCode().' status code');
             }
@@ -97,12 +112,11 @@ class Registrant extends Model
 
     public function save()
     {
-        $index = $this->GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
                 $this->response = $this->client->patch("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}", $this->updateAttributes());
                 if ($this->response->getStatusCode() == '204') {
-                    return $this->response->getContents();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -111,10 +125,9 @@ class Registrant extends Model
             if (in_array('post', $this->methods)) {
                 $this->response = $this->client->post("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}", $this->createAttributes());
                 if ($this->response->getStatusCode() == '201') {
-                    $saved_item = $this->collect($this->response->getContents())->first();
-                    $this->$index = $saved_item->$index;
+                    $this->fill($this->response->getBody());
 
-                    return $this->response->getContents();
+                    return $this;
                 } else {
                     throw new Exception($this->response->getStatusCode().' status code');
                 }
@@ -131,7 +144,7 @@ class Registrant extends Model
     {
         $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $this->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -141,7 +154,7 @@ class Registrant extends Model
     {
         $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $this->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
@@ -151,7 +164,7 @@ class Registrant extends Model
     {
         $this->response = $this->client->put("/{$this->type}/{$this->relationshipID}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $this->email]]]);
         if ($this->response->getStatusCode() == '204') {
-            return $this->response->getContents();
+            return $this->response->getBody();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
         }
