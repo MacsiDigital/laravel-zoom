@@ -4,6 +4,7 @@ namespace MacsiDigital\Zoom;
 
 use Exception;
 use MacsiDigital\Zoom\Support\Model;
+use Psr\Http\Message\ResponseInterface;
 
 class Webinar extends Model
 {
@@ -14,6 +15,8 @@ class Webinar extends Model
     protected $methods = ['get', 'post', 'patch', 'put', 'delete'];
 
     protected $userID;
+
+    public $response;
 
     protected $attributes = [
         'uuid' => '', // string
@@ -212,6 +215,17 @@ class Webinar extends Model
             return $this->response->getContents();
         } else {
             throw new Exception($this->response->getStatusCode().' status code');
+        }
+    }
+
+    public function updateStatus($action = 'end'): string
+    {
+        $this->response = $this->client->put("webinars/{$this->id}/status", ['action' => $action]);
+
+        if ($this->response->getStatusCode() === 204) {
+            return $this->response->getContents();
+        } else {
+            throw new Exception($this->response->getStatusCode() . ' status code');
         }
     }
 }
