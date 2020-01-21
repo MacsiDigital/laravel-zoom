@@ -222,10 +222,10 @@ class Webinar extends Model
     {
         $this->response = $this->client->put("webinars/{$this->id}/status", ['action' => $action]);
 
-        if ($this->response->getStatusCode() === 204) {
+        if ($this->response->getStatusCode() == '204') {
             return $this->response->getContents();
-        } else {
-            throw new Exception($this->response->getStatusCode() . ' status code');
         }
+
+        throw new Exception($this->response->getStatusCode() . ' status code');
     }
 }
