@@ -24,6 +24,7 @@ class Webinar extends Model
         'host_id' => '', // string
         'created_at' => '', // string [date-time]
         'join_url' => '', // string
+        'start_url' => '', //string
         'topic' => '', // string
         'type' => '', // integer
         'start_time' => '', // string [date-time]
