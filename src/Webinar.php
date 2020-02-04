@@ -78,7 +78,7 @@ class Webinar extends Model
         return $this;
     }
 
-    public function addSettings(MeetingSetting $settings)
+    public function addSettings(WebinarSetting $settings)
     {
         $this->attributes['settings'] = $settings;
 
