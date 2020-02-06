@@ -104,7 +104,7 @@ class Registrant extends Model
     public function all()
     {
         if ($this->relationshipID != '') {
-            return $this->collect($this->get("{$this->type}/{$this->relationshipID}/$this->getEndpoint()"));
+            return $this->collect($this->get("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}"));
         } else {
             throw new Exception('No Relationship set');
         }
