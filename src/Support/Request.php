@@ -88,47 +88,6 @@ class Request
 
     private function prepareFields($fields)
     {
-        $return = [];
-        if (is_array($fields)) {
-            foreach ($fields as $key => $value) {
-                if ($value != [] && $value != '') {
-                    if (is_array($value)) {
-                        foreach ($value as $sub_key => $object) {
-                            if (is_object($object)) {
-                                if (is_array($fields[$key][$sub_key])) {
-                                    $return[$key][$sub_key][] = $object->getAttributes();
-                                } else {
-                                    $return[$key][$sub_key] = $object->getAttributes();
-                                }
-                            } else {
-                                if (is_array($fields[$key][$sub_key])) {
-                                    $return[$key][$sub_key][] = $object;
-                                } else {
-                                    $return[$key][$sub_key] = $object;
-                                }
-                            }
-                        }
-                    } else {
-                        if (is_object($value)) {
-                            if (is_array($fields[$key])) {
-                                $return[$key][] = $value->getAttributes();
-                            } else {
-                                $return[$key] = $value->getAttributes();
-                            }
-                        } else {
-                            if (is_array($fields[$key])) {
-                                $return[$key][] = $value;
-                            } else {
-                                $return[$key] = $value;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return json_encode($return);
-        } else {
-            return json_encode($fields);
-        }
+        return json_encode($fields);
     }
 }
