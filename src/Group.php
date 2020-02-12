@@ -67,11 +67,13 @@ class Group extends Model
             throw new Exception('can\'t add members to group without id(probably need save group before)');
         }
 
-        $userIds = array_map(function (User $user) {
-            return $user->getID();
+        $users = array_map(function (User $user) {
+            return ['id' => $user->getID()];
         }, $users);
 
-        $this->response = $this->client->post(self::getEndpoint() . '/' . $this->getID() . '/members', $userIds);
+        $this->response = $this->client->post(self::getEndpoint() . '/' . $this->getID() . '/members', [
+            'members' => $users,
+        ]);
 
         if ($this->response->getStatusCode() === '201') {
             return $this->response->getContents();
