@@ -3,6 +3,7 @@
 namespace MacsiDigital\Zoom;
 
 use Exception;
+use MacsiDigital\Zoom\Interfaces\PrivateApplication;
 use MacsiDigital\Zoom\Support\Model;
 use MacsiDigital\Zoom\Support\Response;
 
@@ -30,13 +31,17 @@ class Group extends Model
     /** @var Response */
     public $response;
 
+    /** @var PrivateApplication $client */
+    public $client;
+
     public function save(): array
     {
         $idField = self::GetKey();
         if ($this->hasID()) {
             if (in_array('put', $this->methods, true)) {
                 $this->response = $this->client->patch(self::getEndpoint() . '/' . $this->id, $this->updateAttributes());
-                if ($this->response->getStatusCode() === '204') {
+
+                if ($this->response->getStatusCode() === 204) {
                     return $this->response->getContents();
                 }
 
@@ -44,7 +49,8 @@ class Group extends Model
             }
         } elseif (in_array('post', $this->methods, true)) {
             $this->response = $this->client->post(self::getEndpoint(), $this->createAttributes());
-            if ($this->response->getStatusCode() === '201') {
+
+            if ($this->response->getStatusCode() === 201) {
                 $result = $this->collect($this->response->getContents())->first();
                 $this->{$idField} = $result->{$idField};
 
@@ -75,7 +81,7 @@ class Group extends Model
             'members' => $users,
         ]);
 
-        if ($this->response->getStatusCode() === '201') {
+        if ($this->response->getStatusCode() === 201) {
             return $this->response->getContents();
         }
 

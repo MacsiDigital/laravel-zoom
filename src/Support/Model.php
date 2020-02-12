@@ -3,9 +3,10 @@
 namespace MacsiDigital\Zoom\Support;
 
 use Exception;
+use JsonSerializable;
 use Illuminate\Support\Collection;
 
-abstract class Model
+abstract class Model implements JsonSerializable
 {
     protected $attributes = [];
     protected $createAttributes = [];
@@ -408,5 +409,9 @@ abstract class Model
         }
 
         return $attributes;
+    }
+
+    public function jsonSerialize() {
+        return $this->getAttributes();
     }
 }
