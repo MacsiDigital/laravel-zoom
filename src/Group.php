@@ -30,7 +30,7 @@ class Group extends Model
     /** @var Response */
     public $response;
 
-    public function save()
+    public function save(): array
     {
         $idField = self::GetKey();
         if ($this->hasID()) {
@@ -58,9 +58,10 @@ class Group extends Model
     /**
      * @param User[] $users
      *
+     * @return array
      * @throws Exception
      */
-    public function addMembers(array $users): void
+    public function addMembers(array $users): array
     {
         if (!$this->hasID()) {
             throw new Exception('can\'t add members to group without id(probably need save group before)');
