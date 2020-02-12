@@ -411,7 +411,8 @@ abstract class Model implements JsonSerializable
         return $attributes;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return $this->getAttributes();
     }
 }
