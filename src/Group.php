@@ -70,7 +70,7 @@ class Group extends Model
     public function addMembers(array $users): array
     {
         if (!$this->hasID()) {
-            throw new Exception('can\'t add members to group without id(probably need save group before)');
+            throw new Exception('Can\'t add members to group without id(probably need save group before)');
         }
 
         $users = array_map(function (User $user) {
