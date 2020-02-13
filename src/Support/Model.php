@@ -381,9 +381,12 @@ abstract class Model implements JsonSerializable
         foreach ($this->attributes as $key => $value) {
             if (in_array($key, $this->createAttributes)) {
                 if (is_object($value)) {
-                    $attributes[$key] = $value->createAttributes();
+                    $childAttributes = $value->createAttributes();
+                    if (count($childAttributes) > 0) {
+                        $attributes[$key] = $childAttributes;
+                    }
                 } else {
-                    if ($value !== '') {
+                    if ($value !== '' && (!is_array($value) || count($value) > 0)) {
                         $attributes[$key] = $value;
                     }
                 }
@@ -399,9 +402,12 @@ abstract class Model implements JsonSerializable
         foreach ($this->attributes as $key => $value) {
             if (in_array($key, $this->updateAttributes)) {
                 if (is_object($value)) {
-                    $attributes[$key] = $value->updateAttributes();
+                    $childAttributes = $value->updateAttributes();
+                    if (count($childAttributes) > 0) {
+                        $attributes[$key] = $childAttributes;
+                    }
                 } else {
-                    if ($value !== '') {
+                    if ($value !== '' && (!is_array($value) || count($value) > 0)) {
                         $attributes[$key] = $value;
                     }
                 }
