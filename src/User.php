@@ -13,7 +13,7 @@ class User extends Model
 
     protected $methods = ['get', 'post', 'patch', 'put', 'delete'];
 
-    protected $queryAttributes = ['status', 'page_size', 'page_number', 'role_id'];
+    protected $queryAttributes = ['status', 'limit', 'role_id'];
 
     protected $attributes = [
         'first_name' => '', //string
