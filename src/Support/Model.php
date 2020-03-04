@@ -338,7 +338,7 @@ abstract class Model
     public function all()
     {
         if (in_array('get', $this->methods)) {
-            $this->response = $this->client->get($this->getEndpoint());
+            $this->response = $this->client->get($this->getEndpoint().$this->getQueryString());
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getBody());
             } else {
