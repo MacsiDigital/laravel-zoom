@@ -17,6 +17,7 @@ abstract class Model
     protected $methods = [];
 
     public $response;
+    public $mergedResponse = [];
 
     const ENDPOINT = '';
     const NODE_NAME = '';
@@ -151,14 +152,14 @@ abstract class Model
                 if (is_array($value) && in_array($class->getKey(), $value)) {
                     $class->fill($value);
                     $this->attributes[$key] = $class;
-                } else if(is_array($value)){
+                } elseif (is_array($value)) {
                     foreach ($value as $index => $class) {
                         $new_class = new $this->relationships[$key];
                         $new_class->fill($class);
                         $this->attributes[$key][$index] = $new_class;
                     }
                 } else {
-                    $this->attributes[$key] = $value;    
+                    $this->attributes[$key] = $value;
                 }
             } else {
                 $this->attributes[$key] = $value;
@@ -335,12 +336,24 @@ abstract class Model
         }
     }
 
-    public function all()
+    public function all($fromPage = 1)
     {
         if (in_array('get', $this->methods)) {
-            $this->response = $this->client->get($this->getEndpoint());
+            array_key_exists('limit', $this->queries)
+                ? $this->queries = array_replace_recursive($this->queries, ['limit' => ['key' => 'page_size']])
+                : $this->queries['page_number'] = ['key' => 'page_number', 'operator' => '=', 'value' => $fromPage];
+            $this->response = $this->client->get($this->getEndpoint().$this->getQueryString());
             if ($this->response->getStatusCode() == '200') {
-                return $this->collect($this->response->getBody());
+                $res = $this->response->getBody();
+                if (array_key_exists('page_number', $this->queries)) {
+                    if ($fromPage <= $res['page_count']) {
+                        $this->mergeResponseData($res, $this->all(++$fromPage));
+                    }
+
+                    return $this->collect($this->mergedResponse);
+                }
+
+                return $this->collect($res);
             } else {
                 throw new Exception('Status Code '.$this->response->getStatusCode());
             }
@@ -386,6 +399,19 @@ abstract class Model
         }
 
         return new Collection($items);
+    }
+
+    protected function mergeResponseData($response, $callback)
+    {
+        $items = [];
+        if (isset($response[strtolower($this->getEndpoint())])) {
+            foreach ($response[strtolower($this->getEndpoint())] as $item) {
+                array_push($items, $item);
+            }
+        }
+        $this->mergedResponse = array_merge_recursive($this->mergedResponse, [strtolower($this->getEndpoint()) => $items]);
+
+        return $this->mergedResponse;
     }
 
     public function createAttributes()
