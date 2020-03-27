@@ -72,7 +72,7 @@ class Meeting extends Model
         'tracking_fields' => '\MacsiDigital\Zoom\TrackingFields',
     ];
 
-    public function addTrackingField(TrackingField $tracking_field)
+    public function addTrackingField(TrackingFields $tracking_field)
     {
         $this->attributes['tracking_fields'][] = $tracking_field;
 
@@ -127,7 +127,7 @@ class Meeting extends Model
         }
     }
 
-    public function all()
+    public function all($fromPage = 1)
     {
         if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
