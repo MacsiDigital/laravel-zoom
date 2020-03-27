@@ -72,7 +72,7 @@ class Meeting extends Model
         'tracking_fields' => '\MacsiDigital\Zoom\TrackingFields',
     ];
 
-    public function addTrackingField(TrackingField $tracking_field)
+    public function addTrackingField(TrackingFields $tracking_field)
     {
         $this->attributes['tracking_fields'][] = $tracking_field;
 
