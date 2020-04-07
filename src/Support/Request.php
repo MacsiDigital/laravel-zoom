@@ -5,6 +5,7 @@ namespace MacsiDigital\Zoom\Support;
 use Exception;
 use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 class Request
 {
@@ -44,8 +45,11 @@ class Request
     {
         try {
             return $this->client->request('GET', $end_point);
-        } catch (Exception $e) {
-            return $e->getResponse();
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                return $e->getResponse();
+            }
+            throw new Exception('Undefined Exception: ' . $e->getMessage());
         }
     }
 
@@ -55,8 +59,11 @@ class Request
             return $this->client->post($end_point, [
                 'body' => $this->prepareFields($fields),
             ]);
-        } catch (Exception $e) {
-            return $e->getResponse();
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                return $e->getResponse();
+            }
+            throw new Exception('Undefined Exception: ' . $e->getMessage());
         }
     }
 
@@ -66,8 +73,11 @@ class Request
             return $this->client->patch($end_point, [
                 'body' => $this->prepareFields($fields),
             ]);
-        } catch (Exception $e) {
-            return $e->getResponse();
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                return $e->getResponse();
+            }
+            throw new Exception('Undefined Exception: ' . $e->getMessage());
         }
     }
 
@@ -77,16 +87,26 @@ class Request
             return $this->client->put($end_point, [
                 'body' => $this->prepareFields($fields),
             ]);
-        } catch (Exception $e) {
-            return $e->getResponse();
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                return $e->getResponse();
+            }
+            throw new Exception('Undefined Exception: ' . $e->getMessage());
         }
     }
 
     public function delete($end_point)
     {
-        return $this->client->delete($end_point, [
-            'headers' => $this->headers,
-        ]);
+        try {
+            return $this->client->delete($end_point, [
+                'headers' => $this->headers,
+            ]);
+        } catch (RequestException $e) {
+            if ($e->hasResponse()) {
+                return $e->getResponse();
+            }
+            throw new Exception('Undefined Exception: ' . $e->getMessage());
+        }
     }
 
     private function prepareFields($fields)
