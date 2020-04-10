@@ -101,7 +101,7 @@ class Registrant extends Model
         }
     }
 
-    public function all()
+    public function all($fromPage = 1)
     {
         if ($this->relationshipID != '') {
             return $this->collect($this->get("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}"));
