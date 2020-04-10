@@ -126,7 +126,7 @@ class Webinar extends Model
         }
     }
 
-    public function all()
+    public function all($fromPage = 1)
     {
         if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
