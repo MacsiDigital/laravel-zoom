@@ -3,6 +3,7 @@
 namespace MacsiDigital\Zoom;
 
 use MacsiDigital\Zoom\Support\Model;
+use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
 
 class User extends Model
 {
@@ -75,7 +76,7 @@ class User extends Model
                 if ($this->response->getStatusCode() == '200' || $this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -87,7 +88,7 @@ class User extends Model
 
                     return $this;
                 } else {
-                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }

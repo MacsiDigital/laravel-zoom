@@ -272,7 +272,7 @@ abstract class Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -283,7 +283,7 @@ abstract class Model
 
                     return $this;
                 } else {
-                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }
@@ -332,7 +332,7 @@ abstract class Model
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getBody());
             } else {
-                throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
+                throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }
@@ -356,7 +356,7 @@ abstract class Model
 
                 return $this->collect($res);
             } else {
-                throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
+                throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }
@@ -383,7 +383,7 @@ abstract class Model
             if ($this->response->getStatusCode() == '204') {
                 return $this->response->getStatusCode();
             } else {
-                throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
+                throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }
