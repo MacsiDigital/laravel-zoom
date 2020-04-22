@@ -96,7 +96,7 @@ class Registrant extends Model
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getBody());
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }
@@ -118,7 +118,7 @@ class Registrant extends Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -129,7 +129,7 @@ class Registrant extends Model
 
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }
@@ -146,7 +146,7 @@ class Registrant extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -156,7 +156,7 @@ class Registrant extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -166,7 +166,7 @@ class Registrant extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 }

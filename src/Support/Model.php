@@ -16,6 +16,7 @@ abstract class Model
     protected $queries = [];
     protected $methods = [];
 
+    /** @var Response */
     public $response;
     public $mergedResponse = [];
 
@@ -271,7 +272,7 @@ abstract class Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new Exception('Status Code '.$this->response->getStatusCode());
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -282,7 +283,7 @@ abstract class Model
 
                     return $this;
                 } else {
-                    throw new Exception('Status Code '.$this->response->getStatusCode());
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }
@@ -331,7 +332,7 @@ abstract class Model
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getBody());
             } else {
-                throw new Exception('Status Code '.$this->response->getStatusCode());
+                throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }
@@ -355,7 +356,7 @@ abstract class Model
 
                 return $this->collect($res);
             } else {
-                throw new Exception('Status Code '.$this->response->getStatusCode());
+                throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }
@@ -382,7 +383,7 @@ abstract class Model
             if ($this->response->getStatusCode() == '204') {
                 return $this->response->getStatusCode();
             } else {
-                throw new Exception('Status Code '.$this->response->getStatusCode());
+                throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }

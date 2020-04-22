@@ -119,11 +119,11 @@ class Meeting extends Model
                 if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getBody());
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
-            throw new Exception('No User to retreive Meetings');
+            throw new Exception('No User to retrieve Meetings');
         }
     }
 
@@ -135,7 +135,7 @@ class Meeting extends Model
                 if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getBody());
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -151,7 +151,7 @@ class Meeting extends Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -162,7 +162,7 @@ class Meeting extends Model
 
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }
@@ -183,7 +183,7 @@ class Meeting extends Model
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -193,7 +193,7 @@ class Meeting extends Model
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -203,7 +203,7 @@ class Meeting extends Model
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new \HttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 }
