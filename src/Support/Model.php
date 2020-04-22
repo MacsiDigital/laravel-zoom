@@ -5,6 +5,7 @@ namespace MacsiDigital\Zoom\Support;
 use Exception;
 use Illuminate\Support\Collection;
 use MacsiDigital\Zoom\Facades\Zoom;
+use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
 
 abstract class Model
 {
