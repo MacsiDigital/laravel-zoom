@@ -3,6 +3,7 @@
 namespace MacsiDigital\Zoom;
 
 use Exception;
+use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
 use MacsiDigital\Zoom\Support\Model;
 
 class Registrant extends Model
@@ -96,12 +97,12 @@ class Registrant extends Model
             if ($this->response->getStatusCode() == '200') {
                 return $this->collect($this->response->getBody());
             } else {
-                throw new Exception($this->response->getStatusCode().' status code');
+                throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
             }
         }
     }
 
-    public function all()
+    public function all($fromPage = 1)
     {
         if ($this->relationshipID != '') {
             return $this->collect($this->get("{$this->type}/{$this->relationshipID}/{$this->getEndpoint()}"));
@@ -118,7 +119,7 @@ class Registrant extends Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -129,7 +130,7 @@ class Registrant extends Model
 
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }
@@ -146,7 +147,7 @@ class Registrant extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -156,7 +157,7 @@ class Registrant extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -166,7 +167,7 @@ class Registrant extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 }

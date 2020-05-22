@@ -9,20 +9,13 @@ Package to manage the Zoom API in Laravel
 
 ## Installation
 
+This package is for Laravel versions > 6.  It may work on < 6 but its not something we have tried.
+
 You can install the package via composer:
 
 ```bash
 composer require macsidigital/laravel-zoom
 ```
-
-The service provider should automatically register for For Laravel > 5.4.
-
-For Laravel < 5.5, open config/app.php and, within the providers array, append:
-
-``` php
-MacsiDigital\Zoom\Providers\ZoomServiceProvider::class
-```
-
 ## Configuration file
 
 Publish the configuration file

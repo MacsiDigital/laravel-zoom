@@ -3,6 +3,7 @@
 namespace MacsiDigital\Zoom;
 
 use Exception;
+use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
 use MacsiDigital\Zoom\Support\Model;
 
 class Meeting extends Model
@@ -72,7 +73,7 @@ class Meeting extends Model
         'tracking_fields' => '\MacsiDigital\Zoom\TrackingFields',
     ];
 
-    public function addTrackingField(TrackingField $tracking_field)
+    public function addTrackingField(TrackingFields $tracking_field)
     {
         $this->attributes['tracking_fields'][] = $tracking_field;
 
@@ -119,15 +120,15 @@ class Meeting extends Model
                 if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getBody());
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
-            throw new Exception('No User to retreive Meetings');
+            throw new Exception('No User to retrieve Meetings');
         }
     }
 
-    public function all()
+    public function all($fromPage = 1)
     {
         if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
@@ -135,7 +136,7 @@ class Meeting extends Model
                 if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getBody());
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -151,7 +152,7 @@ class Meeting extends Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -162,7 +163,7 @@ class Meeting extends Model
 
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }
@@ -183,7 +184,7 @@ class Meeting extends Model
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -193,7 +194,7 @@ class Meeting extends Model
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -203,7 +204,7 @@ class Meeting extends Model
         if ($this->response->getStatusCode() == '200') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 }

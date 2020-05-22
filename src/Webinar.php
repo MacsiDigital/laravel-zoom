@@ -4,6 +4,7 @@ namespace MacsiDigital\Zoom;
 
 use Exception;
 use MacsiDigital\Zoom\Support\Model;
+use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
 
 class Webinar extends Model
 {
@@ -118,7 +119,7 @@ class Webinar extends Model
                 if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getBody());
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -126,7 +127,7 @@ class Webinar extends Model
         }
     }
 
-    public function all()
+    public function all($fromPage = 1)
     {
         if ($this->userID != '') {
             if (in_array('get', $this->methods)) {
@@ -134,7 +135,7 @@ class Webinar extends Model
                 if ($this->response->getStatusCode() == '200') {
                     return $this->collect($this->response->getBody());
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -150,7 +151,7 @@ class Webinar extends Model
                 if ($this->response->getStatusCode() == '204') {
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         } else {
@@ -161,7 +162,7 @@ class Webinar extends Model
 
                     return $this;
                 } else {
-                    throw new Exception($this->response->getStatusCode().' status code');
+                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
                 }
             }
         }
@@ -190,7 +191,7 @@ class Webinar extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -200,7 +201,7 @@ class Webinar extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -210,7 +211,7 @@ class Webinar extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -220,7 +221,7 @@ class Webinar extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 
@@ -230,7 +231,7 @@ class Webinar extends Model
         if ($this->response->getStatusCode() == '204') {
             return $this->response->getBody();
         } else {
-            throw new Exception($this->response->getStatusCode().' status code');
+            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
         }
     }
 }
