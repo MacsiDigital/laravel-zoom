@@ -161,7 +161,7 @@ We utilise the find function to return a record by searching for it by a unique 
 The find all function returns a customised Laravel Collection, which we call a resultset.
 
 ``` php
-	$users = Zoom::user()->all();
+  $users = Zoom::user()->all();
 ```
 
 When calling the the all function we will make up to 5 API calls to retreive all the data, so 5 x 300 records (the max allowed), i.e. up to 1500 records per request. This can be amended in the config by updating 'max_api_calls_per_request'.
@@ -335,7 +335,7 @@ Currently only the User model and Role model can be created directly, most other
 To create a user.
 
 ``` php
-	Zoom::user()->create([
+  Zoom::user()->create([
         'first_name' => 'First Name',
         'last_name' => 'Last Name',
         'email' => 'test@test.com',
@@ -529,18 +529,18 @@ This is the main access for most models in Zoom.
 
     // can only be retrieved through a user
      
-    $user()->settings; 
+    $user->settings; 
 
     // To get sub relations then call the relationship of the setting
     
-    $user()->settings->scheduleMeeting;
-    $user()->settings->emailNotification;
-    $user()->settings->feature;
-    $user()->settings->inMeeting;
-    $user()->settings->integration;
-    $user()->settings->recording;
-    $user()->settings->telephony;
-    $user()->settings->tsp;
+    $user->settings->scheduleMeeting;
+    $user->settings->emailNotification;
+    $user->settings->feature;
+    $user->settings->inMeeting;
+    $user->settings->integration;
+    $user->settings->recording;
+    $user->settings->telephony;
+    $user->settings->tsp;
 
     // To update a setting
      
@@ -842,7 +842,8 @@ If you discover any security related issues, please email colin@macsi.co.uk inst
 
 ## Credits
 
-- [Colin Hall](https://github.com/macsidigital)
+- [MacsiDigital](https://github.com/macsidigital)
+- [Colin Hall](https://github.com/colinhall17)
 - [All Contributors](../../contributors)
 
 ## License
