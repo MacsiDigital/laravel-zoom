@@ -2,7 +2,7 @@
 
 namespace MacsiDigital\Zoom\Support;
 
-use MacsiDigital\API\Support\Factory;
+use Illuminate\Http\Client\Factory;
 
 class Client extends Factory
 {

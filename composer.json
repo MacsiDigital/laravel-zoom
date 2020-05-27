@@ -13,13 +13,13 @@
         }
     ],
     "require": {
-        "php": "^7.2", 
-        "illuminate/support": "^6.0",
-        "macsidigital/laravel-api-client": "^2.0"
+        "php": "^7.2.5", 
+        "illuminate/support": "^7.0",
+        "macsidigital/laravel-api-client": "^3.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^4.0",
-        "phpunit/phpunit": "^8.0"
+        "orchestra/testbench": "^5.0",
+        "phpunit/phpunit": "^8.5"
     },
     "autoload": {
         "psr-4": {
@@ -54,13 +54,6 @@
         {
             "type": "path",
             "url":  "../laravel-api-client",
-            "options": {
-              "symlink": true
-            }
-        },
-        {
-            "type": "path",
-            "url":  "../laravel-oauth2-client",
             "options": {
               "symlink": true
             }
