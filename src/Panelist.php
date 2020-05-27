@@ -6,44 +6,32 @@ use MacsiDigital\Zoom\Support\Model;
 
 class Panelist extends Model
 {
-    public $webinar_id;
+    protected $insertResource = 'MacsiDigital\Zoom\Requests\StorePanelist';
+    
+    protected $endPoint = 'webinars/{webinar:id}/panelists';
 
-    const KEY_FIELD = 'id';
+    protected $allowedMethods = ['get', 'post', 'put'];
 
-    protected $attributes = [
-        'id' => '', // string
-        'name' => '', // string
-        'email' => '', // string
-        'join_url' => '', // string
-    ];
+    protected $apiMultipleDataField = '';
 
-    protected $createAttributes = [
-        'id',
-        'name',
-        'email',
-        'join_url',
-    ];
-
-    protected $updateAttributes = [
-        'id',
-        'name',
-        'email',
-        'join_url',
-    ];
-
-    public function setWebinarID($webinar_id)
-    {
-        $this->webinarID = $webinar_id;
+    public function updateAction($action){
+        $this->action = $action;
+        return $this;
     }
 
-    public function make($attributes)
+    public function approve()
     {
-        $model = new static;
-        $model->fill($attributes);
-        if (isset($this->webinarID)) {
-            $model->setwebinarID($this->webinarID);
-        }
-
-        return $model;
+        return $this->updateAction('approve');
     }
+    
+    public function deny()
+    {
+        return $this->updateAction('deny');
+    }
+
+    public function cancel()
+    {
+        return $this->updateAction('cancel');
+    }
+
 }

@@ -2,236 +2,74 @@
 
 namespace MacsiDigital\Zoom;
 
-use Exception;
 use MacsiDigital\Zoom\Support\Model;
-use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
 
 class Webinar extends Model
 {
-    const ENDPOINT = 'webinars';
-    const NODE_NAME = 'webinar';
-    const KEY_FIELD = 'id';
+    protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreWebinar';
+    protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateWebinar';
+    
+    protected $endPoint = 'webinars';
 
-    protected $methods = ['get', 'post', 'patch', 'put', 'delete'];
-
-    protected $userID;
-
-    protected $attributes = [
-        'uuid' => '', // string
-        'id' => '', // string
-        'host_id' => '', // string
-        'created_at' => '', // string [date-time]
-        'join_url' => '', // string
-        'topic' => '', // string
-        'type' => '', // integer
-        'start_time' => '', // string [date-time]
-        'duration' => '', // integer
-        'timezone' => '', // string
-        'password' => '', // string
-        'agenda' => '', // string
-        'recurrence' => [],
-        'occurrences' => [],
-        'settings' => [],
+    protected $customEndPoints = [
+        'get' => 'users/{user_id}/webinars',
+        'post' => 'users/{user_id}/webinars'
     ];
 
-    protected $createAttributes = [
-        'topic',
-        'type',
+    protected $allowedMethods = ['find', 'get', 'post', 'patch', 'delete'];
+
+    protected $apiDataField = '';
+
+    protected $apiMultipleDataField = 'webinars';
+
+    protected $dates = [
         'start_time',
-        'duration',
-        'timezone',
-        'password',
-        'agenda',
-        'recurrence',
-        'settings',
+        'created_at'
     ];
 
-    protected $updateAttributes = [
-        'topic',
-        'type',
-        'start_time',
-        'duration',
-        'timezone',
-        'password',
-        'agenda',
-        'recurrence',
-        'settings',
-    ];
-
-    protected $relationships = [
-        'settings' => '\MacsiDigital\Zoom\WebinarSetting',
-        'recurrance' => '\MacsiDigital\Zoom\Recurrance',
-        'occurances' => '\MacsiDigital\Zoom\Occurance',
-        'tracking_fields' => '\MacsiDigital\Zoom\TrackingFields',
-    ];
-
-    public function addTrackingField(TrackingField $tracking_field)
+    public function settings() 
     {
-        $this->attributes['tracking_fields'][] = $tracking_field;
-
-        return $this;
+        return $this->hasOne(WebinarSetting::class, 'settings');
     }
 
-    public function addRecurrance(Recurrance $recurance)
+    public function registrants() 
     {
-        $this->attributes['recurrance'] = $recurance;
-
-        return $this;
+        return $this->hasMany(WebinarRegistrant::class);
     }
 
-    public function addSettings(WebinarSetting $settings)
+    public function occurrences() 
     {
-        $this->attributes['settings'] = $settings;
-
-        return $this;
+        return $this->hasMany(WebinarOccurrence::class);
     }
 
-    public function addOccurence(Occurance $occurance)
+    public function panelists() 
     {
-        $this->attributes['occurances'][] = $occurance;
-
-        return $this;
+        return $this->hasMany(Panelist::class);
     }
 
-    public function setUserID($user_id)
+    public function registrationQuestions() 
     {
-        $this->userID = $user_id;
-
-        return $this;
+        return $this->hasMany(RegistrationQuestion::class);
     }
 
-    public function make($attributes)
+    public function trackingField() 
     {
-        $model = new static;
-        $model->fill($attributes);
-        if (isset($this->userID)) {
-            $model->setUserID($this->userID);
-        }
-
-        return $model;
+        return $this->hasMany(TrackingField::class);
     }
 
-    public function get()
+    public function trackingSources() 
     {
-        if ($this->userID != '') {
-            if (in_array('get', $this->methods)) {
-                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->getQueryString());
-                if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getBody());
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        } else {
-            throw new Exception('No User to retreive Meetings');
-        }
+        return $this->hasMany(TrackingSources::class);
     }
 
-    public function all($fromPage = 1)
+    public function polls() 
     {
-        if ($this->userID != '') {
-            if (in_array('get', $this->methods)) {
-                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint());
-                if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getBody());
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        } else {
-            throw new Exception('No User to retreive Meetings');
-        }
+        return $this->hasMany(Poll::class); 
     }
 
-    public function save()
+    public function endWebinar() 
     {
-        if ($this->hasID()) {
-            if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
-                if ($this->response->getStatusCode() == '204') {
-                    return $this;
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        } else {
-            if (in_array('post', $this->methods)) {
-                $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->createAttributes());
-                if ($this->response->getStatusCode() == '201') {
-                    $this->fill($this->response->getBody());
-
-                    return $this;
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        }
+        return $this->newQuery()->sendRequest('put', ['webinars/'.$this->id.'/status', ['action' => 'end']])->successful();
     }
-
-    public function registrants()
-    {
-        $registrant = new \MacsiDigital\Zoom\Registrant;
-        $registrant->setType('webinars');
-        $registrant->setRelationshipID($this->getID());
-
-        return $registrant;
-    }
-
-    public function panelists()
-    {
-        $panelist = new \MacsiDigital\Zoom\Panelist;
-        $panelist->setWebinarID($this->getID());
-
-        return $panelist;
-    }
-
-    public function cancelRegistrant($registrant)
-    {
-        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
-        if ($this->response->getStatusCode() == '204') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
-    }
-
-    public function denyRegistrant($registrant)
-    {
-        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
-        if ($this->response->getStatusCode() == '204') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
-    }
-
-    public function approveRegistrant($registrant)
-    {
-        $this->response = $this->client->put("/webinars/{$this->getID()}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
-        if ($this->response->getStatusCode() == '204') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
-    }
-
-    public function deletePanelist($panelist)
-    {
-        $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists/{$panelist->id}");
-        if ($this->response->getStatusCode() == '204') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
-    }
-
-    public function deletePanelists()
-    {
-        $this->response = $this->client->delete("/webinars/{$this->getID()}/panelists");
-        if ($this->response->getStatusCode() == '204') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
-    }
+    
 }

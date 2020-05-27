@@ -3,110 +3,140 @@
 namespace MacsiDigital\Zoom;
 
 use MacsiDigital\Zoom\Support\Model;
-use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
+use MacsiDigital\Zoom\Exceptions\FileTooLargeException;
 
 class User extends Model
 {
-    const ENDPOINT = 'users';
-    const NODE_NAME = 'user';
-    const KEY_FIELD = 'id';
-
-    protected $methods = ['get', 'post', 'patch', 'put', 'delete'];
-
-    protected $queryAttributes = ['status', 'limit', 'role_id'];
+    protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreUser';
+    protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateUser';
 
     protected $attributes = [
-        'first_name' => '', //string
-        'last_name' => '', //string
-        'email' => '', //string
-        'type' => '', //integer
-        'pmi' => '', //string
-        'use_pmi' => '',
-        'timezone' => '', //string
-        'dept' => '', //string
-        'created_at' => '', //string [date-time]
-        'last_login_time' => '', //string [date-time]
-        'last_client_version' => '', //string
-        'language' => '',
-        'phone_country' => '',
-        'phone_number' => '',
-        'vanity_url' => '', // string
-        'personal_meeting_url' => '', // string
-        'verified' => '', // integer
-        'pic_url' => '', // string
-        'cms_user_id' => '', // string
-        'account_id' => '', // string
-        'host_key' => '', // string
-        'status' => '',
-        'group_ids' => [],
-        'im_group_ids' => [],
-        'password' => '',
-        'id' => '',
-        'jid' => '',
+        'action' => 'create',
+        'type' => 1
     ];
+    
+    protected $endPoint = 'users';
 
-    protected $createAttributes = [
-        'first_name',
-        'last_name',
-        'email',
-        'type',
-        'password',
-    ];
+    protected $allowedMethods = ['find', 'get', 'post', 'patch', 'delete'];
 
-    protected $updateAttributes = [
-        'first_name',
-        'last_name',
-        'type',
-        'pmi',
-        'use_pmi',
-        'timezone',
-        'dept',
-        'language',
-        'dept',
-        'vanity_name',
-        'host_key',
-        'cms_user_id',
-    ];
+    protected $apiDataField = '';
 
-    public function save()
+    protected $apiMultipleDataField = 'users';
+
+    public function isBasicType() 
     {
-        if ($this->hasID()) {
-            if (in_array('put', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
-                if ($this->response->getStatusCode() == '200' || $this->response->getStatusCode() == '204') {
-                    return $this;
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        } else {
-            if (in_array('post', $this->methods)) {
-                $attributes = ['action' => 'create', 'user_info' => $this->createAttributes()];
-                $this->response = $this->client->post($this->getEndpoint(), $attributes);
-                if ($this->response->getStatusCode() == '201') {
-                    $this->fill($this->response->getBody());
+        $this->type = 1;
+        return $this;
+    }
 
-                    return $this;
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        }
+    public function isLicensedType() 
+    {
+        $this->type = 2;
+        return $this;
+    }
+
+    public function isOnPremType() 
+    {
+        $this->type = 3;
+        return $this;
+    }
+
+    public function assistants()
+    {
+        return $this->hasMany(Assistant::class);
+    }
+
+    public function schedulers()
+    {
+        return $this->hasMany(Scheduler::class);
+    }
+
+    public function settings()
+    {
+        return $this->hasOne(Setting::class);
+    }
+
+    public function permission()
+    {
+        return $this->hasOne(Permission::class);
+    }
+
+    public function token()
+    {
+        return $this->hasOne(Token::class);
     }
 
     public function meetings()
     {
-        $meeting = new \MacsiDigital\Zoom\Meeting;
-        $meeting->setUserID($this->getID());
-
-        return $meeting;
+        return $this->hasMany(Meeting::class);
     }
 
     public function webinars()
     {
-        $webinar = new \MacsiDigital\Zoom\Webinar;
-        $webinar->setUserID($this->getID());
-
-        return $webinar;
+        return $this->hasMany(Webinar::class);
     }
+
+    public function setBasic()
+    {
+        $this->type = '1';
+    }
+
+    public function setLicensed()
+    {
+        $this->type = '2';
+    }
+
+    public function setOnPrem()
+    {
+        $this->type = '3';
+    }
+
+    public function updateProfilePicture($image)
+    {
+        $filesize = number_format(filesize($image) / 1048576,2);
+        if($filesize > 2){
+            throw new FileTooLargeException($image, $filesize, '2MB');
+        } else {
+            return $this->newQuery()->attachFile('pic_file', file_get_contents($image), $image)->sendRequest('post', ['users/'.$this->id.'/picture'])->successful();
+        }
+    }
+
+    public function updateStatus($status)
+    {
+        if(in_array($status, ['activate', 'deactivate'])){
+            return $this->newQuery()->sendRequest('put', ['users/'.$this->id.'/status', ['action' => $status]])->successful();
+        } else {
+            throw new ValidationException('Status must be either active or deactivate');
+        }
+    }
+
+    public function updatePassword($password)
+    {
+        if(count($password) < 8){
+            return $this->newQuery()->sendRequest('put', ['users/'.$this->id.'/password', ['password' => $password]])->successful();
+        } else {
+            throw new ValidationException('Password must be 8 characters');
+        }
+    }
+
+    public function updateEmail($email)
+    {
+        $validator = Validator::make(['email' => $email], [ 'email' => 'required|email|max:128' ]);
+        if($validator->fails()){
+            throw new ValidationException('Email must be a valid email address less than 128 characters');
+        } else {
+            return $this->newQuery()->sendRequest('put', ['users/'.$this->id.'/email', ['email' => $email]])->successful();
+        }
+    }
+
+    public function disassociate()
+    {
+        return $this->newQuery()->sendRequest('delete', ['users/'.$this->id, ['action' => 'disassociate']])->successful();
+    }
+
+    public function delete()
+    {
+        return $this->newQuery()->sendRequest('delete', ['users/'.$this->id, ['action' => 'delete']])->successful();   
+    }
+    
 }

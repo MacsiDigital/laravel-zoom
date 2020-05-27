@@ -2,209 +2,84 @@
 
 namespace MacsiDigital\Zoom;
 
-use Exception;
-use MacsiDigital\Zoom\Exceptions\ZoomHttpException;
 use MacsiDigital\Zoom\Support\Model;
 
 class Meeting extends Model
 {
-    const ENDPOINT = 'meetings';
-    const NODE_NAME = 'meeting';
-    const KEY_FIELD = 'id';
+    protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreMeeting';
+    protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateMeeting';
+    
+    protected $endPoint = 'meetings';
 
-    protected $methods = ['get', 'post', 'patch', 'put', 'delete'];
-
-    protected $userID;
-
-    public $response;
-
-    protected $attributes = [
-        'uuid' => '',
-        'id' => '', // string
-        'host_id' => '', // string
-        'created_at' => '', // string [date-time]
-        'join_url' => '', // string
-        'topic' => '', // string
-        'type' => '', // integer
-        'status' => '', // string
-        'start_time' => '', // string [date-time]
-        'duration' => '', // integer
-        'timezone' => '', // string
-        'password' => '', // string
-        'agenda' => '', // string
-        'start_url' => '', // string
-        'recurrence' => [],
-        'occurrences' => [],
-        'tracking_fields' => [],
-        'settings' => [],
+    protected $customEndPoints = [
+        'get' => 'users/{user:id}/meetings',
+        'post' => 'users/{user:id}/meetings'
     ];
 
-    protected $createAttributes = [
-        'schedule_for',
-        'topic',
-        'type',
+    protected $allowedMethods = ['find', 'get', 'post', 'patch', 'delete'];
+
+    protected $apiDataField = '';
+
+    protected $apiMultipleDataField = 'meetings';   
+
+    protected $dates = [
         'start_time',
-        'duration',
-        'timezone',
-        'password',
-        'agenda',
-        'tracking_fields',
-        'recurrence',
-        'settings',
+        'created_at'
     ];
 
-    protected $updateAttributes = [
-        'schedule_for',
-        'topic',
-        'type',
-        'start_time',
-        'duration',
-        'timezone',
-        'password',
-        'agenda',
-        'tracking_fields',
-        'recurrence',
-        'settings',
-    ];
-
-    protected $relationships = [
-        'settings' => '\MacsiDigital\Zoom\MeetingSetting',
-        'recurrance' => '\MacsiDigital\Zoom\Recurrance',
-        'tracking_fields' => '\MacsiDigital\Zoom\TrackingFields',
-    ];
-
-    public function addTrackingField(TrackingFields $tracking_field)
+    public function settings() 
     {
-        $this->attributes['tracking_fields'][] = $tracking_field;
-
-        return $this;
+    	return $this->hasOne(MeetingSetting::class);
     }
 
-    public function addRecurrance(Recurrance $recurance)
+    public function recurrence() 
     {
-        $this->attributes['recurrance'] = $recurance;
-
-        return $this;
+    	return $this->hasOne(Recurrence::class);
     }
 
-    public function addSettings(MeetingSetting $settings)
+    public function occurrences() 
     {
-        $this->attributes['settings'] = $settings;
-
-        return $this;
+        return $this->hasMany(MeetingOccurrence::class);
     }
 
-    public function setUserID($user_id)
+    public function registrants() 
     {
-        $this->userID = $user_id;
-
-        return $this;
+    	return $this->hasMany(MeetingRegistrant::class);
     }
 
-    public function make($attributes)
+    public function polls() 
     {
-        $model = new static;
-        $model->fill($attributes);
-        if (isset($this->userID)) {
-            $model->setUserID($this->userID);
-        }
-
-        return $model;
+    	return $this->hasMany(Poll::class);	
     }
 
-    public function get()
+    public function registrationQuestions() 
     {
-        if ($this->userID != '') {
-            if (in_array('get', $this->methods)) {
-                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint().$this->getQueryString());
-                if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getBody());
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        } else {
-            throw new Exception('No User to retrieve Meetings');
-        }
+        return $this->hasMany(RegistrationQuestion::class); 
     }
 
-    public function all($fromPage = 1)
+    public function invitation() 
     {
-        if ($this->userID != '') {
-            if (in_array('get', $this->methods)) {
-                $this->response = $this->client->get("users/{$this->userID}/".$this->getEndPoint());
-                if ($this->response->getStatusCode() == '200') {
-                    return $this->collect($this->response->getBody());
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        } else {
-            throw new Exception('No User to retreive Meetings');
-        }
+        return $this->hasOne(Invitation::class); 
     }
 
-    public function save()
+    public function liveStream() 
     {
-        if ($this->hasID()) {
-            if (in_array('put', $this->methods) || in_array('patch', $this->methods)) {
-                $this->response = $this->client->patch("{$this->getEndpoint()}/{$this->getID()}", $this->updateAttributes());
-                if ($this->response->getStatusCode() == '204') {
-                    return $this;
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        } else {
-            if (in_array('post', $this->methods)) {
-                $this->response = $this->client->post("users/{$this->userID}/{$this->getEndPoint()}", $this->createAttributes());
-                if ($this->response->getStatusCode() == '201') {
-                    $this->fill($this->response->getBody());
-
-                    return $this;
-                } else {
-                    throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-                }
-            }
-        }
+        return $this->hasOne(LiveStream::class); 
     }
 
-    public function registrants()
+    public function trackingFields() 
     {
-        $registrant = new \MacsiDigital\Zoom\Registrant;
-        $registrant->setType('meetings');
-        $registrant->setRelationshipID($this->getID());
-
-        return $registrant;
+        return $this->hasMany(TrackingField::class); 
     }
 
-    public function deleteRegistrant($registrant)
+    public function delete($scheduleForReminder=true)
     {
-        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'cancel', 'registrant' => [['email' => $registrant->email]]]);
-        if ($this->response->getStatusCode() == '200') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
+        return $this->newQuery()->addQuery('schedule_for_reminder', $scheduleForReminder)->delete();
     }
 
-    public function denyRegistrant($registrant)
+    public function endMeeting() 
     {
-        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'deny', 'registrant' => [['email' => $registrant->email]]]);
-        if ($this->response->getStatusCode() == '200') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
+    	return $this->newQuery()->sendRequest('put', ['meetings/'.$this->id.'/status', ['action' => 'end']])->successful();
     }
-
-    public function approveRegistrant($registrant)
-    {
-        $this->response = $this->client->put("/meetings/{$this->getID()}/registrants/status", ['action' => 'approve', 'registrant' => [['email' => $registrant->email]]]);
-        if ($this->response->getStatusCode() == '200') {
-            return $this->response->getBody();
-        } else {
-            throw new ZoomHttpException($this->response->getStatusCode(), $this->response->getBody());
-        }
-    }
+    
 }

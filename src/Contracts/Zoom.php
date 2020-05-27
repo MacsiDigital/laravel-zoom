@@ -2,13 +2,9 @@
 
 namespace MacsiDigital\Zoom\Contracts;
 
-interface Zoom
+use MacsiDigital\API\Facades\Client as ClientFacade;
+
+interface Zoom extends ClientFacade
 {
-    public function __construct($type = 'Private');
 
-    public function getClient();
-
-    public function __get($key);
-
-    public function getNode($key);
 }

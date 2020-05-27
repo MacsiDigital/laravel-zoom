@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 2.0.0 - 2020-05-27
+
+Updated version for Laravel 5.5 - 5.8
+
 ## 1.0.15 - 2019-08-02
 
 Update $query_attributes to $queryAttributes to be in line
