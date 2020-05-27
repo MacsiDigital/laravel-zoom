@@ -529,18 +529,18 @@ This is the main access for most models in Zoom.
 
     // can only be retrieved through a user
      
-    $user()->settings; 
+    $user->settings; 
 
     // To get sub relations then call the relationship of the setting
     
-    $user()->settings->scheduleMeeting;
-    $user()->settings->emailNotification;
-    $user()->settings->feature;
-    $user()->settings->inMeeting;
-    $user()->settings->integration;
-    $user()->settings->recording;
-    $user()->settings->telephony;
-    $user()->settings->tsp;
+    $user->settings->scheduleMeeting;
+    $user->settings->emailNotification;
+    $user->settings->feature;
+    $user->settings->inMeeting;
+    $user->settings->integration;
+    $user->settings->recording;
+    $user->settings->telephony;
+    $user->settings->tsp;
 
     // To update a setting
      
@@ -842,7 +842,8 @@ If you discover any security related issues, please email colin@macsi.co.uk inst
 
 ## Credits
 
-- [Colin Hall](https://github.com/macsidigital)
+- [MacsiDigital](https://github.com/macsidigital)
+- [Colin Hall](https://github.com/colinhall17)
 - [All Contributors](../../contributors)
 
 ## License
