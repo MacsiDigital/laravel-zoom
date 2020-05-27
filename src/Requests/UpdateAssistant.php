@@ -4,7 +4,7 @@ namespace MacsiDigital\Zoom\Requests;
 
 use MacsiDigital\API\Support\PersistResource;
 
-class StoreAssistant extends PersistResource
+class UpdateAssistant extends PersistResource
 {
 
     protected $persistAttributes = [
