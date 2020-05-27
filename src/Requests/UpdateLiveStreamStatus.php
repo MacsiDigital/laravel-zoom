@@ -4,7 +4,7 @@ namespace MacsiDigital\Zoom\Requests;
 
 use MacsiDigital\API\Support\PersistResource;
 
-class UpdateLiveStream extends PersistResource
+class UpdateLiveStreamStatus extends PersistResource
 {
 
     protected $persistAttributes = [

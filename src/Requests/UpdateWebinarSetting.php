@@ -4,7 +4,7 @@ namespace MacsiDigital\Zoom\Requests;
 
 use MacsiDigital\API\Support\PersistResource;
 
-class UpdateSetting extends PersistResource
+class UpdateWebinarSetting extends PersistResource
 {
 
     protected $persistAttributes = [

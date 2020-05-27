@@ -3,9 +3,6 @@
 namespace MacsiDigital\Zoom\Requests;
 
 use MacsiDigital\API\Support\PersistResource;
-use MacsiDigital\Zoom\Requests\StoreSetting;
-use MacsiDigital\Zoom\Requests\StoreRecurrence;
-use MacsiDigital\Zoom\Requests\StoreTrackingField;
 
 class StoreMeeting extends PersistResource
 {

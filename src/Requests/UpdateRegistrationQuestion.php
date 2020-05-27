@@ -4,7 +4,7 @@ namespace MacsiDigital\Zoom\Requests;
 
 use MacsiDigital\API\Support\PersistResource;
 
-class UpdateRegistrantQuestion extends PersistResource
+class UpdateRegistrationQuestion extends PersistResource
 {
 
     protected $relatedResource = [

@@ -4,7 +4,7 @@ namespace MacsiDigital\Zoom\Requests;
 
 use MacsiDigital\API\Support\PersistResource;
 
-class UpdateQuestion extends PersistResource
+class UpdatePollQuestion extends PersistResource
 {
 
     protected $persistAttributes = [
