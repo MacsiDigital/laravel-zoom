@@ -77,11 +77,9 @@ Also note that some of the functionality is only available to certain plan types
 
 ### Connecting
 
-To get an access point you can simply create a new instance or use the facade to call any of the models.
+To get an access point you can simply create a new instance and the resource.
 
 ``` php
-    $zoom = new \MacsiDigital\Zoom\Zoom;
-
     $user = Zoom::user();
 ```
 
@@ -90,17 +88,13 @@ To get an access point you can simply create a new instance or use the facade to
 There are 3 main ways to work with models, to call them directly from the access point, via a facade, or to call them in a traditional way and pass in the access point
 
 ``` php
-    // Directly from the access point
-    $zoom = new \MacsiDigital\Zoom\Zoom;
-    $user = $zoom->user();
-
     //or you can shorten this into all one step by using the zoom facade
     
     $user = Zoom::user();
 
     //or
     
-    $zoom = new \MacsiDigital\Zoom\Zoom;
+    $zoom = new \MacsiDigital\Zoom\Support\Entry;
     $user = new \MacsiDigital\Zoom\User($zoom);
 ```
 
