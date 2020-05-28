@@ -2,6 +2,26 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 4.0.1 - 2020-05-27
+
+Document Correction
+
+## 4.0.0 - 2020-05-27
+
+Updated version for Laravel 7.0
+
+## 3.0.1 - 2020-05-27
+
+Document Correction
+
+## 3.0.0 - 2020-05-27
+
+Updated version for Laravel 6.0
+
+## 2.0.1 - 2020-05-27
+
+Document Correction
+
 ## 2.0.0 - 2020-05-27
 
 Updated version for Laravel 5.5 - 5.8
