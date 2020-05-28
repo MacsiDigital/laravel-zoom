@@ -77,11 +77,9 @@ Also note that some of the functionality is only available to certain plan types
 
 ### Connecting
 
-To get an access point you can simply create a new instance or use the facade to call any of the models.
+To get an access point you can simply create a new instance and the resource.
 
 ``` php
-    $zoom = new \MacsiDigital\Zoom\Zoom;
-
     $user = Zoom::user();
 ```
 
@@ -90,17 +88,13 @@ To get an access point you can simply create a new instance or use the facade to
 There are 3 main ways to work with models, to call them directly from the access point, via a facade, or to call them in a traditional way and pass in the access point
 
 ``` php
-    // Directly from the access point
-    $zoom = new \MacsiDigital\Zoom\Zoom;
-    $user = $zoom->user();
-
     //or you can shorten this into all one step by using the zoom facade
     
     $user = Zoom::user();
 
     //or
     
-    $zoom = new \MacsiDigital\Zoom\Zoom;
+    $zoom = new \MacsiDigital\Zoom\Support\Entry;
     $user = new \MacsiDigital\Zoom\User($zoom);
 ```
 
@@ -161,7 +155,7 @@ We utilise the find function to return a record by searching for it by a unique 
 The find all function returns a customised Laravel Collection, which we call a resultset.
 
 ``` php
-	$users = Zoom::user()->all();
+  $users = Zoom::user()->all();
 ```
 
 When calling the the all function we will make up to 5 API calls to retreive all the data, so 5 x 300 records (the max allowed), i.e. up to 1500 records per request. This can be amended in the config by updating 'max_api_calls_per_request'.
@@ -335,7 +329,7 @@ Currently only the User model and Role model can be created directly, most other
 To create a user.
 
 ``` php
-	Zoom::user()->create([
+  Zoom::user()->create([
         'first_name' => 'First Name',
         'last_name' => 'Last Name',
         'email' => 'test@test.com',
