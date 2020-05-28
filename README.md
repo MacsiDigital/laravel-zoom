@@ -88,8 +88,6 @@ To get an access point you can simply create a new instance and the resource.
 There are 2 main ways to work with models, to call them directly from the access entry point via a facade, or to call them in a traditional way and pass in the access entry point
 
 ``` php
-    //or you can shorten this into all one step by using the zoom facade
-    
     $user = Zoom::user();
 
     //or
