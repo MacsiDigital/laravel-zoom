@@ -18,9 +18,9 @@ class StoreWebinar extends PersistResource
     ];
 
     protected $relatedResource = [
-    	"settings" => StoreWebianrSetting::class,
+    	"settings" => StoreWebinarSetting::class,
     	"recurrence" => StoreRecurrence::class,
         "tracking_fields" => StoreTrackingField::class
     ];
-    
+
 }
