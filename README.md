@@ -9,13 +9,13 @@ Laravel Zoom API Package
 
 ## Our API mission!
 
-Lets be honest, API's are all over the place and so inconsistant.  We are therefore setting out to try to change this for all Laravel user's who need an API client.  Therefore we have developed an [API Client Library](https://github.com/MacsiDigital/laravel-api-client), which our API's are built on top of, to give a common set of consistant functionality.
+Let's be honest, API's are all over the place and so inconsistent.  We are therefore setting out to try to change this for all Laravel user's who need an API client and have developed an [API Client Library](https://github.com/MacsiDigital/laravel-api-client), which our API's are built on top of, to give a common set of consistent functionality.
 
 ## Updates
 
 We update security and bug fixes as soon as we can, other pull requests and enhancements will be as and when we can do them.
 
-You can follow us on twitter where we will post any major updates. [MacsiDigital](https://twitter.com/MacsiDigital)
+You can follow us on Twitter where we will post any major updates. [MacsiDigital](https://twitter.com/MacsiDigital)
 
 ## Installation
 
@@ -64,7 +64,7 @@ That should be it.
 
 ## Usage
 
-Everything has been setup to be similar to Laravel syntax. So hopefully using it will be similar to Eloquent, right down to relationships.
+Everything has been set up to be similar to Laravel syntax. So hopefully using it will be similar to Eloquent, right down to relationships.
 
 Unfortunately the Zoom API is not very uniform and is a bit all over the place.  But we have hopefully made this uniform and logical. However you will still need to read the [Zoom documentation](https://marketplace.zoom.us/docs/api-reference/introduction) to know what is and isn't possible.
 
@@ -91,7 +91,7 @@ To get an access point you can simply create a new instance and the resource.
 
 ### Accessing models
 
-There are 2 main ways to work with models, to call them directly from the access entry point via a facade, or to call them in a traditional way and pass in the access entry point
+There are 2 main ways to work with models, to call them directly from the access entry point via a facade, or to call them in teh standard php 'new' method and pass in the access entry point
 
 ``` php
     $user = Zoom::user();
@@ -104,7 +104,7 @@ There are 2 main ways to work with models, to call them directly from the access
 
 ## Working with models
 
-As noted we are aiming for functionality similar to Laravel, so most things that you can do in Laravel you can do here, with exception of any database specific functionality, as we are not using databases.
+As noted we are aiming for functionality similar to Laravel, so most things that you can do in Laravel you can do here, with exception to any database specific functionality, as we are not using databases.
 
 ``` php
     $user = Zoom::user()->create([...]);
@@ -162,13 +162,13 @@ The find all function returns a customised Laravel Collection, which we call a r
   $users = Zoom::user()->all();
 ```
 
-When calling the the all function we will make up to 5 API calls to retreive all the data, so 5 x 300 records (the max allowed), i.e. up to 1500 records per request. This can be amended in the config by updating 'max_api_calls_per_request'.
+When calling the all function we will make up to 5 API calls to retrieve all the data, so 5 x 300 records (the max allowed), i.e. up to 1500 records per request. This can be amended in the config by updating 'max_api_calls_per_request'.
 
 More info below in ResultSets.
 
 ### Get
 
-We utilise the get function when we want to retreive filtered records.  Note that Zoom doesn't offer much in the way of filters. So check the documentation.
+We utilise the get function when we want to retrieve filtered records.  Note that Zoom doesn't offer much in the way of filters. So check the documentation.
 
 ``` php
     $users = Zoom::user()->where('status', 'active')->get();
@@ -184,7 +184,7 @@ When using the get call we will automatically paginate results, which by default
     $users = Zoom::user()->where('status', 'active')->paginate(100)->get(); // will return 100 records
 ``` 
 
-You can disable the pagination so it behaves the same as the all() function
+You can disable the pagination, so it behaves the same as the all() function
 
 ``` php
     $users = Zoom::user()->where('status', 'active')->setPaginate(false)->setPerPage(300)->get(); // will return 300 records * 5 request (or amount set in config) = 1500 records
@@ -192,7 +192,7 @@ You can disable the pagination so it behaves the same as the all() function
 
 ### resultSet
 
-The all and get functions return a resultSet which is an enhanced Laravel Collection. Like collections we can call the toArray and toJson functions, which places the data in a 'data' field and adds some meta information on total records and page information.
+The all and get functions return a resultSet which is an enhanced Laravel Collection. Like collections, we can call the toArray and toJson functions, which places the data in a 'data' field and adds some meta information on total records and page information.
 
 ``` php
     // toArray()
@@ -274,7 +274,7 @@ The all and get functions return a resultSet which is an enhanced Laravel Collec
 
 There are a few additional helper functions.
 
-If our data set is larger than the returned records then we call call the nextPage() function to return the next page of records.
+If our data set is larger than the returned records then we call the nextPage() function to return the next page of records.
 
 ```php
     $meetings->nextPage();
@@ -286,7 +286,7 @@ We can then also navigate back a page by calling the previousPage() function.  W
     $meetings->previousPage();
 ```
 
-There is also a function to accumulate more records, if you call the getNextRecords() function it will retreive the next 1500 results and add them to the current records, so you can then run through 3000 records if required.
+There is also a function to accumulate more records, if you call the getNextRecords() function it will retrieve the next 1500 results and add them to the current records, so you can then run through 3000 records if required.
 
 ```php
     $meetings->getNextRecords();
@@ -308,11 +308,11 @@ There are also a number of helper functions.
     $meetings->perPage(); // returns how many results we return per page
 ```
 
-As noted above we are using collections as the base for the record sets, so anything that is possible in collections is possible here.  As Zoom's ability to filter is limited we can therefore use the collections where function for example.
+As noted above we are using collections as the base for the record sets, so anything that is possible in collections is possible here.  As Zoom's ability to filter is limited we can use the collections 'where' function for example.
 
 ## Persisting Models
 
-Again, the aim is to be similar to laravel, so you can utilise save, create, update and make methods.
+Again, the aim is to be similar to laravel, so you can utilise the save, create, update and make methods.
 
 ### Save
 
@@ -328,7 +328,7 @@ To save a model we will use the save method, this will determine if the model is
 
 ### Create
 
-Currently only the User model and Role model can be created directly, most other models need to be created as part of a relationship, see below for details.
+Currently, only the User model and Role model can be created directly, most other models need to be created as part of a relationship, see below for details.
 
 To create a user.
 
@@ -350,7 +350,7 @@ To create a user.
 
 ### Make
 
-Make is simlar to create except it will not persist the model to the API.  This is handy for relationship models, more on this below.
+Make is similar to create except it will not persist the model to the API.  This is handy for relationship models, more on this below.
 
 ``` php
     $meeting = Zoom::meeting()->make([...]); 
@@ -368,13 +368,13 @@ We can also mass update attributes.
 
 ## Relationships
 
-A major change to the newer versions of our API client is we use Relationships similar to Laravel. To retreive all meetings associated to a user we would call like so.
+A major change to the newer versions of our API client is we use Relationships similar to Laravel. To retrieve all meetings associated to a user we would call like so.
 
 ```php
     $meetings = Zoom::user()->find(...)->meetings;
 ```
 
-In the Zoom API some relationships are returned direct with the parent model and some we have to make additional API calls for (this is worthwhile knowing for performance reasons and API rate limits).
+In the Zoom API some relationships get returned direct with the parent model, some we have to make additional API calls for (this is worthwhile knowing for performance reasons and API rate limits).
 
 Its also worth pointing out that we are returning the resultset by calling ->meetings.  If we call the function ->meetings() we receive the relationship object which can be further queried.
 
@@ -390,7 +390,7 @@ The later is handy when we need to filter results
     $meetings = Zoom::user()->find(...)->meetings()->where('type', 'scheduled')->get();
 ```
 
-As noted above, Zoom has very limited queriable filters, so check with the Zoom documentation.
+As noted above, Zoom has very limited queryable filters, so check with the Zoom documentation.
 
 ### Save & Create
 
@@ -447,7 +447,7 @@ We give a brief overview of the common models, we have not included any validati
     
     Zoom::role();
 
-    // available retreive functions
+    // available retrieve functions
      
     $role->find($id); // by id
     $role->all();
@@ -479,7 +479,7 @@ This is the main access for most models in Zoom.
     
     Zoom::user();
 
-    // available retreive functions
+    // available retrieve functions
      
     Zoom::user()->find('test@example.com'); // by id or email
     Zoom::user()->all();
@@ -592,14 +592,14 @@ This is the main access for most models in Zoom.
 
     $user->meetings()->save($meeting);
 
-    // To retreive multiple records we need to go through the user model
+    // To retrieve multiple records we need to go through the user model
 
     $user->meetings()->all();
     $user->meetings;  // same as above
     $user->meetings()->get();
     $user->meetings()->first();
 
-    // available retreive functions
+    // available retrieve functions
      
     $meeting->find(id); // by id
 
@@ -635,7 +635,7 @@ This is the main access for most models in Zoom.
     $registrant = Zoom::registrant()->make([...]);
     $meeting->registrants()->save($registrant);
     
-    // To retreive occurrences, Zoom requires both meeting and occurrence ID's, so we have to 
+    // To retrieve occurrences, Zoom requires both meeting and occurrence ID's, so we have to 
     // first retrieve the meeting
      
     $occurrence = Zoom::meeting()->find('...')->occurrences()->find('...');
@@ -699,7 +699,7 @@ This is the main access for most models in Zoom.
     $user->webinars()->get();
     $user->webinars()->first();
 
-    // available retreive functions
+    // available retrieve functions
      
     $webinar->find(id); // by id
 
@@ -723,7 +723,7 @@ This is the main access for most models in Zoom.
     $webinar->trackingSources // hasMany relationship
     $webinar->trackingFields // hasMany relationship
 
-    // To retreive an occurrence, Zoom requires both webinar and occurnce ID's, so we have to 
+    // To retrieve an occurrence, Zoom requires both webinar and occurnce ID's, so we have to 
     // first retrieve the webinar
      
     $occurrence = Zoom::webinar()->find('...')->occurrences()->find('...');
@@ -759,7 +759,7 @@ We are showing info for meeting, you will need to switch out meeting to webinar 
     // cant be instantiated or created directly, has to be created by setting up a recurrence
     // model on Meeting/Webinar Creation
     //
-    // To retreive occurrences we need to go through the meeting/webinar model, 
+    // To retrieve occurrences we need to go through the meeting/webinar model, 
     // 
     // Only try to retrieve for a meeting/webinar that recurs, otherwise you will just get returned a
     // meeting/webinar model which will throw an error.
@@ -802,7 +802,7 @@ We are showing info for meeting, you will need to switch out meeting to webinar 
     $settings = Zoom::meetingSetting()->make([...]);
     $meeting = $meeting->settings()->save($settings);
 
-    // To retreive settings we need to go through the meeting model
+    // To retrieve settings we need to go through the meeting model
 
     $meeting->settings; // returns MeetingSetting model / WebinarSettings model
 
