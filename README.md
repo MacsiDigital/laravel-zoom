@@ -15,7 +15,7 @@ Let's be honest, API's are all over the place and so inconsistent.  We are there
 
 We update security and bug fixes as soon as we can, other pull requests and enhancements will be as and when we can do them.
 
-You can follow us on Twitter where we will post any major updates. [MacsiDigital](https://twitter.com/MacsiDigital)
+You can follow us on Twitter where we will post any major updates. [MacsiDigital Twitter](https://twitter.com/MacsiDigital)
 
 ## Installation
 
