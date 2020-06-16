@@ -11,6 +11,12 @@ Laravel Zoom API Package
 
 Lets be honest, API's are all over the place and so inconsistant.  We are therefore setting out to try to change this for all Laravel user's who need an API client.  Therefore we have developed an [API Client Library](https://github.com/MacsiDigital/laravel-api-client), which our API's are built on top of, to give a common set of consistant functionality.
 
+## Updates
+
+We update security and bug fixes as soon as we can, other pull requests and enhancements will be as and when we can do them.
+
+You can follow us on twitter where we will post any major updates. [MacsiDigital](https://twitter.com/MacsiDigital)
+
 ## Installation
 
 You can install the package via composer:
@@ -162,7 +168,7 @@ More info below in ResultSets.
 
 ### Get
 
-We utilise the get function when we want to retreive filtered records.  Note that Zoom don't offer much in the way of filters. So check the documentation.
+We utilise the get function when we want to retreive filtered records.  Note that Zoom doesn't offer much in the way of filters. So check the documentation.
 
 ``` php
     $users = Zoom::user()->where('status', 'active')->get();
