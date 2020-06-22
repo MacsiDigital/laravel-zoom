@@ -9,6 +9,8 @@ class Model extends ApiResource
 {
 	protected $apiDataField = '';
 
+    protected $updateOnlyDirty = false;
+
 	protected $dateFormat = \DateTime::ATOM;
 
 }
