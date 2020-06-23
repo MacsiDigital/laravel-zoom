@@ -11,7 +11,7 @@ class UpdateRecurrence extends PersistResource
     	"type" => "nullable|integer|in:1,2,3",
 	    "repeat_interval" => "nullable|integer",
 	    "weekly_days" => "nullable|integer|in:1,2,3,4,5,6,7",
-	    "monthly_day" => "nullabel|numeric|between:1,31",
+	    "monthly_day" => "nullable|numeric|between:1,31",
 	    "monthly_week" => "nullable|numeric|in:-1,1,2,3,4",
 	    "monthly_week_day" => "nullable|integer|in:1,2,3,4,5,6,7",
 	    "end_times" => "nullable|numeric|max:50",
