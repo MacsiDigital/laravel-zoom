@@ -17,6 +17,12 @@ We update security and bug fixes as soon as we can, other pull requests and enha
 
 You can follow us on Twitter where we will post any major updates. [MacsiDigital Twitter](https://twitter.com/MacsiDigital)
 
+## Updates
+
+We update security and bug fixes as soon as we can, other pull requests and enhancements will be as and when we can do them.
+
+You can follow us on twitter where we will post any major updates. [MacsiDigital](https://twitter.com/MacsiDigital)
+
 ## Installation
 
 You can install the package via composer:
@@ -91,7 +97,7 @@ To get an access point you can simply create a new instance and the resource.
 
 ### Accessing models
 
-There are 2 main ways to work with models, to call them directly from the access entry point via a facade, or to call them in teh standard php 'new' method and pass in the access entry point
+There are 2 main ways to work with models, to call them directly from the access entry point via a facade, or to call them in the standard php 'new' method and pass in the access entry point
 
 ``` php
     $user = Zoom::user();

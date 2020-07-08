@@ -8,7 +8,7 @@ class Webinar extends Model
 {
     protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreWebinar';
     protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateWebinar';
-    
+
     protected $endPoint = 'webinars';
 
     protected $customEndPoints = [
@@ -27,49 +27,54 @@ class Webinar extends Model
         'created_at'
     ];
 
-    public function settings() 
+    public function settings()
     {
         return $this->hasOne(WebinarSetting::class, 'settings');
     }
 
-    public function registrants() 
+    public function recurrence()
+    {
+        return $this->hasOne(Recurrence::class);
+    }
+
+    public function registrants()
     {
         return $this->hasMany(WebinarRegistrant::class);
     }
 
-    public function occurrences() 
+    public function occurrences()
     {
         return $this->hasMany(WebinarOccurrence::class);
     }
 
-    public function panelists() 
+    public function panelists()
     {
         return $this->hasMany(Panelist::class);
     }
 
-    public function registrationQuestions() 
+    public function registrationQuestions()
     {
         return $this->hasMany(RegistrationQuestion::class);
     }
 
-    public function trackingField() 
+    public function trackingField()
     {
         return $this->hasMany(TrackingField::class);
     }
 
-    public function trackingSources() 
+    public function trackingSources()
     {
         return $this->hasMany(TrackingSources::class);
     }
 
-    public function polls() 
+    public function polls()
     {
-        return $this->hasMany(Poll::class); 
+        return $this->hasMany(Poll::class);
     }
 
-    public function endWebinar() 
+    public function endWebinar()
     {
         return $this->newQuery()->sendRequest('put', ['webinars/'.$this->id.'/status', ['action' => 'end']])->successful();
     }
-    
+
 }
