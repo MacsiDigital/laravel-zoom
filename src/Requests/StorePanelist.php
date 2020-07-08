@@ -8,8 +8,8 @@ class StorePanelist extends PersistResource
 {
 
     protected $persistAttributes = [
-      "email" => "nullable|email",
-      "name" => "required|string|max:64"
+        "email" => "nullable|email",
+        "name" => "required|string|max:64"
     ];
-    
+
 }
