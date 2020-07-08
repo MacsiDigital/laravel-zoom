@@ -9,7 +9,7 @@ class StoreWebinar extends PersistResource
 
     protected $persistAttributes = [
     	'topic' => 'nullable|string',
-    	'type' => 'nullable|integer|in:1,2,3,8',
+    	'type' => 'nullable|integer|in:5,6,9',
     	'start_time' => 'nullable|date',
     	'duration' => 'nullable|integer',
     	'timezone' => 'nullable|string',

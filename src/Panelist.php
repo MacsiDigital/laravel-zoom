@@ -7,12 +7,15 @@ use MacsiDigital\Zoom\Support\Model;
 class Panelist extends Model
 {
     protected $insertResource = 'MacsiDigital\Zoom\Requests\StorePanelist';
-    
+
     protected $endPoint = 'webinars/{webinar:id}/panelists';
 
-    protected $allowedMethods = ['get', 'post', 'put'];
+    protected $allowedMethods = ['get', 'post', 'delete'];
 
-    protected $apiMultipleDataField = '';
+    protected $apiMultipleDataField = 'panelists';
+
+    protected $wrapInOnInsert = 'panelists';
+    protected $wrapInEmptyArrayOnInsert = true;
 
     public function updateAction($action){
         $this->action = $action;
@@ -23,7 +26,7 @@ class Panelist extends Model
     {
         return $this->updateAction('approve');
     }
-    
+
     public function deny()
     {
         return $this->updateAction('deny');
