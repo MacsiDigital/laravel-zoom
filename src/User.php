@@ -14,7 +14,7 @@ class User extends Model
         'action' => 'create',
         'type' => 1
     ];
-    
+
     protected $endPoint = 'users';
 
     protected $allowedMethods = ['find', 'get', 'post', 'patch', 'delete'];
@@ -23,19 +23,19 @@ class User extends Model
 
     protected $apiMultipleDataField = 'users';
 
-    public function isBasicType() 
+    public function isBasicType()
     {
         $this->type = 1;
         return $this;
     }
 
-    public function isLicensedType() 
+    public function isLicensedType()
     {
         $this->type = 2;
         return $this;
     }
 
-    public function isOnPremType() 
+    public function isOnPremType()
     {
         $this->type = 3;
         return $this;
@@ -70,6 +70,12 @@ class User extends Model
     {
         return $this->hasMany(Meeting::class);
     }
+
+    public function recordings()
+    {
+        return $this->hasMany(Recording::class);
+    }
+
 
     public function webinars()
     {
@@ -136,7 +142,7 @@ class User extends Model
 
     public function delete()
     {
-        return $this->newQuery()->sendRequest('delete', ['users/'.$this->id, ['action' => 'delete']])->successful();   
+        return $this->newQuery()->sendRequest('delete', ['users/'.$this->id, ['action' => 'delete']])->successful();
     }
-    
+
 }
