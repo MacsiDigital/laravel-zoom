@@ -8,7 +8,7 @@ class Meeting extends Model
 {
     protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreMeeting';
     protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateMeeting';
-    
+
     protected $endPoint = 'meetings';
 
     protected $customEndPoints = [
@@ -20,56 +20,61 @@ class Meeting extends Model
 
     protected $apiDataField = '';
 
-    protected $apiMultipleDataField = 'meetings';   
+    protected $apiMultipleDataField = 'meetings';
 
     protected $dates = [
         'start_time',
         'created_at'
     ];
 
-    public function settings() 
+    public function settings()
     {
     	return $this->hasOne(MeetingSetting::class);
     }
 
-    public function recurrence() 
+    public function recurrence()
     {
     	return $this->hasOne(Recurrence::class);
     }
 
-    public function occurrences() 
+    public function occurrences()
     {
         return $this->hasMany(MeetingOccurrence::class);
     }
 
-    public function registrants() 
+    public function registrants()
     {
     	return $this->hasMany(MeetingRegistrant::class);
     }
 
-    public function polls() 
+    public function polls()
     {
-    	return $this->hasMany(Poll::class);	
+    	return $this->hasMany(Poll::class);
     }
 
-    public function registrationQuestions() 
+    public function registrationQuestions()
     {
-        return $this->hasMany(RegistrationQuestion::class); 
+        return $this->hasMany(RegistrationQuestion::class);
     }
 
-    public function invitation() 
+    public function invitation()
     {
-        return $this->hasOne(Invitation::class); 
+        return $this->hasOne(Invitation::class);
     }
 
-    public function liveStream() 
+    public function liveStream()
     {
-        return $this->hasOne(LiveStream::class); 
+        return $this->hasOne(LiveStream::class);
     }
 
-    public function trackingFields() 
+    public function trackingFields()
     {
-        return $this->hasMany(TrackingField::class); 
+        return $this->hasMany(TrackingField::class);
+    }
+
+    public function recording()
+    {
+        return $this->hasOne(MeetingRecording::class);
     }
 
     public function delete($scheduleForReminder=true)
@@ -77,9 +82,9 @@ class Meeting extends Model
         return $this->newQuery()->addQuery('schedule_for_reminder', $scheduleForReminder)->delete();
     }
 
-    public function endMeeting() 
+    public function endMeeting()
     {
     	return $this->newQuery()->sendRequest('put', ['meetings/'.$this->id.'/status', ['action' => 'end']])->successful();
     }
-    
+
 }

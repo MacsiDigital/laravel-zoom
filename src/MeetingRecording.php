@@ -4,15 +4,13 @@ namespace MacsiDigital\Zoom;
 
 use MacsiDigital\Zoom\Support\Model;
 
-class Recording extends Model
+class MeetingRecording extends Model
 {
     protected $customEndPoints = [
-        'get' => 'users/{user:id}/recordings'
+        'get' => 'meetings/{meeting:id}/recordings'
     ];
 
     protected $allowedMethods = ['get'];
-
-    protected $apiMultipleDataField = 'meetings';
 
     public function recordingFiles()
     {
