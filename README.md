@@ -82,6 +82,7 @@ At present we cover the following modules
 - Past Meetings
 - Webinars
 - Past Webinars
+- Recordings (get only)
 
 Doesn't look like a lot but Meetings and Webinars are the 2 big modules and includes, polls, registration questions, registrants, panelists and various other relationships.
 
@@ -505,6 +506,7 @@ This is the main access for most models in Zoom.
     $user->schedulers // hasMany relationship
     $user->permission // hasOne relationship
     $user->token // hasOne relationship
+    $user->recordings // hasMany relationship
 
     // Special functions
      
@@ -631,6 +633,7 @@ This is the main access for most models in Zoom.
     $meeting->liveStream // hasOne relationship
     $meeting->registrationQuestions // hasMany relationship
     $meeting->trackingFields // hasMany relationship
+    $meeting->recordings // hasOne relationship
 
     // Once we have the meeting we can update registrants
      
