@@ -11,17 +11,13 @@ Laravel Zoom API Package
 
 Let's be honest, API's are all over the place and so inconsistent.  We are therefore setting out to try to change this for all Laravel user's who need an API client and have developed an [API Client Library](https://github.com/MacsiDigital/laravel-api-client), which our API's are built on top of, to give a common set of consistent functionality.
 
-## Updates
+## Updates & Issues
+
+We only accept Issues through [Github](https://github.com/MacsiDigital/laravel-zoom)
 
 We update security and bug fixes as soon as we can, other pull requests and enhancements will be as and when we can do them.
 
 You can follow us on Twitter where we will post any major updates. [MacsiDigital Twitter](https://twitter.com/MacsiDigital)
-
-## Updates
-
-We update security and bug fixes as soon as we can, other pull requests and enhancements will be as and when we can do them.
-
-You can follow us on twitter where we will post any major updates. [MacsiDigital](https://twitter.com/MacsiDigital)
 
 ## Installation
 
@@ -35,7 +31,7 @@ For versioning:-
 
 - 1.0 - deprecated - was a quick build for a client project, not recommended you use this version.
 
-- 2.0 - Laravel 5.5 - 5.8 - bug fixes only, if there are any issues then create a pull request. There only as 5.5 is a LTS version of Laravel.  To keep it 5.5 we use casts from Laravel 5.5, 5.8 had some updates but they wont be available.
+- 2.0 - Laravel 5.5 - 5.8 - bug fixes only, if there are any issues then create a pull request. There only as 5.5 is a LTS version of Laravel.  To keep it 5.5 we use casts from Laravel 5.5, 5.8 had some updates but they wont be available. **Laravel 5.5 support is until August 30th, 2020, at which point we will drop support for this version** 
 
 - 3.0 - Laravel 6.0 - Maintained, feel free to create pull requests.  This is open source which is a 2 way street.
 
