@@ -7,14 +7,16 @@ use MacsiDigital\Zoom\Support\Model;
 class MeetingOccurrence extends Model
 {
     protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateOccurrence';
-    
-    protected $endPoint = 'meetings';
+
+    protected $endPoint = 'meetings/{meeting:id}';
 
     protected $allowedMethods = ['find', 'get', 'patch', 'delete'];
 
     protected $apiDataField = '';
 
-    protected $apiMultipleDataField = 'occurrences';  
+    protected $apiMultipleDataField = 'occurrences';
+
+    protected $primaryKey = 'occurrence_id';
 
     public function registrants()
     {
@@ -23,18 +25,26 @@ class MeetingOccurrence extends Model
 
     public function find($id)
     {
-    	$occurence = $this->newQuery()->addQuery('occurrence_id', $id)->find($this->meeting_id);
+        $occurence = $this->newQuery()->addQuery('occurrence_id', $id)->getOne();
     	$occurence->meeting_id = $this->meeting_id;
     	$occurence->occurrence_id = $id;
     	return $occurence;
     }
 
-    public function beforeUpdating($query) 
+    public function getPatchEndPoint()
     {
-    	If(!$this->hasKey()){
-    		return false;
-    	}
-    	return $query->where('occurrence_id', $this->id);
+        if($this->hasCustomEndPoint('patch')){
+            return $this->getCustomEndPoint('patch').$this->getKeyForEndPoint();
+        }
+        return $this->endPoint.'?occurrence_id='.$this->getKey();
+    }
+
+    public function getDeleteEndPoint()
+    {
+        if($this->hasCustomEndPoint('delete')){
+            return $this->getCustomEndPoint('delete').$this->getKeyForEndPoint();
+        }
+        return $this->endPoint.'?occurrence_id='.$this->getKey();
     }
 
     public function delete($scheduleForReminder=true)
@@ -42,11 +52,4 @@ class MeetingOccurrence extends Model
     	return $this->newQuery()->addQuery('schedule_for_reminder', $scheduleForReminder)->delete();
     }
 
-    public function beforeDeleting($query) 
-    {
-    	If(!$this->hasKey()){
-    		return false;
-    	}
-    	return $query->where('occurrence_id', $this->id);
-    }
 }
