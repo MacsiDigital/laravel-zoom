@@ -7,14 +7,16 @@ use MacsiDigital\Zoom\Support\Model;
 class WebinarOccurrence extends Model
 {
     protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateOccurrence';
-    
+
     protected $endPoint = 'webinars/{webinar:id}';
 
     protected $allowedMethods = ['find', 'get', 'patch', 'delete'];
 
     protected $apiDataField = '';
 
-    protected $apiMultipleDataField = 'occurrences';  
+    protected $primaryKey = 'occurrence_id';
+
+    protected $apiMultipleDataField = 'occurrences';
 
     public function registrants()
     {
@@ -29,12 +31,20 @@ class WebinarOccurrence extends Model
         return $occurence;
     }
 
-    public function beforeUpdating($query) 
+    public function getPatchEndPoint()
     {
-        If(!$this->hasKey()){
-            return false;
+        if($this->hasCustomEndPoint('patch')){
+            return $this->getCustomEndPoint('patch').$this->getKeyForEndPoint();
         }
-        return $query->where('occurrence_id', $this->id);
+        return $this->endPoint.'?occurrence_id='.$this->getKey();
+    }
+
+    public function getDeleteEndPoint()
+    {
+        if($this->hasCustomEndPoint('delete')){
+            return $this->getCustomEndPoint('delete').$this->getKeyForEndPoint();
+        }
+        return $this->endPoint.'?occurrence_id='.$this->getKey();
     }
 
     public function delete($scheduleForReminder=true)
@@ -42,11 +52,4 @@ class WebinarOccurrence extends Model
         return $this->newQuery()->addQuery('schedule_for_reminder', $scheduleForReminder)->delete();
     }
 
-    public function beforeDeleting($query) 
-    {
-        If(!$this->hasKey()){
-            return false;
-        }
-        return $query->where('occurrence_id', $this->id);
-    }
 }
