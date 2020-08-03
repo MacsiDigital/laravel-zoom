@@ -2,9 +2,9 @@
 
 namespace MacsiDigital\Zoom;
 
-use MacsiDigital\API\Support\Resource;
+use MacsiDigital\API\Support\ApiResource;
 
-class TrackingField extends Resource
+class TrackingField extends ApiResource
 {
     
 }
