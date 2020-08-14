@@ -19,7 +19,7 @@ class StoreMeetingSetting extends PersistResource
 	    "approval_type" => "nullable|in:0,1,2",
 	    "registration_type" => "nullable|in:1,2,3",
 	    "audio" => "nullable|in:both,telephony,voip",
-	    "local_recording" => "nullable|in:local,cloud,none",
+	    "auto_recording" => "nullable|in:local,cloud,none",
 	    "enforce_login" => "nullable|boolean",
 	    "enforce_login_domains" => "nullable|string",
 	    "alternative_hosts" => "nullable|string",
@@ -39,5 +39,5 @@ class StoreMeetingSetting extends PersistResource
     	"global_dial_in_countries" => StoreGlobalDialInCountry::class,
     	"global_dial_in_numbers" => StoreGlobalDialInNumber::class
     ];
-    
+
 }
