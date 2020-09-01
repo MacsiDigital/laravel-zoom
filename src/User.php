@@ -4,6 +4,7 @@ namespace MacsiDigital\Zoom;
 
 use MacsiDigital\Zoom\Support\Model;
 use MacsiDigital\Zoom\Exceptions\FileTooLargeException;
+use MacsiDigital\Zoom\Exceptions\ValidationException;
 
 class User extends Model
 {
@@ -117,10 +118,10 @@ class User extends Model
 
     public function updatePassword($password)
     {
-        if(count($password) < 8){
+        if(strlen($password) >= 8){
             return $this->newQuery()->sendRequest('put', ['users/'.$this->id.'/password', ['password' => $password]])->successful();
         } else {
-            throw new ValidationException('Password must be 8 characters');
+            throw new ValidationException('Password must be at least 8 characters');
         }
     }
 
