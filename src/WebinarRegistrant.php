@@ -7,7 +7,7 @@ use MacsiDigital\Zoom\Support\Model;
 class WebinarRegistrant extends Model
 {
     protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreRegistrant';
-    
+
     protected $endPoint = 'webinars/{webinar:id}/registrants';
 
     protected $allowedMethods = ['get', 'post', 'put'];
@@ -17,6 +17,11 @@ class WebinarRegistrant extends Model
     public function getApiMultipleDataField()
     {
         return $this->apiMultipleDataField;
+    }
+
+    public function customQuestions()
+    {
+        return $this->hasMany(CustomQuestion::class);
     }
 
     public function beforeQuery($query)
@@ -47,7 +52,7 @@ class WebinarRegistrant extends Model
     {
         return $this->updateAction('approve');
     }
-    
+
     public function deny()
     {
         return $this->updateAction('deny');
