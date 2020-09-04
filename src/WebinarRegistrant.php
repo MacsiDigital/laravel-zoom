@@ -28,7 +28,7 @@ class WebinarRegistrant extends Model
 
     public function find($id)
     {
-        $registrant = $this->newQuery()->addQuery('registrant_id', $id)->find($this->webinar_id);
+        $registrant = $this->newQuery()->addQuery('webinar_id', $this->webinar_id)->find($id);
         $registrant->webinar_id = $this->webinar_id;
         $registrant->registrant_id = $id;
         return $registrant;
