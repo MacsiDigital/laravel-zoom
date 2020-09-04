@@ -31,26 +31,27 @@ class WebinarRegistrant extends Model
         $registrant = $this->newQuery()->addQuery('webinar_id', $this->webinar_id)->find($id);
         $registrant->webinar_id = $this->webinar_id;
         $registrant->registrant_id = $id;
+
         return $registrant;
     }
 
     public function beforeQuery($query)
     {
-        if( isset($this->occurrence_id)){
+        if (isset($this->occurrence_id)) {
             $query->addQuery('occurrence_id', $this->occurrence_id);
         }
     }
 
     public function beforeInsert($query)
     {
-        if( isset($this->occurrence_id)){
+        if (isset($this->occurrence_id)) {
             $query->addQuery('occurrence_id', $this->occurrence_id);
         }
     }
 
     protected function updateAction($action)
     {
-        if ($this->exists()){
+        if ($this->exists()) {
             if (isset($this->occurrence_id)) {
                 return $this->newQuery()->sendRequest('put', ['webinars/'.$this->webinar_id.'/registrants/status', ['action' => $action, 'registrants' => [['id' => $this->id, 'email' => $this->email]]], ['occurrence_id' => $this->occurrence_id]])->successful();
             } else {
@@ -73,5 +74,4 @@ class WebinarRegistrant extends Model
     {
         return $this->updateAction('cancel');
     }
-
 }
