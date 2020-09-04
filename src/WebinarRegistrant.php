@@ -10,7 +10,9 @@ class WebinarRegistrant extends Model
 
     protected $endPoint = 'webinars/{webinar:id}/registrants';
 
-    protected $allowedMethods = ['get', 'post', 'put'];
+    protected $allowedMethods = ['find', 'get', 'post', 'put'];
+
+    protected $primaryKey = 'registrant_id';
 
     protected $apiMultipleDataField = 'registrants';
 
@@ -24,6 +26,13 @@ class WebinarRegistrant extends Model
         return $this->hasMany(CustomQuestion::class);
     }
 
+    public function find($id)
+    {
+        $registrant = $this->newQuery()->addQuery('registrant_id', $id)->find($this->webinar_id);
+        $registrant->webinar_id = $this->webinar_id;
+        $registrant->registrant_id = $id;
+        return $registrant;
+    }
 
     public function beforeQuery($query)
     {
