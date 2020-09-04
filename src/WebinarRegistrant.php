@@ -36,21 +36,22 @@ class WebinarRegistrant extends Model
 
     public function beforeQuery($query)
     {
-        if(isset($this->occurrence_id)){
+        if( isset($this->occurrence_id)){
             $query->addQuery('occurrence_id', $this->occurrence_id);
         }
     }
 
     public function beforeInsert($query)
     {
-        if(isset($this->occurrence_id)){
+        if( isset($this->occurrence_id)){
             $query->addQuery('occurrence_id', $this->occurrence_id);
         }
     }
 
-    protected function updateAction($action){
-        if($this->exists()){
-            if(isset($this->occurrence_id)){
+    protected function updateAction($action)
+    {
+        if ($this->exists()){
+            if (isset($this->occurrence_id)) {
                 return $this->newQuery()->sendRequest('put', ['webinars/'.$this->webinar_id.'/registrants/status', ['action' => $action, 'registrants' => [['id' => $this->id, 'email' => $this->email]]], ['occurrence_id' => $this->occurrence_id]])->successful();
             } else {
                 return $this->newQuery()->sendRequest('put', ['webinars/'.$this->webinar_id.'/registrants/status', ['action' => $action, 'registrants' => [['id' => $this->id, 'email' => $this->email]]]])->successful();
