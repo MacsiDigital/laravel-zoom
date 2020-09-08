@@ -576,7 +576,7 @@ This is the main access for most models in Zoom.
     $meeting = Zoom::meeting()->make([
       'topic' => 'New meeting',
       'type' => 8,
-      'start_time' => new Carbon('2020-08-12 10:00:00'); // best to use a Carbon instance here.
+      'start_time' => new Carbon('2020-08-12 10:00:00'), // best to use a Carbon instance here.
     ]);
 
     $meeting->recurrence()->make([
