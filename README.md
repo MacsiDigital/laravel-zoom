@@ -1,11 +1,20 @@
-# Laravel package for Zoom API
+# Laravel Zoom
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/macsidigital/laravel-zoom.svg?style=flat-square)](https://packagist.org/packages/macsidigital/laravel-zoom)
-[![Build Status](https://img.shields.io/travis/macsidigital/laravel-zoom/master.svg?style=flat-square)](https://travis-ci.org/MacsiDigital/laravel-zoom)
-[![StyleCI](https://github.styleci.io/repos/193588988/shield?branch=master)](https://github.styleci.io/repos/193588988)
-[![Total Downloads](https://img.shields.io/packagist/dt/macsidigital/laravel-zoom.svg?style=flat-square)](https://packagist.org/packages/macsidigital/laravel-zoom)
+## Laravel Zoom API Client
+
+![Header Image](https://github.com/MacsiDigital/repo-design/raw/master/laravel-zoom/header.png)
+
+<p align="center">
+ <a href="https://github.com/MacsiDigital/laravel-zoom/actions?query=workflow%3Atests"><img src="https://github.com/MacsiDigital/laravel-zoom/workflows/Run%20tests/badge.svg" style="max-width:100%;"  alt="tests badge"></a>
+ <a href="https://packagist.org/packages/macsidigital/laravel-zoom"><img src="https://img.shields.io/packagist/v/macsidigital/laravel-zoom.svg?style=flat-square" alt="version badge"/></a>
+ <a href="https://packagist.org/packages/macsidigital/laravel-zoom"><img src="https://img.shields.io/packagist/dt/macsidigital/laravel-zoom.svg?style=flat-square" alt="downloads badge"/></a>
+</p>
 
 Laravel Zoom API Package
+
+## Support us
+
+We invest a lot in creating [open source packages](https://macsidigital.co.uk/open-source), and would be grateful for a [sponsor](https://github.com/sponsors/MacsiDigital) if you make money from your product that uses them.
 
 ## Our API mission!
 
@@ -31,11 +40,11 @@ For versioning:-
 
 - 1.0 - deprecated - was a quick build for a client project, not recommended you use this version.
 
-- 2.0 - Laravel 5.5 - 5.8 - bug fixes only, if there are any issues then create a pull request. There only as 5.5 is a LTS version of Laravel.  To keep it 5.5 we use casts from Laravel 5.5, 5.8 had some updates but they wont be available. **Laravel 5.5 support is until August 30th, 2020, at which point we will drop support for this version** 
+- 2.0 - Laravel 5.5 - 5.8 - deprecated, no longer maintained
 
 - 3.0 - Laravel 6.0 - Maintained, feel free to create pull requests.  This is open source which is a 2 way street.
 
-- 4.0 - Laravel 7.0 - Maintained, feel free to create pull requests.  This is open source which is a 2 way street.
+- 4.0 - Laravel 7.0 - 8.0 - Maintained, feel free to create pull requests.  This is open source which is a 2 way street.
 
 ### Configuration file
 
@@ -105,7 +114,7 @@ There are 2 main ways to work with models, to call them directly from the access
     $user = new \MacsiDigital\Zoom\User($zoom);
 ```
 
-## Working with models
+### Working with models
 
 As noted we are aiming for functionality similar to Laravel, so most things that you can do in Laravel you can do here, with exception to any database specific functionality, as we are not using databases.
 
@@ -133,9 +142,9 @@ Each model may also have some custom functions where Zoom has some unique functi
     $user->updateProfilePicture($image); // Path to image
 ```
 
-## Common get functions
+### Common get functions
 
-### First
+#### First
 
 We utilise the first function to return the first record from the record set.  This will return an instantiated model.
 
@@ -143,7 +152,7 @@ We utilise the first function to return the first record from the record set.  T
     $user = Zoom::user()->where('status', 'active')->first();
 ```
 
-### Find
+#### Find
 
 We utilise the find function to return a record by searching for it by a unique attribute.  This will return an instantiated model.
 
@@ -157,7 +166,7 @@ We utilise the find function to return a record by searching for it by a unique 
     // for most models this is only the id.  The past models utilise the uuid instead of the id.
 ```
 
-### All
+#### All
 
 The find all function returns a customised Laravel Collection, which we call a resultset.
 
@@ -169,7 +178,7 @@ When calling the all function we will make up to 5 API calls to retrieve all the
 
 More info below in ResultSets.
 
-### Get
+#### Get
 
 We utilise the get function when we want to retrieve filtered records.  Note that Zoom doesn't offer much in the way of filters. So check the documentation.
 
@@ -193,7 +202,7 @@ You can disable the pagination, so it behaves the same as the all() function
     $users = Zoom::user()->where('status', 'active')->setPaginate(false)->setPerPage(300)->get(); // will return 300 records * 5 request (or amount set in config) = 1500 records
 ```
 
-### resultSet
+#### resultSet
 
 The all and get functions return a resultSet which is an enhanced Laravel Collection. Like collections, we can call the toArray and toJson functions, which places the data in a 'data' field and adds some meta information on total records and page information.
 
@@ -313,11 +322,11 @@ There are also a number of helper functions.
 
 As noted above we are using collections as the base for the record sets, so anything that is possible in collections is possible here.  As Zoom's ability to filter is limited we can use the collections 'where' function for example.
 
-## Persisting Models
+### Persisting Models
 
 Again, the aim is to be similar to laravel, so you can utilise the save, create, update and make methods.
 
-### Save
+#### Save
 
 To save a model we will use the save method, this will determine if the model is a new model or an existing and insert or update the model as needed.
 
@@ -329,7 +338,7 @@ To save a model we will use the save method, this will determine if the model is
     $user->save();
 ```
 
-### Create
+#### Create
 
 Currently, only the User model and Role model can be created directly, most other models need to be created as part of a relationship, see below for details.
 
@@ -351,7 +360,7 @@ To create a user.
     ]); 
 ```
 
-### Make
+#### Make
 
 Make is similar to create except it will not persist the model to the API.  This is handy for relationship models, more on this below.
 
@@ -361,7 +370,7 @@ Make is similar to create except it will not persist the model to the API.  This
     Zoom::user()->find('id')->meetings()->save($meeting); 
 ```
 
-### Update
+#### Update
 
 We can also mass update attributes.
 
@@ -369,7 +378,7 @@ We can also mass update attributes.
     $user = Zoom::user()->find('id')->update(['field' => 'value', 'another_field' => 'value']);
 ```
 
-## Relationships
+### Relationships
 
 A major change to the newer versions of our API client is we use Relationships similar to Laravel. To retrieve all meetings associated to a user we would call like so.
 
@@ -395,7 +404,7 @@ The later is handy when we need to filter results
 
 As noted above, Zoom has very limited queryable filters, so check with the Zoom documentation.
 
-### Save & Create
+#### Save & Create
 
 We can utilise the create and save functions on the relationship model to create models that require a relationship.
 
@@ -433,17 +442,17 @@ We can also utilise the Make and Attach methods for creating and attaching model
     // The later is very uncommon in Zoom and unlikely to be used due to the setup of relationships, but is an option.
 ```
 
-## Validation
+### Validation
 
 Validation is built into the API where possible, and will throw an exception if there are validation errors.  If our own validation fails and the Zoom request returns an error, then we will throw a HTTP exception.
 
 If Validation in the API changes or something is not working, then the best is to amend the request object for the failing model and submit a pull request.
 
-## Resources
+### Resources
 
-We give a brief overview of the common models, we have not included any validation requirements, you will need to check documentaiton for this.
+We give a brief overview of the common models, we have not included any validation requirements, you will need to check documentation for this.
 
-### Roles
+#### Roles
 
 ``` php
     //To get a new instance
@@ -473,7 +482,7 @@ We give a brief overview of the common models, we have not included any validati
     $role->delete(); // Delete (destroy) role.
 ```
 
-### Users
+#### Users
 
 This is the main access for most models in Zoom.
 
@@ -522,7 +531,7 @@ This is the main access for most models in Zoom.
     $user->delete(); // Delete (destroy) user.
 ```
 
-#### User Settings
+##### User Settings
 
 ``` php
     //To get a new instance
@@ -557,7 +566,7 @@ This is the main access for most models in Zoom.
     // $user()->settings()->where('option', 'meeting_authentication')->get(); // Allowed values meeting_authentication, recording_authentication.
 ```
 
-### Meetings
+#### Meetings
 
 ``` php
     //To get a new instance
@@ -660,7 +669,7 @@ This is the main access for most models in Zoom.
     $meeting->delete($scheduleForReminder); // Delete (destroy) meeting. ScheduleForReminder true by default
 ```
 
-### Webinars
+#### Webinars
 
 ``` php
     //To get a new instance
@@ -756,7 +765,7 @@ This is the main access for most models in Zoom.
     $webinar->delete(); // Delete (destroy) webinar.
 ```
 
-### Meeting/Webinar Occurences
+#### Meeting/Webinar Occurrences
 
 We are showing info for meeting, you will need to switch out meeting to webinar for webinars.
 
@@ -791,7 +800,7 @@ We are showing info for meeting, you will need to switch out meeting to webinar 
     $occurrence->delete();
 ```
 
-### Meeting/Webinar Settings
+#### Meeting/Webinar Settings
 
 We are showing info for meeting, you will need to switch out meeting to webinar for webinars.
 
@@ -816,37 +825,39 @@ We are showing info for meeting, you will need to switch out meeting to webinar 
     $setting->globalDialInCountries // HasMany relationship
 ```
 
-### Past Meetings
+#### Past Meetings
 
 Coming soon
 
 
-### Past Webinars
+#### Past Webinars
 
 Coming soon
 
 ## To Do's
 
+- Documentation Site
 - Documentation for other Meeting/Webinar relationships
 - Documentation for Past Meetings & Past Webinars
 - OAuth2 implementation
+- Tests
 
-### Changelog
+## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-### Security
+## Security
 
-If you discover any security related issues, please email colin@macsi.co.uk instead of using the issue tracker.
+If you discover any security-related issues, please email [info@macsi.co.uk](mailto:info@masi.co.uk) instead of using the issue tracker.
 
 ## Credits
 
-- [MacsiDigital](https://github.com/macsidigital)
-- [Colin Hall](https://github.com/colinhall17)
+- [Colin Hall](https://github.com/ColinHall)
+- [MacsiDigital](https://github.com/MacsiDigital)
 - [All Contributors](../../contributors)
 
 ## License
