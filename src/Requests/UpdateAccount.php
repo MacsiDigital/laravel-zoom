@@ -6,9 +6,7 @@ use MacsiDigital\API\Support\PersistResource;
 
 class UpdateAccount extends PersistResource
 {
-
     protected $persistAttributes = [
-    	
+        
     ];
-    
 }

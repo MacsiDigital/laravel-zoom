@@ -13,7 +13,7 @@ class Meeting extends Model
 
     protected $customEndPoints = [
         'get' => 'users/{user:id}/meetings',
-        'post' => 'users/{user:id}/meetings'
+        'post' => 'users/{user:id}/meetings',
     ];
 
     protected $allowedMethods = ['find', 'get', 'post', 'patch', 'delete'];
@@ -24,17 +24,17 @@ class Meeting extends Model
 
     protected $dates = [
         'start_time',
-        'created_at'
+        'created_at',
     ];
 
     public function settings()
     {
-    	return $this->hasOne(MeetingSetting::class);
+        return $this->hasOne(MeetingSetting::class);
     }
 
     public function recurrence()
     {
-    	return $this->hasOne(Recurrence::class);
+        return $this->hasOne(Recurrence::class);
     }
 
     public function occurrences()
@@ -44,12 +44,12 @@ class Meeting extends Model
 
     public function registrants()
     {
-    	return $this->hasMany(MeetingRegistrant::class);
+        return $this->hasMany(MeetingRegistrant::class);
     }
 
     public function polls()
     {
-    	return $this->hasMany(Poll::class);
+        return $this->hasMany(Poll::class);
     }
 
     public function registrationQuestions()
@@ -77,14 +77,13 @@ class Meeting extends Model
         return $this->hasOne(MeetingRecording::class);
     }
 
-    public function delete($scheduleForReminder=true)
+    public function delete($scheduleForReminder = true)
     {
         return $this->newQuery()->addQuery('schedule_for_reminder', $scheduleForReminder)->delete();
     }
 
     public function endMeeting()
     {
-    	return $this->newQuery()->sendRequest('put', ['meetings/'.$this->id.'/status', ['action' => 'end']])->successful();
+        return $this->newQuery()->sendRequest('put', ['meetings/'.$this->id.'/status', ['action' => 'end']])->successful();
     }
-
 }

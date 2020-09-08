@@ -6,10 +6,9 @@ use MacsiDigital\Zoom\Support\Model;
 
 class Participant extends Model
 {
-	protected $endPoint = '/past_webinars/{webinar:uuid}/participants';
+    protected $endPoint = '/past_webinars/{webinar:uuid}/participants';
 
-	protected $allowedMethods = ['get'];
+    protected $allowedMethods = ['get'];
 
     protected $apiMultipleDataField = 'participants';
-    
 }

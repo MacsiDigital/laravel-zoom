@@ -6,11 +6,10 @@ use MacsiDigital\API\Support\PersistResource;
 
 class UpdateOccurrence extends PersistResource
 {
-
     protected $persistAttributes = [
-    	'start_time' => 'nullable|date',
-    	'duration' => 'nullable|integer',
-    	'agenda' => 'nullable|string|max:2000',
+        'start_time' => 'nullable|date',
+        'duration' => 'nullable|integer',
+        'agenda' => 'nullable|string|max:2000',
         'settings.host_video' => 'nullable|boolean',
         'settings.panelists_video' => 'nullable|boolean',
         'settings.hd_video' => 'nullable|boolean',
@@ -21,5 +20,4 @@ class UpdateOccurrence extends PersistResource
         'settings.mute_upon_entry' => 'nullable|boolean',
         'settings.waiting_room' => 'nullable|boolean',
     ];
-    
 }

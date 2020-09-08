@@ -15,21 +15,18 @@ class Role extends Model
 
     protected $apiDataField = '';
 
-    protected $apiMultipleDataField = 'roles';   
+    protected $apiMultipleDataField = 'roles';
 
-    public function members() 
+    public function members()
     {
-    	return $this->hasMany(User::class, 'members');
+        return $this->hasMany(User::class, 'members');
     }
 
     public function giveRoleTo($user)
     {
-
     }
 
     public function removeRoleFrom($user)
     {
-        
     }
-    
 }

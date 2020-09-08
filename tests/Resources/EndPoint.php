@@ -4,56 +4,56 @@ namespace MacsiDigital\Zoom\Test\Resources;
 
 class EndPoint
 {
-	protected $apiKey = '';
-	protected $apiSecret = '';
+    protected $apiKey = '';
+    protected $apiSecret = '';
 
-	protected $endPoints = [
-		'methods' => [
-			'find' => [
+    protected $endPoints = [
+        'methods' => [
+            'find' => [
 
-			],
-			'get' => [
+            ],
+            'get' => [
 
-			],
-			'post' => [
+            ],
+            'post' => [
 
-			],
-			'put' => [
+            ],
+            'put' => [
 
-			],
-			'patch' => [
+            ],
+            'patch' => [
 
-			],
-			'delete' => [
+            ],
+            'delete' => [
 
-			],
-		]
-	];
+            ],
+        ],
+    ];
 
-	public function authenticate($token)
-	{
-		
-	}
+    public function authenticate($token)
+    {
+    }
 
-	public function processEndPoint($method, $endPoint) 
-	{
-		if($this->hasEndPoint($method, $endPoint)){
-			$this->retreiveData($method, $endPoint);
-		}
-	}
+    public function processEndPoint($method, $endPoint)
+    {
+        if ($this->hasEndPoint($method, $endPoint)) {
+            $this->retreiveData($method, $endPoint);
+        }
+    }
 
-	public function hasEndPoint() 
-	{
-		if(isset($this->endPoints[$method]) && isset($this->endPoints[$method][$endPoint])){
-			return true;
-		}	
-		return false;
-	}
+    public function hasEndPoint()
+    {
+        if (isset($this->endPoints[$method]) && isset($this->endPoints[$method][$endPoint])) {
+            return true;
+        }
 
-	public function retreieveData($method, $endPoint)
-	{
-		$function = $this->endPoints[$method][$endPoint];
-		return $this->$function();
-	}
+        return false;
+    }
 
+    public function retreieveData($method, $endPoint)
+    {
+        $function = $this->endPoints[$method][$endPoint];
+
+        return $this->$function();
+    }
 }

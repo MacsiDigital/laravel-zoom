@@ -15,7 +15,7 @@ class Scheduler extends Model
 
     protected $apiMultipleDataField = 'schedulers';
 
-    public function user() 
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
@@ -24,5 +24,4 @@ class Scheduler extends Model
     {
         return $this->apiMultipleDataField;
     }
-    
 }

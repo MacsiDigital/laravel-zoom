@@ -6,7 +6,6 @@ use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-
     public function setUp() : void
     {
         parent::setUp();
@@ -33,11 +32,10 @@ abstract class TestCase extends Orchestra
      */
     protected function setupEnvironment($app)
     {
-        if(env('USE_LIVE_API')){
-            $app['config']->set('zoom.client_key');    
-            $app['config']->set('zoom.client_secret');    
+        if (env('USE_LIVE_API')) {
+            $app['config']->set('zoom.client_key');
+            $app['config']->set('zoom.client_secret');
         } else {
-
         }
     }
 }

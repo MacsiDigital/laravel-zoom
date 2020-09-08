@@ -19,42 +19,42 @@ class Setting extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function emailNotification() 
+    public function emailNotification()
     {
         return $this->hasOne(EmailNotification::class);
     }
 
-    public function feature() 
+    public function feature()
     {
         return $this->hasOne(Feature::class);
     }
 
-    public function inMeeting() 
+    public function inMeeting()
     {
         return $this->hasOne(InMeeting::class);
     }
 
-    public function integration() 
+    public function integration()
     {
         return $this->hasOne(Integration::class);
     }
 
-    public function recording() 
+    public function recording()
     {
         return $this->hasOne(Recording::class);
     }
 
-    public function scheduleMeeting() 
+    public function scheduleMeeting()
     {
         return $this->hasOne(ScheduleMeeting::class);
     }
 
-    public function telephony() 
+    public function telephony()
     {
         return $this->hasOne(Telephony::class);
     }
 
-    public function tsp() 
+    public function tsp()
     {
         return $this->hasOne(Tsp::class);
     }
@@ -63,5 +63,4 @@ class Setting extends Model
     {
         return $this->apiMultipleDataField;
     }
-    
 }
