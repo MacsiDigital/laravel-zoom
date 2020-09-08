@@ -25,5 +25,4 @@ class RegistrationQuestion extends Model
     {
         return $this->hasMany(CustomQuestion::class);
     }
-
 }

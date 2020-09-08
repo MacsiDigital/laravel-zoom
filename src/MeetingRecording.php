@@ -7,7 +7,7 @@ use MacsiDigital\Zoom\Support\Model;
 class MeetingRecording extends Model
 {
     protected $customEndPoints = [
-        'get' => 'meetings/{meeting:id}/recordings'
+        'get' => 'meetings/{meeting:id}/recordings',
     ];
 
     protected $allowedMethods = ['get'];

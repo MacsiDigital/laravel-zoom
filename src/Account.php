@@ -6,8 +6,8 @@ use MacsiDigital\Zoom\Support\Model;
 
 class Account extends Model
 {
-	// API included but its not open to the majority of API Users
-	protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreAccount';
+    // API included but its not open to the majority of API Users
+    protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreAccount';
     protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateAccount';
     
     protected $endPoint = 'accounts';
@@ -17,5 +17,4 @@ class Account extends Model
     protected $apiDataField = '';
 
     protected $apiMultipleDataField = 'accounts';
-    
 }

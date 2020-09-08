@@ -2,9 +2,9 @@
 
 namespace MacsiDigital\Zoom\Support;
 
-use MacsiDigital\Zoom\Facades\Client;
-use MacsiDigital\API\Support\Entry as ApiEntry;
 use MacsiDigital\API\Support\Authentication\JWT;
+use MacsiDigital\API\Support\Entry as ApiEntry;
+use MacsiDigital\Zoom\Facades\Client;
 
 class Entry extends ApiEntry
 {
@@ -30,21 +30,20 @@ class Entry extends ApiEntry
 
     public function __construct()
     {
-        if(config('zoom.max_api_calls_per_request') != null){
+        if (config('zoom.max_api_calls_per_request') != null) {
             $this->maxQueries = config('zoom.max_api_calls_per_request');
         }
     }
 
     public function newRequest()
-    {   
-        if(config('zoom.authentication_method') == 'jwt'){
+    {
+        if (config('zoom.authentication_method') == 'jwt') {
             return $this->jwtRequest();
-        }elseif(config('zoom.authentication_method') == 'oauth2'){
-
+        } elseif (config('zoom.authentication_method') == 'oauth2') {
         }
     }
 
-    public function jwtRequest() 
+    public function jwtRequest()
     {
         $jwtToken = JWT::generateToken(['iss' => config('zoom.api_key'), 'exp' => time() + config('zoom.token_life')], config('zoom.api_secret'));
         
@@ -53,7 +52,5 @@ class Entry extends ApiEntry
 
     public function oauth2Request()
     {
-
     }
-
 }

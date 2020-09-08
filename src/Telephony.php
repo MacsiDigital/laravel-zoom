@@ -6,5 +6,4 @@ use MacsiDigital\API\Support\Resource;
 
 class Telephony extends Resource
 {
-    
 }
