@@ -13,7 +13,7 @@ class Webinar extends Model
 
     protected $customEndPoints = [
         'get' => 'users/{user_id}/webinars',
-        'post' => 'users/{user_id}/webinars'
+        'post' => 'users/{user_id}/webinars',
     ];
 
     protected $allowedMethods = ['find', 'get', 'post', 'patch', 'delete'];
@@ -24,7 +24,7 @@ class Webinar extends Model
 
     protected $dates = [
         'start_time',
-        'created_at'
+        'created_at',
     ];
 
     public function settings()
@@ -76,5 +76,4 @@ class Webinar extends Model
     {
         return $this->newQuery()->sendRequest('put', ['webinars/'.$this->id.'/status', ['action' => 'end']])->successful();
     }
-
 }

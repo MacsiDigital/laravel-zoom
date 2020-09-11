@@ -2,9 +2,9 @@
 
 namespace MacsiDigital\Zoom;
 
+use MacsiDigital\Zoom\Exceptions\FileTooLargeException;
 use MacsiDigital\Zoom\Exceptions\ValidationException;
 use MacsiDigital\Zoom\Support\Model;
-use MacsiDigital\Zoom\Exceptions\FileTooLargeException;
 
 class User extends Model
 {
@@ -13,7 +13,7 @@ class User extends Model
 
     protected $attributes = [
         'action' => 'create',
-        'type' => 1
+        'type' => 1,
     ];
 
     protected $endPoint = 'users';
@@ -27,18 +27,21 @@ class User extends Model
     public function isBasicType()
     {
         $this->type = 1;
+
         return $this;
     }
 
     public function isLicensedType()
     {
         $this->type = 2;
+
         return $this;
     }
 
     public function isOnPremType()
     {
         $this->type = 3;
+
         return $this;
     }
 
@@ -99,8 +102,8 @@ class User extends Model
 
     public function updateProfilePicture($image)
     {
-        $filesize = number_format(filesize($image) / 1048576,2);
-        if($filesize > 2){
+        $filesize = number_format(filesize($image) / 1048576, 2);
+        if ($filesize > 2) {
             throw new FileTooLargeException($image, $filesize, '2MB');
         } else {
             return $this->newQuery()->attachFile('pic_file', file_get_contents($image), $image)->sendRequest('post', ['users/'.$this->id.'/picture'])->successful();
@@ -109,7 +112,7 @@ class User extends Model
 
     public function updateStatus($status)
     {
-        if(in_array($status, ['activate', 'deactivate'])){
+        if (in_array($status, ['activate', 'deactivate'])) {
             return $this->newQuery()->sendRequest('put', ['users/'.$this->id.'/status', ['action' => $status]])->successful();
         } else {
             throw new ValidationException('Status must be either active or deactivate');
@@ -118,7 +121,7 @@ class User extends Model
 
     public function updatePassword($password)
     {
-        if(strlen($password) >= 8){
+        if (strlen($password) >= 8) {
             return $this->newQuery()->sendRequest('put', ['users/'.$this->id.'/password', ['password' => $password]])->successful();
         } else {
             throw new ValidationException('Password must be at least 8 characters');
@@ -128,7 +131,7 @@ class User extends Model
     public function updateEmail($email)
     {
         $validator = Validator::make(['email' => $email], [ 'email' => 'required|email|max:128' ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             throw new ValidationException('Email must be a valid email address less than 128 characters');
         } else {
             return $this->newQuery()->sendRequest('put', ['users/'.$this->id.'/email', ['email' => $email]])->successful();
@@ -144,5 +147,4 @@ class User extends Model
     {
         return $this->newQuery()->sendRequest('delete', ['users/'.$this->id, ['action' => 'delete']])->successful();
     }
-
 }

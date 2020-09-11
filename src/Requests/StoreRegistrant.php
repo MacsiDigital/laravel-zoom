@@ -6,17 +6,16 @@ use MacsiDigital\API\Support\PersistResource;
 
 class StoreRegistrant extends PersistResource
 {
-
     protected $persistAttributes = [
       "email" => "required|email",
       "first_name" => "required|string|max:64",
       "last_name" => "nullable|string|max:64",
-      "address"=> "nullable|string|max:64",
-      "city"=> "nullable|string|max:64",
-      "country"=> "nullable|string|max:64",
-      "zip"=> "nullable|string|max:20",
-      "state"=> "nullable|string|max:64",
-      "phone"=> "nullable|string|max:64",
+      "address" => "nullable|string|max:64",
+      "city" => "nullable|string|max:64",
+      "country" => "nullable|string|max:64",
+      "zip" => "nullable|string|max:20",
+      "state" => "nullable|string|max:64",
+      "phone" => "nullable|string|max:64",
       "industry" => "nullable|string|max:64",
       "org" => "nullable|string|max:64",
       "job_title" => "nullable|string|max:64",
@@ -27,7 +26,6 @@ class StoreRegistrant extends PersistResource
     ];
 
     protected $relatedResource = [
-        "custom_questions" => StoreCustomQuestion::class
+        "custom_questions" => StoreCustomQuestion::class,
     ];
-
 }

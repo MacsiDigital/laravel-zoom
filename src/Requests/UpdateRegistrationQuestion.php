@@ -6,10 +6,8 @@ use MacsiDigital\API\Support\PersistResource;
 
 class UpdateRegistrationQuestion extends PersistResource
 {
-
     protected $relatedResource = [
-    	"questions" => UpdateQuestion::class,
-    	"custom_questions" => UpdateCustomQuestion::class
+        "questions" => UpdateQuestion::class,
+        "custom_questions" => UpdateCustomQuestion::class,
     ];
-    
 }

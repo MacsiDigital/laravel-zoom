@@ -3,5 +3,8 @@ composer.lock
 docs
 vendor
 coverage
-.DS_Store
+node_modules
+.phpunit.result.cache
+.idea
 /.idea
+.php_cs.cache

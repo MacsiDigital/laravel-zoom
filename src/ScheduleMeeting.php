@@ -6,7 +6,7 @@ use MacsiDigital\API\Support\Resource;
 
 class ScheduleMeeting extends Resource
 {
-    public function recordingPasswordRequirement() 
+    public function recordingPasswordRequirement()
     {
         return $this->hasOne(MeetingPasswordRequirement::class);
     }

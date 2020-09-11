@@ -6,14 +6,13 @@ use MacsiDigital\Zoom\Support\Model;
 
 class MeetingSetting extends Model
 {
-    public function globalDialInNumbers() 
+    public function globalDialInNumbers()
     {
-    	return $this->hasMany(GlobalDialInNumber::class);
+        return $this->hasMany(GlobalDialInNumber::class);
     }
 
-    public function globalDialInCountries() 
+    public function globalDialInCountries()
     {
-    	return $this->hasMany(GlobalDialInCountry::class);
+        return $this->hasMany(GlobalDialInCountry::class);
     }
-
 }

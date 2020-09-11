@@ -17,8 +17,10 @@ class Panelist extends Model
     protected $wrapInOnInsert = 'panelists';
     protected $wrapInEmptyArrayOnInsert = true;
 
-    public function updateAction($action){
+    public function updateAction($action)
+    {
         $this->action = $action;
+
         return $this;
     }
 
@@ -36,5 +38,4 @@ class Panelist extends Model
     {
         return $this->updateAction('cancel');
     }
-
 }

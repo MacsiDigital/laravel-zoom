@@ -6,5 +6,4 @@ use MacsiDigital\Zoom\Support\Resource;
 
 class LiveStreamStatusSetting extends Resource
 {
-    
 }

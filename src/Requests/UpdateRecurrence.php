@@ -6,7 +6,6 @@ use MacsiDigital\API\Support\PersistResource;
 
 class UpdateRecurrence extends PersistResource
 {
-
     protected $persistAttributes = [
     	"type" => "nullable|integer|in:1,2,3",
 	    "repeat_interval" => "nullable|integer",
@@ -17,5 +16,4 @@ class UpdateRecurrence extends PersistResource
 	    "end_times" => "nullable|numeric|max:50|exclude_unless:end_date_time,null",
 	    "end_date_time" => "nullable|date|exclude_unless:end_times,null"
     ];
-
 }

@@ -6,12 +6,12 @@ use MacsiDigital\Zoom\Support\Model;
 
 class Poll extends Model
 {
-	protected $insertResource = 'MacsiDigital\Zoom\Requests\StorePoll';
-	protected $storeResource = 'MacsiDigital\Zoom\Requests\UpdatePoll';
+    protected $insertResource = 'MacsiDigital\Zoom\Requests\StorePoll';
+    protected $storeResource = 'MacsiDigital\Zoom\Requests\UpdatePoll';
 
-	protected $endPoint = '/meetings/{meeting:id}/polls';
+    protected $endPoint = '/meetings/{meeting:id}/polls';
 
-	protected $allowedMethods = ['find', 'get', 'post', 'put', 'delete'];
+    protected $allowedMethods = ['find', 'get', 'post', 'put', 'delete'];
 
     protected $apiMultipleDataField = 'polls';
 
@@ -20,9 +20,8 @@ class Poll extends Model
         return $this->apiMultipleDataField;
     }
 
-    public function questions() 
+    public function questions()
     {
-    	return $this->hasMany(PollQuestion::class);
+        return $this->hasMany(PollQuestion::class);
     }
-    
 }

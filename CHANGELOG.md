@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-zoom` will be documented in this file
 
+## 4.1.0 - 2020-09-08
+
+Laravel 8.0
+
 ## 4.0.8 - 2020-07-16
 
 Add Recordings

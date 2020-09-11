@@ -6,8 +6,7 @@ use MacsiDigital\API\Support\PersistResource;
 
 class UpdateIntegration extends PersistResource
 {
-
     protected $persistAttributes = [
-    	"linkedin_sales_navigator" => "nullable|boolean",
+        "linkedin_sales_navigator" => "nullable|boolean",
     ];
 }
