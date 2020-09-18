@@ -2,6 +2,7 @@
 
 namespace MacsiDigital\Zoom\Tests;
 
+use MacsiDigital\Zoom\Providers\ZoomServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
