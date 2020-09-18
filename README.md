@@ -852,11 +852,11 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security-related issues, please email [info@macsi.co.uk](mailto:info@masi.co.uk) instead of using the issue tracker.
+If you discover any security-related issues, please email [info@macsi.co.uk](mailto:info@macsi.co.uk) instead of using the issue tracker.
 
 ## Credits
 
-- [Colin Hall](https://github.com/ColinHall)
+- [Colin Hall](https://github.com/colinhall17)
 - [MacsiDigital](https://github.com/MacsiDigital)
 - [All Contributors](../../contributors)
 

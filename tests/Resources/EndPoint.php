@@ -1,6 +1,6 @@
 <?php
 
-namespace MacsiDigital\Zoom\Test\Resources;
+namespace MacsiDigital\Zoom\Tests\Resources;
 
 class EndPoint
 {
