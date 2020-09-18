@@ -5,7 +5,7 @@
 ![Header Image](https://github.com/MacsiDigital/repo-design/raw/master/laravel-zoom/header.png)
 
 <p align="center">
- <a href="https://github.com/MacsiDigital/laravel-zoom/actions?query=workflow%3Atests"><img src="https://github.com/MacsiDigital/laravel-zoom/workflows/Run%20tests/badge.svg" style="max-width:100%;"  alt="tests badge"></a>
+ <a href="https://github.com/MacsiDigital/laravel-zoom/actions?query=workflow%3ATests"><img src="https://github.com/MacsiDigital/laravel-zoom/workflows/Tests/badge.svg" style="max-width:100%;"  alt="tests badge"></a>
  <a href="https://packagist.org/packages/macsidigital/laravel-zoom"><img src="https://img.shields.io/packagist/v/macsidigital/laravel-zoom.svg?style=flat-square" alt="version badge"/></a>
  <a href="https://packagist.org/packages/macsidigital/laravel-zoom"><img src="https://img.shields.io/packagist/dt/macsidigital/laravel-zoom.svg?style=flat-square" alt="downloads badge"/></a>
 </p>
