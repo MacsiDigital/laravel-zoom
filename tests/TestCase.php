@@ -36,7 +36,6 @@ abstract class TestCase extends Orchestra
             $app['config']->set('zoom.client_key');
             $app['config']->set('zoom.client_secret');
         } else {
-
         }
     }
 }
