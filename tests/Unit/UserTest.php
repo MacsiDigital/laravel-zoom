@@ -2,6 +2,8 @@
 
 namespace MacsiDigital\Zoom\Tests\Unit;
 
+use MacsiDigital\Zoom\Tests\TestCase;
+
 class UserTest extends TestCase
 {
     /** @test */
