@@ -41,7 +41,10 @@ class Webinar extends Model
     {
         return $this->hasMany(WebinarRegistrant::class);
     }
-
+   public function participants()
+    {
+        return $this->hasMany(WebinarParticipant::class);
+    }
     public function occurrences()
     {
         return $this->hasMany(WebinarOccurrence::class);
