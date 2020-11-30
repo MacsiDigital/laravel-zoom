@@ -8,7 +8,7 @@ class WebinarParticipant extends Model
 {
     //protected $insertResource = 'MacsiDigital\Zoom\Requests\StoreRegistrant';
 
-    protected $endPoint = '/metrics/meetings/{webinar:id}/participants';
+    protected $endPoint = '/metrics/webinars/{webinar:id}/participants';
 
     protected $allowedMethods = ['get', 'post', 'put'];
 
