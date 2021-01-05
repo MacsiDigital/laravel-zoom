@@ -44,12 +44,12 @@ class Entry extends ApiEntry
      * @param $maxQueries
      * @param $baseUrl
      */
-    public function __construct($apiKey, $apiSecret, $tokenLife, $maxQueries, $baseUrl)
+    public function __construct($apiKey = null, $apiSecret = null, $tokenLife = null, $maxQueries = null, $baseUrl = null)
     {
         $this->apiKey = $apiKey ? $apiKey : config('zoom.api_key');
         $this->apiSecret = $apiSecret ? $apiSecret : config('zoom.api_secret');
         $this->tokenLife = $tokenLife ? $tokenLife : config('zoom.token_life');
-        $this->maxQueries = $maxQueries ? $maxQueries : config('zoom.max_api_calls_per_request') ? config('zoom.max_api_calls_per_request') : $this->maxQueries;
+        $this->maxQueries = $maxQueries ? $maxQueries : (config('zoom.max_api_calls_per_request') ? config('zoom.max_api_calls_per_request') : $this->maxQueries);
         $this->baseUrl = $baseUrl ? $baseUrl : config('zoom.base_url');
     }
 
