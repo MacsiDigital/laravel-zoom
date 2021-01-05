@@ -114,6 +114,12 @@ There are 2 main ways to work with models, to call them directly from the access
     $user = new \MacsiDigital\Zoom\User($zoom);
 ```
 
+### Custom settings
+If you would like to use different configuration values than those in your zoom.php config file, you can feed those as parameters to \MacsiDigital\Zoom\Support\Entry as shown below.
+``` php
+    $zoom = new \MacsiDigital\Zoom\Support\Entry($apiKey, $apiSecret, $tokenLife, $maxQueries, $baseUrl);
+```
+
 ### Working with models
 
 As noted we are aiming for functionality similar to Laravel, so most things that you can do in Laravel you can do here, with exception to any database specific functionality, as we are not using databases.
