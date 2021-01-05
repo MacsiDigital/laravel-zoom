@@ -8,7 +8,7 @@ class MeetingRecording extends Model
 {
     protected $customEndPoints = [
         'get' => 'meetings/{meeting:id}/recordings',
-        'delete' => 'meetings/{meeting:id}/recordings'
+        'delete' => 'meetings/{meeting:id}/recordings',
     ];
 
     protected $allowedMethods = ['get', 'delete'];
