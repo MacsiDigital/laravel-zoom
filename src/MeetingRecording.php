@@ -8,9 +8,10 @@ class MeetingRecording extends Model
 {
     protected $customEndPoints = [
         'get' => 'meetings/{meeting:id}/recordings',
+        'delete' => 'meetings/{meeting:id}/recordings'
     ];
 
-    protected $allowedMethods = ['get'];
+    protected $allowedMethods = ['get', 'delete'];
 
     public function recordingFiles()
     {
@@ -20,5 +21,10 @@ class MeetingRecording extends Model
     public function recordingPasswordRequirement()
     {
         return $this->hasOne(RecordingPasswordRequirement::class);
+    }
+
+    public function delete()
+    {
+        return $this->newQuery()->delete();
     }
 }
