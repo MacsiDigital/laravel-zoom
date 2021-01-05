@@ -17,6 +17,7 @@ class Setting extends Model
     public function beforeSave($options, $query)
     {
         $this->exists = true;
+
         return $query;
     }
 
