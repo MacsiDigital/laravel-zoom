@@ -7,12 +7,18 @@ use MacsiDigital\Zoom\Support\Model;
 class Setting extends Model
 {
     protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateSetting';
-    
+
     protected $endPoint = 'users/{user_id}/settings';
 
     protected $allowedMethods = ['get', 'patch'];
 
     protected $apiMultipleDataField = '';
+
+    public function beforeSave($options, $query)
+    {
+        $this->exists = true;
+        return $query;
+    }
 
     public function user()
     {

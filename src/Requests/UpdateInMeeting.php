@@ -22,6 +22,7 @@ class UpdateInMeeting extends PersistResource
         "remote_control" => "nullable|boolean",
         "non_verbal_feedback" => "nullable|boolean",
         "breakout_room" => "nullable|boolean",
+        "remote_support" => "nullable|boolean",
         "closed_caption" => "nullable|boolean",
         "group_hd" => "nullable|boolean",
         "virtual_background" => "nullable|boolean",
