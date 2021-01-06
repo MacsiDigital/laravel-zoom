@@ -14,6 +14,14 @@ class Entry extends ApiEntry
 
     protected $maxQueries = '5';
 
+    protected $apiKey = null;
+
+    protected $apiSecret = null;
+
+    protected $tokenLife = null;
+
+    protected $baseUrl = null;
+
     // Amount of pagination results per page by default, leave blank if should not paginate
     // Without pagination rate limits could be hit
     protected $defaultPaginationRecords = '30';
@@ -28,11 +36,21 @@ class Entry extends ApiEntry
 
     protected $allowedOperands = ['='];
 
-    public function __construct()
+    /**
+     * Entry constructor.
+     * @param $apiKey
+     * @param $apiSecret
+     * @param $tokenLife
+     * @param $maxQueries
+     * @param $baseUrl
+     */
+    public function __construct($apiKey = null, $apiSecret = null, $tokenLife = null, $maxQueries = null, $baseUrl = null)
     {
-        if (config('zoom.max_api_calls_per_request') != null) {
-            $this->maxQueries = config('zoom.max_api_calls_per_request');
-        }
+        $this->apiKey = $apiKey ? $apiKey : config('zoom.api_key');
+        $this->apiSecret = $apiSecret ? $apiSecret : config('zoom.api_secret');
+        $this->tokenLife = $tokenLife ? $tokenLife : config('zoom.token_life');
+        $this->maxQueries = $maxQueries ? $maxQueries : (config('zoom.max_api_calls_per_request') ? config('zoom.max_api_calls_per_request') : $this->maxQueries);
+        $this->baseUrl = $baseUrl ? $baseUrl : config('zoom.base_url');
     }
 
     public function newRequest()
@@ -45,9 +63,9 @@ class Entry extends ApiEntry
 
     public function jwtRequest()
     {
-        $jwtToken = JWT::generateToken(['iss' => config('zoom.api_key'), 'exp' => time() + config('zoom.token_life')], config('zoom.api_secret'));
-        
-        return Client::baseUrl(config('zoom.base_url'))->withToken($jwtToken);
+        $jwtToken = JWT::generateToken(['iss' => $this->apiKey, 'exp' => time() + $this->tokenLife], $this->apiSecret);
+
+        return Client::baseUrl($this->baseUrl)->withToken($jwtToken);
     }
 
     public function oauth2Request()
