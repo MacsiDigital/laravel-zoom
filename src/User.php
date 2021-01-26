@@ -5,6 +5,7 @@ namespace MacsiDigital\Zoom;
 use MacsiDigital\Zoom\Exceptions\FileTooLargeException;
 use MacsiDigital\Zoom\Exceptions\ValidationException;
 use MacsiDigital\Zoom\Support\Model;
+use Illuminate\Support\Facades\Validator;
 
 class User extends Model
 {
