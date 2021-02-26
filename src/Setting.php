@@ -8,7 +8,9 @@ class Setting extends Model
 {
     protected $updateResource = 'MacsiDigital\Zoom\Requests\UpdateSetting';
 
-    protected $endPoint = 'users/{user_id}/settings';
+    protected $customEndPoints = [
+        'get' => 'users/{user:id}/settings',
+    ];
 
     protected $allowedMethods = ['get', 'patch'];
 
