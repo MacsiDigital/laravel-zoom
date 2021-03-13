@@ -8,8 +8,8 @@ class StoreWebinarSetting extends PersistResource
 {
     protected $persistAttributes = [
         "host_video" => "nullable|boolean",
-        "panelist_video" => "nullable|boolean",
-        "practice_video" => "nullable|boolean",
+        "panelists_video" => "nullable|boolean",
+        "practice_session" => "nullable|boolean",
         "hd_video" => "nullable|boolean",
         "approval_type" => "nullable|in:0,1,2",
         "registration_type" => "nullable|in:1,2,3",
@@ -31,6 +31,7 @@ class StoreWebinarSetting extends PersistResource
         "meeting_authentication" => "nullable|boolean",
         "authentication_option" => "nullable|string",
         "authentication_domains" => "nullable|string",
+        "authentication_name" => "nullable|string",
     ];
 
     protected $relatedResource = [
