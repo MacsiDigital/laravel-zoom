@@ -652,7 +652,7 @@ This is the main access for most models in Zoom.
 
     // or
      
-    $registrant = Zoom::registrant()->make([...]);
+    $registrant = Zoom::meetingRegistrant()->make([...]);
     $meeting->registrants()->save($registrant);
     
     // To retrieve occurrences, Zoom requires both meeting and occurrence ID's, so we have to 
@@ -757,7 +757,7 @@ This is the main access for most models in Zoom.
 
     // Once we have the webinar we can update registrants / panelists
      
-    $registrant = Zoom::registrant()->create([...]);
+    $registrant = Zoom::webinarRegistrant()->create([...]);
 
     $webinar->registrants()->save($registrant);
 
@@ -795,7 +795,7 @@ We are showing info for meeting, you will need to switch out meeting to webinar 
 
     // Once we have the recurrence we can update registrants / panelists to that occurrence instance
      
-    $registrant = Zoom::registrant()->create([...]);
+    $registrant = Zoom::meetingRegistrant()->create([...]);
 
     $occurrence->registrants()->save($registrant);
 
