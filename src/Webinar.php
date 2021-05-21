@@ -74,6 +74,11 @@ class Webinar extends Model
     {
         return $this->hasMany(Poll::class);
     }
+    
+    public function delete($scheduleForReminder = true)
+    {
+        return $this->newQuery()->addQuery('schedule_for_reminder', $scheduleForReminder)->delete();
+    }
 
     public function endWebinar()
     {
