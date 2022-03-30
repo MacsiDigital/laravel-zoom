@@ -10,7 +10,7 @@ class MeetingRegistrant extends Model
 
     protected $endPoint = 'meetings/{meeting:id}/registrants';
 
-    protected $allowedMethods = ['get', 'post', 'put'];
+    protected $allowedMethods = ['get', 'post', 'put', 'find', 'delete'];
 
     protected $apiMultipleDataField = 'registrants';
 
