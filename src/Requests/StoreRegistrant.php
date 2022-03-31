@@ -23,6 +23,7 @@ class StoreRegistrant extends PersistResource
       "role_in_purchase_process" => "nullable|string|in:Decision Maker,Evaluator/Recommender,Influencer,Not involved",
       "no_of_employees" => "nullable|string|in:1-20,21-50,51-100,101-500,501-1,000,1,001-5,000,5,001-10,000,More than 10,000",
       "comments" => 'nullable|string|max:2000',
+      "auto_approve" => 'nullable'
     ];
 
     protected $relatedResource = [
