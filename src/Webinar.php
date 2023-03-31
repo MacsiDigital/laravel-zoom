@@ -22,9 +22,9 @@ class Webinar extends Model
 
     protected $apiMultipleDataField = 'webinars';
 
-    protected $dates = [
-        'start_time',
-        'created_at',
+    protected $casts = [
+        'start_time' => 'datetime',
+        'created_at' => 'datetime',
     ];
 
     public function settings()
