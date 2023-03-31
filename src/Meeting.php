@@ -24,7 +24,7 @@ class Meeting extends Model
 
     protected $casts = [
         'start_time' => 'datetime',
-        'created_at' => 'datetime,
+        'created_at' => 'datetime',
     ];
 
     public function settings()
