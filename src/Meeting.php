@@ -22,9 +22,9 @@ class Meeting extends Model
 
     protected $apiMultipleDataField = 'meetings';
 
-    protected $dates = [
-        'start_time',
-        'created_at',
+    protected $casts = [
+        'start_time' => 'datetime',
+        'created_at' => 'datetime',
     ];
 
     public function settings()
