@@ -22,7 +22,7 @@
     "require": {
         "php": "^8.0|^8.1",
         "illuminate/support": "^8.0|^9.0|^10.0",
-        "macsidigital/laravel-api-client": "^4.0.2"
+        "macsidigital/laravel-api-client": "dev-master"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16|^3.14",
@@ -58,5 +58,11 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/philharmonie/laravel-api-client"
+    }
+  ]
 }
