@@ -2,9 +2,11 @@
 
 namespace MacsiDigital\Zoom\Support;
 
-use MacsiDigital\API\Support\Authentication\JWT;
-use MacsiDigital\API\Support\Entry as ApiEntry;
+use Illuminate\Support\Facades\Http;
 use MacsiDigital\Zoom\Facades\Client;
+use MacsiDigital\API\Support\Entry as ApiEntry;
+use MacsiDigital\API\Support\Authentication\JWT;
+use MacsiDigital\API\Support\Authentication\OAuth1;
 
 class Entry extends ApiEntry
 {
@@ -14,6 +16,8 @@ class Entry extends ApiEntry
 
     protected $maxQueries = '5';
 
+    protected $accountId = null;
+
     protected $apiKey = null;
 
     protected $apiSecret = null;
@@ -21,6 +25,8 @@ class Entry extends ApiEntry
     protected $tokenLife = null;
 
     protected $baseUrl = null;
+
+    protected $siteUrl = null;
 
     // Amount of pagination results per page by default, leave blank if should not paginate
     // Without pagination rate limits could be hit
@@ -44,13 +50,15 @@ class Entry extends ApiEntry
      * @param $maxQueries
      * @param $baseUrl
      */
-    public function __construct($apiKey = null, $apiSecret = null, $tokenLife = null, $maxQueries = null, $baseUrl = null)
+    public function __construct($apiKey = null, $apiSecret = null, $tokenLife = null, $maxQueries = null, $baseUrl = null, $accountId = null, $siteUrl = null)
     {
         $this->apiKey = $apiKey ? $apiKey : config('zoom.api_key');
         $this->apiSecret = $apiSecret ? $apiSecret : config('zoom.api_secret');
         $this->tokenLife = $tokenLife ? $tokenLife : config('zoom.token_life');
         $this->maxQueries = $maxQueries ? $maxQueries : (config('zoom.max_api_calls_per_request') ? config('zoom.max_api_calls_per_request') : $this->maxQueries);
         $this->baseUrl = $baseUrl ? $baseUrl : config('zoom.base_url');
+        $this->accountId = $accountId ? $accountId : config('zoom.account_id');
+        $this->siteUrl = $siteUrl ? $siteUrl : config('zoom.site_url');
     }
 
     public function newRequest()
@@ -58,6 +66,7 @@ class Entry extends ApiEntry
         if (config('zoom.authentication_method') == 'jwt') {
             return $this->jwtRequest();
         } elseif (config('zoom.authentication_method') == 'oauth2') {
+            return $this->oauth2Request();
         }
     }
 
@@ -70,5 +79,22 @@ class Entry extends ApiEntry
 
     public function oauth2Request()
     {
+        $oAuthToken = null;
+
+        try {
+            $data = Http::withHeaders([
+                'Authorization' => 'Basic ' . base64_encode($this->apiKey . ':' . $this->apiSecret),
+            ])->post($this->siteUrl . '/oauth/token?grant_type=account_credentials&account_id=' . $this->accountId)->json();
+
+            if (isset($data['error'])) {
+                throw new \Exception($data['error'] . ': ' . $data['reason']);
+            }
+
+            $oAuthToken = $data['access_token'];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        return Client::baseUrl($this->baseUrl)->withToken($oAuthToken);
     }
 }
