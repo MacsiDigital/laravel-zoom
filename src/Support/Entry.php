@@ -59,7 +59,6 @@ class Entry extends ApiEntry
 
     public function newRequest()
     {
-
         if (config('zoom.authentication_method') == 'Oauth') {
             return $this->oauthRequest();
         }
@@ -68,19 +67,25 @@ class Entry extends ApiEntry
 
     public function oauthRequest()
     {
-        $oauth = $this->OAuthGenerateToken();
+        $oauthToken =  $this->OAuthGenerateToken();
 
-        return Client::baseUrl($this->baseUrl)->withToken($oauth['access_token']);
+        return Client::baseUrl($this->baseUrl)->withToken($oauthToken);
     }
 
-    private function OAuthGenerateToken()
-    {
-        return \Illuminate\Support\Facades\Http::asForm()
+    private function OAuthGenerateToken(){
+
+        $response = \Illuminate\Support\Facades\Http::asForm()
             ->withHeaders([
-                'Authorization' => ['Basic ' . base64_encode("$this->clientId:$this->clientSecret")]
+                'Authorization' => ['Basic '.base64_encode("$this->clientId:$this->clientSecret")]
             ])->post('https://zoom.us/oauth/token', [
                 'grant_type' => 'account_credentials',
                 'account_id' => $this->accountId,
             ]);
+
+        if ($response->status() != 200) {
+            throw new \ErrorException( $response['error']);
+        }
+
+        return $response['access_token'];
     }
 }
