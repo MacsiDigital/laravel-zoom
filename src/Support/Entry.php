@@ -3,8 +3,12 @@
 namespace MacsiDigital\Zoom\Support;
 
 use MacsiDigital\API\Support\Authentication\JWT;
+use MacsiDigital\API\Support\Authentication\OAuth;
+use MacsiDigital\API\Support\Authentication\OAuth1;
 use MacsiDigital\API\Support\Entry as ApiEntry;
+use MacsiDigital\OAuth2\Providers\OAuth2ServiceProvider;
 use MacsiDigital\Zoom\Facades\Client;
+
 
 class Entry extends ApiEntry
 {
@@ -13,6 +17,12 @@ class Entry extends ApiEntry
     protected $pageField = 'page_number';
 
     protected $maxQueries = '5';
+
+    protected $accountId = null;
+
+    protected $clientId = null;
+
+    protected $clientSecret = null;
 
     protected $apiKey = null;
 
@@ -44,8 +54,11 @@ class Entry extends ApiEntry
      * @param $maxQueries
      * @param $baseUrl
      */
-    public function __construct($apiKey = null, $apiSecret = null, $tokenLife = null, $maxQueries = null, $baseUrl = null)
+    public function __construct($accountId = null, $clientId = null, $clientSecret = null, $apiKey = null, $apiSecret = null, $tokenLife = null, $maxQueries = null, $baseUrl = null)
     {
+        $this->accountId = $accountId ? $accountId : config('zoom.account_id');
+        $this->clientId = $clientId ? $clientId : config('zoom.client_id');
+        $this->clientSecret = $clientSecret ? $clientSecret : config('zoom.client_secret');
         $this->apiKey = $apiKey ? $apiKey : config('zoom.api_key');
         $this->apiSecret = $apiSecret ? $apiSecret : config('zoom.api_secret');
         $this->tokenLife = $tokenLife ? $tokenLife : config('zoom.token_life');
@@ -57,7 +70,8 @@ class Entry extends ApiEntry
     {
         if (config('zoom.authentication_method') == 'jwt') {
             return $this->jwtRequest();
-        } elseif (config('zoom.authentication_method') == 'oauth2') {
+        } elseif (config('zoom.authentication_method') == 'oauth') {
+            return $this->oauthRequest();
         }
     }
 
@@ -68,7 +82,20 @@ class Entry extends ApiEntry
         return Client::baseUrl($this->baseUrl)->withToken($jwtToken);
     }
 
-    public function oauth2Request()
+    public function oauthRequest()
     {
+        $oauth =  $this->OAuthGenerateToken();
+
+        return Client::baseUrl($this->baseUrl)->withToken($oauth['access_token']);
+    }
+
+    private function OAuthGenerateToken(){
+        return \Illuminate\Support\Facades\Http::asForm()
+            ->withHeaders([
+                'Authorization' => ['Basic '.base64_encode("$this->clientId:$this->clientSecret")]
+            ])->post('https://zoom.us/oauth/token', [
+                'grant_type' => 'account_credentials',
+                'account_id' => $this->accountId,
+            ]);
     }
 }
