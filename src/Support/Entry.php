@@ -60,7 +60,7 @@ class Entry extends ApiEntry
             return $this->oauthRequest();
         }
 
-        throw new \ErrorException( "authentication_method " . config('zoom.authentication_method') . 'not found');
+        throw new \ErrorException( "authentication_method " . config('zoom.authentication_method') . ' not found');
     }
 
 
