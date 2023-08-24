@@ -2,9 +2,10 @@
 
 namespace MacsiDigital\Zoom\Support;
 
-use MacsiDigital\API\Support\Authentication\JWT;
 use MacsiDigital\API\Support\Entry as ApiEntry;
+use MacsiDigital\OAuth2\Providers\OAuth2ServiceProvider;
 use MacsiDigital\Zoom\Facades\Client;
+
 
 class Entry extends ApiEntry
 {
@@ -14,11 +15,11 @@ class Entry extends ApiEntry
 
     protected $maxQueries = '5';
 
-    protected $apiKey = null;
+    protected $accountId = null;
 
-    protected $apiSecret = null;
+    protected $clientId = null;
 
-    protected $tokenLife = null;
+    protected $clientSecret = null;
 
     protected $baseUrl = null;
 
@@ -38,37 +39,52 @@ class Entry extends ApiEntry
 
     /**
      * Entry constructor.
-     * @param $apiKey
-     * @param $apiSecret
-     * @param $tokenLife
+     * @param $accountId
+     * @param $clientId
+     * @param $clientSecret
      * @param $maxQueries
      * @param $baseUrl
      */
-    public function __construct($apiKey = null, $apiSecret = null, $tokenLife = null, $maxQueries = null, $baseUrl = null)
+    public function __construct($accountId = null, $clientId = null, $clientSecret = null, $maxQueries = null, $baseUrl = null)
     {
-        $this->apiKey = $apiKey ? $apiKey : config('zoom.api_key');
-        $this->apiSecret = $apiSecret ? $apiSecret : config('zoom.api_secret');
-        $this->tokenLife = $tokenLife ? $tokenLife : config('zoom.token_life');
+        $this->accountId = $accountId ? $accountId : config('zoom.account_id');
+        $this->clientId = $clientId ? $clientId : config('zoom.client_id');
+        $this->clientSecret = $clientSecret ? $clientSecret : config('zoom.client_secret');
         $this->maxQueries = $maxQueries ? $maxQueries : (config('zoom.max_api_calls_per_request') ? config('zoom.max_api_calls_per_request') : $this->maxQueries);
         $this->baseUrl = $baseUrl ? $baseUrl : config('zoom.base_url');
     }
 
     public function newRequest()
     {
-        if (config('zoom.authentication_method') == 'jwt') {
-            return $this->jwtRequest();
-        } elseif (config('zoom.authentication_method') == 'oauth2') {
+        if (config('zoom.authentication_method') == 'Oauth') {
+            return $this->oauthRequest();
         }
+
+        throw new \ErrorException( "authentication_method " . config('zoom.authentication_method') . ' not found');
     }
 
-    public function jwtRequest()
-    {
-        $jwtToken = JWT::generateToken(['iss' => $this->apiKey, 'exp' => time() + $this->tokenLife], $this->apiSecret);
 
-        return Client::baseUrl($this->baseUrl)->withToken($jwtToken);
+    public function oauthRequest()
+    {
+        $oauthToken =  $this->OAuthGenerateToken();
+
+        return Client::baseUrl($this->baseUrl)->withToken($oauthToken);
     }
 
-    public function oauth2Request()
-    {
+    private function OAuthGenerateToken(){
+
+        $response = \Illuminate\Support\Facades\Http::asForm()
+            ->withHeaders([
+                'Authorization' => ['Basic '.base64_encode("$this->clientId:$this->clientSecret")]
+            ])->post('https://zoom.us/oauth/token', [
+                'grant_type' => 'account_credentials',
+                'account_id' => $this->accountId,
+            ]);
+
+        if ($response->status() != 200) {
+            throw new \ErrorException( $response['error']);
+        }
+
+        return $response['access_token'];
     }
 }
