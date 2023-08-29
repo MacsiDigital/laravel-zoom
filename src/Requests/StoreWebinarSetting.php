@@ -36,5 +36,7 @@ class StoreWebinarSetting extends PersistResource
 
     protected $relatedResource = [
         "global_dial_in_countries" => StoreGlobalDialInCountry::class,
+        "attendees_and_panelists_reminder_email_notification" => StoreEmailNotification::class,
+        "question_and_answer" => StoreQuestionAnswer::class,
     ];
 }
