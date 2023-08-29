@@ -56,7 +56,7 @@ class Entry extends ApiEntry
 
     public function newRequest()
     {
-        if (config('zoom.authentication_method') == 'Oauth') {
+        if (strtolower(config('zoom.authentication_method')) == 'oauth') {
             return $this->oauthRequest();
         }
 
@@ -66,7 +66,8 @@ class Entry extends ApiEntry
 
     public function oauthRequest()
     {
-        $oauthToken =  $this->OAuthGenerateToken();
+        $cached = config('zoom.cache_token', true) ? \Cache::get('zoom_oauth_token') : null;
+        $oauthToken = !is_null($cached) ? $cached : $this->OAuthGenerateToken();
 
         return Client::baseUrl($this->baseUrl)->withToken($oauthToken);
     }
@@ -83,6 +84,11 @@ class Entry extends ApiEntry
 
         if ($response->status() != 200) {
             throw new \ErrorException( $response['error']);
+        }
+
+        if(config('zoom.cache_token', true)) {
+            // -10 seconds TTL just-in-case...
+            cache(['zoom_oauth_token' => $response['access_token']], now()->addSeconds($response['expires_in'] - 10));
         }
 
         return $response['access_token'];
