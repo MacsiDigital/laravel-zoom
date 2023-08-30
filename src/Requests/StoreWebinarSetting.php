@@ -32,6 +32,7 @@ class StoreWebinarSetting extends PersistResource
         "authentication_option" => "nullable|string",
         "authentication_domains" => "nullable|string",
         "authentication_name" => "nullable|string",
+        "email_language" => "nullable|string",
     ];
 
     protected $relatedResource = [

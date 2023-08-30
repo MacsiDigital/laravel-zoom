@@ -31,6 +31,7 @@ class UpdateWebinarSetting extends PersistResource
         "meeting_authentication" => "nullable|boolean",
         "authentication_option" => "nullable|string",
         "authentication_domains" => "nullable|string",
+        "email_language" => "nullable|string",
     ];
 
     protected $relatedResource = [
