@@ -15,6 +15,16 @@ class WebinarSetting extends Resource
     {
         return $this->hasOne(EmailNotification::class);
     }
+    
+    public function followUpAbsenteesEmailNotification()
+    {
+        return $this->hasOne(EmailNotification::class);
+    }
+    
+    public function followUpAttendeesEmailNotification()
+    {
+        return $this->hasOne(EmailNotification::class);
+    }
 
     public function questionAndAnswer()
     {
