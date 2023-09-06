@@ -10,7 +10,7 @@ class WebinarRegistrant extends Model
 
     protected $endPoint = 'webinars/{webinar:id}/registrants';
 
-    protected $allowedMethods = ['find', 'get', 'post', 'put'];
+    protected $allowedMethods = ['find', 'get', 'post', 'put', 'delete'];
 
     protected $apiMultipleDataField = 'registrants';
 

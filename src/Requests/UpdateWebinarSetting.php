@@ -31,9 +31,14 @@ class UpdateWebinarSetting extends PersistResource
         "meeting_authentication" => "nullable|boolean",
         "authentication_option" => "nullable|string",
         "authentication_domains" => "nullable|string",
+        "email_language" => "nullable|string",
     ];
 
     protected $relatedResource = [
         "global_dial_in_countries" => StoreGlobalDialInCountry::class,
+        "attendees_and_panelists_reminder_email_notification" => StoreEmailNotification::class,
+        "follow_up_absentees_email_notification" => StoreEmailNotification::class,
+        "follow_up_attendees_email_notification" => StoreEmailNotification::class,
+        "question_and_answer" => StoreQuestionAnswer::class,
     ];
 }
