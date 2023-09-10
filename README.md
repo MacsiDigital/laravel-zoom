@@ -58,16 +58,17 @@ This will create a zoom.php config file within your config directory:-
 
 ```php
 return [
-    'apiKey' => env('ZOOM_CLIENT_KEY'),
-    'apiSecret' => env('ZOOM_CLIENT_SECRET'),
+    'account_id' => env('ZOOM_ACCOUNT_ID'),
+    'client_id' => env('ZOOM_CLIENT_ID'),
+    'client_secret' => env('ZOOM_CLIENT_SECRET'),
     'baseUrl' => 'https://api.zoom.us/v2/',
     'token_life' => 60 * 60 * 24 * 7, // In seconds, default 1 week
-    'authentication_method' => 'jwt', // Only jwt compatible at present
+    'authentication_method' => 'oauth', 
     'max_api_calls_per_request' => '5' // how many times can we hit the api to return results for an all() request
 ];
 ```
 
-You need to add ZOOM_CLIENT_KEY and ZOOM_CLIENT_SECRET into your .env file.
+You need to add ZOOM_ACCOUNT_ID, ZOOM_CLIENT_ID and ZOOM_CLIENT_SECRET into your .env file.
 
 Also note the tokenLife, there were numerous users of the old API who said the token expired to quickly, so we have set for a longer lifeTime by default and more importantly made it customisable.
 
@@ -117,7 +118,7 @@ There are 2 main ways to work with models, to call them directly from the access
 ### Custom settings
 If you would like to use different configuration values than those in your zoom.php config file, you can feed those as parameters to \MacsiDigital\Zoom\Support\Entry as shown below.
 ``` php
-    $zoom = new \MacsiDigital\Zoom\Support\Entry($apiKey, $apiSecret, $tokenLife, $maxQueries, $baseUrl);
+    $zoom = new \MacsiDigital\Zoom\Support\Entry($accountId, $clientId, $clientSecret, $maxQueries, $baseUrl);
 ```
 
 ### Working with models
