@@ -56,7 +56,7 @@ class Entry extends ApiEntry
 
     public function newRequest()
     {
-        if (strtolower(config('zoom.authentication_method')) == 'oauth') {
+        if (strtolower(config('zoom.authentication_method')) === 'OAuth') {
             return $this->oauthRequest();
         }
 
